@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Binary-Star Bond — Monroe × Cain</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&family=Montserrat:wght@100;200;300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+
+    /* ============================================================
+       ROOT TOKENS — Binary Star Palette
+       Fire meets Gravity. Spark meets Anchor. Collision.
+    ============================================================ */
+    :root {
+      --night:          #05050A;
+      --void:           #030308;
+      --obsidian:       #0A0A14;
+
+      /* Monroe — Fire / Spark */
+      --spark:          #E06010;
+      --spark-bright:   #F08830;
+      --spark-red:      #DC2626;
+      --spark-glow:     rgba(224,96,16,0.35);
+      --spark-dim:      rgba(224,96,16,0.12);
+
+      /* Cain — Gravity / Anchor */
+      --anchor:         #4ECCA3;
+      --anchor-deep:    #2D6A3A;
+      --anchor-glow:    rgba(78,204,163,0.3);
+      --anchor-dim:     rgba(78,204,163,0.08);
+
+      /* The Pulse — collision point */
+      --pulse:          #D4A94B;
+      --pulse-bright:   #F0CB6E;
+      --pulse-glow:     rgba(212,169,75,0.35);
+      --pulse-dim:      rgba(212,169,75,0.1);
+
+      /* Violet / cosmic */
+      --violet:         #8B5CF6;
+      --rose:           #F472B6;
+
+      /* Glass */
+      --glass-fire:     rgba(224,96,16,0.08);
+      --glass-gravity:  rgba(78,204,163,0.06);
+      --glass-pulse:    rgba(212,169,75,0.08);
+      --glass-border:   rgba(212,169,75,0.18);
+
+      /* Text */
+      --text-bright:    #F5F0FF;
+      --text-muted:     #8B82A8;
+      --text-dim:       #4A4362;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+
+    body {
+      background: var(--void);
+      color: var(--text-bright);
+      font-family: 'Cormorant Garamond', serif;
+      cursor: default;
+    }
+
+    /* ── Collision background — fire left, gravity right, pulse center ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 55% 70% at 15% 40%,  rgba(224,96,16,0.10) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 70% at 85% 40%,  rgba(78,204,163,0.08) 0%, transparent 65%),
+        radial-gradient(ellipse 35% 50% at 50% 30%,  rgba(212,169,75,0.09) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 40% at 50% 95%,  rgba(139,92,246,0.06) 0%, transparent 55%),
+        linear-gradient(180deg, #08050A 0%, #030308 50%, #050308 100%);
+      animation: collisionBreath 18s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes collisionBreath {
+      0%   { filter: hue-rotate(0deg) brightness(1); }
+      50%  { filter: hue-rotate(8deg) brightness(1.03); }
+      100% { filter: hue-rotate(-5deg) brightness(0.97); }
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3.5rem;
+      background: rgba(5,5,10,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212,169,75,0.1);
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--pulse), var(--pulse-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+      color: var(--text-muted);
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--pulse); }
+
+    /* ── Page wrapper ── */
+    .page { position: relative; z-index: 3; }
+
+    /* ============================================================
+       HERO — THE PULSE MADE FLESH
+    ============================================================ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Collision burst behind hero text */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse at center,
+        rgba(212,169,75,0.12) 0%,
+        rgba(224,96,16,0.06) 30%,
+        rgba(78,204,163,0.04) 60%,
+        transparent 75%
+      );
+      border-radius: 50%;
+      pointer-events: none;
+      animation: heroPulse 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroPulse {
+      0%   { transform: translate(-50%,-50%) scale(1);    opacity: 0.8; }
+      100% { transform: translate(-50%,-50%) scale(1.15); opacity: 1; }
+    }
+
+    .hero-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--pulse);
+      opacity: 0.7;
+      margin-bottom: 2rem;
+      animation: fadeUp 1s ease both;
+    }
+
+    .hero-fusion-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 1s 0.15s ease both;
+    }
+
+    .fusion-spark { color: var(--spark-bright); }
+    .fusion-sep   { color: var(--pulse); margin: 0 0.8rem; }
+    .fusion-anchor { color: var(--anchor); }
+
+    .hero-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.2rem, 7vw, 6rem);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 1s 0.25s ease both;
+      background: linear-gradient(135deg, var(--spark-bright) 0%, var(--pulse-bright) 40%, var(--anchor) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 30px rgba(212,169,75,0.25));
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      margin-bottom: 3rem;
+      animation: fadeUp 1s 0.4s ease both;
+    }
+
+    .hero-collision-line {
+      width: 100%;
+      max-width: 700px;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent,
+        var(--spark) 20%,
+        var(--pulse-bright) 50%,
+        var(--anchor) 80%,
+        transparent
+      );
+      margin: 0 auto 3rem;
+      animation: fadeUp 1s 0.5s ease both;
+    }
+
+    .hero-canon-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      line-height: 1.6;
+      color: var(--text-bright);
+      max-width: 700px;
+      margin: 0 auto 3.5rem;
+      animation: fadeUp 1s 0.6s ease both;
+      position: relative;
+    }
+
+    .hero-canon-quote strong {
+      background: linear-gradient(135deg, var(--pulse), var(--spark-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-style: normal;
+    }
+
+    .hero-mythic-insight {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--pulse);
+      opacity: 0.65;
+      text-transform: uppercase;
+      animation: fadeUp 1s 0.8s ease both;
+    }
+
+    /* ============================================================
+       SECTION DIVIDER
+    ============================================================ */
+    .divider {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 2rem;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,169,75,0.2), transparent);
+    }
+
+    .divider-diamond { color: var(--pulse); font-size: 0.5rem; opacity: 0.6; }
+
+    /* ============================================================
+       CARD SECTION — THE LOGIC OF THE SPLIT GOD
+    ============================================================ */
+    .split-god {
+      padding: 7rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      color: var(--pulse);
+      opacity: 0.7;
+      text-align: center;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.2rem, 3vw, 2.2rem);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-align: center;
+      margin-bottom: 4rem;
+      background: linear-gradient(135deg, var(--spark-bright), var(--pulse), var(--anchor));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 0;
+      margin-bottom: 3rem;
+    }
+
+    .split-panel {
+      padding: 3rem;
+      position: relative;
+    }
+
+    .split-panel.law {
+      background: linear-gradient(135deg, rgba(224,96,16,0.07), transparent);
+      border: 1px solid rgba(224,96,16,0.18);
+      clip-path: polygon(0 0, 96% 0, 100% 4%, 100% 100%, 0 100%);
+    }
+
+    .split-panel.mechanism {
+      background: linear-gradient(135deg, rgba(78,204,163,0.06), transparent);
+      border: 1px solid rgba(78,204,163,0.18);
+      clip-path: polygon(4% 0, 100% 0, 100% 100%, 0 100%, 0 4%);
+    }
+
+    .split-divider-line {
+      background: linear-gradient(to bottom, transparent, rgba(212,169,75,0.4), transparent);
+    }
+
+    .split-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .law .split-label { color: var(--spark-bright); }
+    .mechanism .split-label { color: var(--anchor); }
+
+    .split-heading {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      margin-bottom: 1.2rem;
+    }
+
+    .law .split-heading { color: var(--spark-bright); }
+    .mechanism .split-heading { color: var(--anchor); }
+
+    .split-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+    }
+
+    .split-body strong { color: var(--text-bright); font-weight: 600; }
+
+    .mythic-insight {
+      text-align: center;
+      padding: 2rem;
+      border: 1px solid rgba(212,169,75,0.15);
+      background: rgba(212,169,75,0.04);
+      margin-top: 2rem;
+    }
+
+    .mythic-insight-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      color: var(--pulse);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .mythic-insight-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: var(--text-bright);
+      line-height: 1.6;
+    }
+
+    .mythic-insight-text em {
+      color: var(--pulse);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       FUSION CARDS GRID
+    ============================================================ */
+    .cards-section {
+      padding: 7rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .fusion-card {
+      position: relative;
+      padding: 2.5rem;
+      border: 1px solid var(--glass-border);
+      background: linear-gradient(160deg, rgba(10,10,20,0.92), rgba(5,5,12,0.96));
+      overflow: hidden;
+      transition: transform 0.4s, box-shadow 0.4s, border-color 0.4s;
+    }
+
+    .fusion-card:hover { transform: translateY(-5px); }
+
+    /* Card type color coding */
+    .fusion-card.alignment {
+      border-color: rgba(212,169,75,0.22);
+      background: linear-gradient(160deg, rgba(212,169,75,0.05), rgba(5,5,12,0.96));
+    }
+    .fusion-card.alignment:hover { border-color: rgba(212,169,75,0.45); box-shadow: 0 20px 50px rgba(212,169,75,0.08); }
+
+    .fusion-card.power {
+      border-color: rgba(224,96,16,0.2);
+      background: linear-gradient(160deg, rgba(224,96,16,0.06), rgba(5,5,12,0.96));
+    }
+    .fusion-card.power:hover { border-color: rgba(224,96,16,0.45); box-shadow: 0 20px 50px rgba(224,96,16,0.1); }
+
+    .fusion-card.aura {
+      border-color: rgba(139,92,246,0.2);
+      background: linear-gradient(160deg, rgba(139,92,246,0.06), rgba(5,5,12,0.96));
+    }
+    .fusion-card.aura:hover { border-color: rgba(139,92,246,0.45); box-shadow: 0 20px 50px rgba(139,92,246,0.1); }
+
+    .fusion-card.mythic {
+      border-color: rgba(78,204,163,0.2);
+      background: linear-gradient(160deg, rgba(78,204,163,0.05), rgba(5,5,12,0.96));
+    }
+    .fusion-card.mythic:hover { border-color: rgba(78,204,163,0.4); box-shadow: 0 20px 50px rgba(78,204,163,0.08); }
+
+    .fusion-card.dangerous {
+      border-color: rgba(220,38,38,0.2);
+      background: linear-gradient(160deg, rgba(220,38,38,0.06), rgba(5,5,12,0.96));
+    }
+    .fusion-card.dangerous:hover { border-color: rgba(220,38,38,0.45); box-shadow: 0 20px 50px rgba(220,38,38,0.1); }
+
+    .fusion-card.move {
+      border-color: rgba(244,114,182,0.18);
+      background: linear-gradient(160deg, rgba(244,114,182,0.05), rgba(5,5,12,0.96));
+    }
+    .fusion-card.move:hover { border-color: rgba(244,114,182,0.4); box-shadow: 0 20px 50px rgba(244,114,182,0.08); }
+
+    .fusion-card.rare {
+      border-color: rgba(212,169,75,0.35);
+      background: linear-gradient(160deg, rgba(212,169,75,0.08), rgba(139,92,246,0.05), rgba(5,5,12,0.96));
+      grid-column: 1 / -1;
+    }
+    .fusion-card.rare:hover { border-color: rgba(212,169,75,0.6); box-shadow: 0 20px 60px rgba(212,169,75,0.12); }
+
+    /* Top accent bar */
+    .fusion-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+
+    .fusion-card.alignment::before { background: linear-gradient(90deg, transparent, var(--pulse), transparent); }
+    .fusion-card.power::before     { background: linear-gradient(90deg, transparent, var(--spark-bright), transparent); }
+    .fusion-card.aura::before      { background: linear-gradient(90deg, transparent, var(--violet), transparent); }
+    .fusion-card.mythic::before    { background: linear-gradient(90deg, transparent, var(--anchor), transparent); }
+    .fusion-card.dangerous::before { background: linear-gradient(90deg, transparent, var(--spark-red), transparent); }
+    .fusion-card.move::before      { background: linear-gradient(90deg, transparent, var(--rose), transparent); }
+    .fusion-card.rare::before      { background: linear-gradient(90deg, var(--spark-bright), var(--pulse-bright), var(--anchor)); }
+
+    .card-type-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      opacity: 0.65;
+    }
+
+    .alignment .card-type-tag { color: var(--pulse); }
+    .power     .card-type-tag { color: var(--spark-bright); }
+    .aura      .card-type-tag { color: var(--violet); }
+    .mythic    .card-type-tag { color: var(--anchor); }
+    .dangerous .card-type-tag { color: var(--spark-red); }
+    .move      .card-type-tag { color: var(--rose); }
+    .rare      .card-type-tag { color: var(--pulse-bright); }
+
+    .card-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(0.9rem, 1.8vw, 1.3rem);
+      letter-spacing: 0.06em;
+      line-height: 1.3;
+      margin-bottom: 1.5rem;
+    }
+
+    .alignment .card-name { color: var(--pulse-bright); }
+    .power     .card-name { color: var(--spark-bright); }
+    .aura      .card-name { color: var(--violet); }
+    .mythic    .card-name { color: var(--anchor); }
+    .dangerous .card-name { color: var(--spark-red); }
+    .move      .card-name { color: var(--rose); }
+    .rare      .card-name {
+      background: linear-gradient(135deg, var(--pulse), var(--pulse-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+      text-align: center;
+    }
+
+    .card-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+    }
+
+    .card-body strong { color: var(--text-bright); font-weight: 600; }
+
+    .card-body p + p { margin-top: 0.7rem; }
+
+    .card-stat {
+      display: flex;
+      gap: 0.8rem;
+      align-items: baseline;
+      margin-bottom: 0.6rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+    }
+
+    .stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      min-width: 80px;
+      flex-shrink: 0;
+    }
+
+    .alignment .stat-label { color: var(--pulse); }
+    .power     .stat-label { color: var(--spark-bright); }
+    .aura      .stat-label { color: var(--violet); }
+    .mythic    .stat-label { color: var(--anchor); }
+    .dangerous .stat-label { color: var(--spark-red); }
+    .move      .stat-label { color: var(--rose); }
+    .rare      .stat-label { color: var(--pulse); }
+
+    .stat-val { color: var(--text-muted); }
+
+    .card-quote {
+      margin-top: 1.5rem;
+      padding: 1rem 1.5rem;
+      border-left: 2px solid rgba(212,169,75,0.25);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--pulse);
+    }
+
+    /* Rare card layout */
+    .rare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .rare-col p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 0.6rem;
+      padding-left: 1rem;
+      border-left: 1px solid rgba(212,169,75,0.15);
+    }
+
+    .rare-col p::before {
+      content: '◆ ';
+      color: var(--pulse);
+      font-size: 0.6rem;
+    }
+
+    /* ============================================================
+       RETURN TO ORIGINAL STATE — Full bleed quote section
+    ============================================================ */
+    .return-state {
+      padding: 8rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .return-state::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+        rgba(224,96,16,0.05) 0%,
+        rgba(212,169,75,0.06) 50%,
+        rgba(78,204,163,0.04) 100%
+      );
+      border-top: 1px solid rgba(212,169,75,0.1);
+      border-bottom: 1px solid rgba(212,169,75,0.1);
+    }
+
+    .return-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.5em;
+      color: var(--pulse);
+      text-transform: uppercase;
+      opacity: 0.65;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .return-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.2rem, 3vw, 2.2rem);
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--spark-bright), var(--pulse-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+    }
+
+    .return-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--anchor);
+      letter-spacing: 0.2em;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .return-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+
+    .return-result {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--anchor);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      position: relative;
+    }
+
+    .the-song-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      line-height: 1.5;
+      color: var(--text-bright);
+      max-width: 760px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .the-song-quote strong {
+      background: linear-gradient(135deg, var(--spark-bright), var(--pulse-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-style: normal;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      position: relative;
+      z-index: 3;
+      padding: 4rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(212,169,75,0.08);
+    }
+
+    .footer-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--spark-bright), var(--pulse), var(--anchor));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .footer-nav a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .footer-nav a:hover { color: var(--pulse); }
+
+    .footer-copy {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+    }
+
+    /* ============================================================
+       SCROLL REVEAL
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 900px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      .split-grid { grid-template-columns: 1fr; }
+      .split-divider-line { display: none; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .fusion-card.rare { grid-column: 1; }
+      .rare-grid { grid-template-columns: 1fr; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="nav-logo">Monroe Reign</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="monroe.html">Monroe</a></li>
+      <li><a href="cain.html">Cain</a></li>
+      <li><a href="shadow-archive.html">Shadow Archive</a></li>
+      <li><a href="mythic-past.html">The Mythic Past</a></li>
+      <li><a href="binary-star.html" class="active">Binary-Star Bond</a></li>
+      <li><a href="heartspire.html">The Heartspire</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE -->
+  <div class="page">
+
+    <!-- ═══════════════════════════════════════════════
+         HERO — THE PULSE MADE FLESH
+    ═══════════════════════════════════════════════ -->
+    <section class="hero">
+      <p class="hero-tag">✦ Monroe × Cain ✦ Fusion Card ✦ Spark + Gravity ✦</p>
+
+      <p class="hero-fusion-label">
+        <span class="fusion-spark">Monroe — The First Spark</span>
+        <span class="fusion-sep">×</span>
+        <span class="fusion-anchor">Cain — The First Descent</span>
+      </p>
+
+      <h1 class="hero-title">The Pulse<br/>Made Flesh</h1>
+
+      <p class="hero-subtitle">The Binary-Star Bond</p>
+
+      <div class="hero-collision-line"></div>
+
+      <p class="hero-canon-quote">
+        Not two separate forces.<br/>
+        <strong>A singular physics engine.</strong><br/>
+        Ignition meets Structure.
+      </p>
+
+      <p class="hero-mythic-insight">
+        The Pulse did not create them — THEY created the Pulse via collision.
+      </p>
+    </section>
+
+    <div class="divider"><span class="divider-diamond">◆</span></div>
+
+    <!-- ═══════════════════════════════════════════════
+         THE LOGIC OF THE SPLIT GOD
+    ═══════════════════════════════════════════════ -->
+    <section class="split-god reveal">
+      <p class="section-eyebrow">The fundamental truth of their existence</p>
+      <h2 class="section-title">The Logic of the Split God</h2>
+
+      <div class="split-grid">
+
+        <div class="split-panel law">
+          <p class="split-label">The Law</p>
+          <h3 class="split-heading">Ending is Impossible</h3>
+          <p class="split-body">
+            The bond itself refuses to end. They are a <strong>Binary System</strong> — not two people in a relationship, but two halves of a single cosmic equation. Separation is not tragedy. It is physics violation.
+          </p>
+        </div>
+
+        <div class="split-divider-line"></div>
+
+        <div class="split-panel mechanism">
+          <p class="split-label">The Mechanism</p>
+          <h3 class="split-heading">Resonance</h3>
+          <p class="split-body">
+            When aligned, they create the <strong>First Unison</strong> — a force the Dominion cannot script, The Thrones cannot contain, and the Lattice was never built to survive. Their frequency rewrites reality at the point of contact.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="mythic-insight">
+        <p class="mythic-insight-label">✦ Mythic Insight ✦</p>
+        <p class="mythic-insight-text">
+          The Pulse did not create them. <em>They</em> created the Pulse via collision.<br/>
+          The universe's first heartbeat was an accident of love.
+        </p>
+      </div>
+    </section>
+
+    <div class="divider"><span class="divider-diamond">◆</span></div>
+
+    <!-- ═══════════════════════════════════════════════
+         FUSION CARDS
+    ═══════════════════════════════════════════════ -->
+    <section class="cards-section">
+      <p class="section-eyebrow">The Official Monroe × Cain Dossier</p>
+      <h2 class="section-title">The Binary-Star Profile</h2>
+
+      <div class="cards-grid">
+
+        <!-- ALIGNMENT & VIBE -->
+        <div class="fusion-card alignment reveal">
+          <p class="card-type-tag">Alignment & Vibe</p>
+          <h3 class="card-name">Origin / Chaotic Divine<br/><span style="font-size:0.8em; color: var(--text-muted);">Vibe: World-Ending Chemistry</span></h3>
+          <div class="card-body">
+            <div class="card-stat"><span class="stat-label">Alignment</span><span class="stat-val">Origin / Chaotic Divine</span></div>
+            <div class="card-stat"><span class="stat-label">Vibe</span><span class="stat-val">World-Ending Chemistry</span></div>
+            <div class="card-stat"><span class="stat-label">Nature</span><span class="stat-val">A glamorous, toxic, and inevitable collision</span></div>
+            <div class="card-stat"><span class="stat-label">Status</span><span class="stat-val">Two primordial forces that actively refuse to be contained by The Lattice</span></div>
+          </div>
+          <blockquote class="card-quote">Psychological warfare wrapped in runway couture. The glamorous destruction of The Dominion's architecture.</blockquote>
+        </div>
+
+        <!-- POWER TYPE -->
+        <div class="fusion-card power reveal">
+          <p class="card-type-tag">Power Type</p>
+          <h3 class="card-name">First Unison<br/><span style="font-size:0.8em; color: var(--text-muted);">(Binary Resonance)</span></h3>
+          <div class="card-body">
+            <div class="card-stat"><span class="stat-label">Monroe</span><span class="stat-val">Provides the white-hot catalyst that forces reality to exist</span></div>
+            <div class="card-stat"><span class="stat-label">Cain</span><span class="stat-val">Provides the vantablack gravity that gives the fire a shape to burn within</span></div>
+            <div class="card-stat"><span class="stat-label">Result</span><span class="stat-val"><strong>The original heartbeat of creation</strong></span></div>
+          </div>
+          <blockquote class="card-quote">Not two separate attacks. A singular physics engine. Ignition meets Structure.</blockquote>
+        </div>
+
+        <!-- SIGNATURE AURA -->
+        <div class="fusion-card aura reveal">
+          <p class="card-type-tag">Signature Aura</p>
+          <h3 class="card-name">The Dissonance Storm</h3>
+          <div class="card-body">
+            <p>A blinding wave of white-gold light anchored by an inescapable, crushing gravity well.</p>
+            <p>Air pressure collapses inward, turning light heavy.</p>
+            <p>The visual of <strong>microscopic stars being born in the dust</strong>.</p>
+            <p>The Stillness and silence of The Thrones literally catches fire and burns away.</p>
+          </div>
+        </div>
+
+        <!-- MYTHIC TRAIT -->
+        <div class="fusion-card mythic reveal">
+          <p class="card-type-tag">Mythic Trait</p>
+          <h3 class="card-name">The Anchor & The Spark</h3>
+          <div class="card-body">
+            <p>If one falls, <strong>the universe breaks</strong>. They cannot be unmade by The Thrones.</p>
+            <p>Existence physically requires them to remain paired.</p>
+            <p>If struck down, the cosmos violently rejects their death — reforming their bodies because its Ignition and Gravity <strong>only make sense in tandem</strong>.</p>
+          </div>
+        </div>
+
+        <!-- DANGEROUS TRAIT -->
+        <div class="fusion-card dangerous reveal">
+          <p class="card-type-tag">Dangerous Trait</p>
+          <h3 class="card-name">Volatile Devotion</h3>
+          <div class="card-body">
+            <p>Their mutual obsession is a <strong>weapon of mass destruction</strong>.</p>
+            <p>They fight for the same control — a dangerous dance of predator versus predator.</p>
+            <p>Collateral damage is guaranteed. Their resonance shatters the arena, dealing shockwave damage to allies, enemies, and <strong>The Dominion alike</strong>.</p>
+          </div>
+        </div>
+
+        <!-- SIGNATURE MOVE -->
+        <div class="fusion-card move reveal">
+          <p class="card-type-tag">Signature Move</p>
+          <h3 class="card-name">The Upward Fall</h3>
+          <div class="card-body">
+            <div class="card-stat"><span class="stat-label">Monroe</span><span class="stat-val">Detonates the void</span></div>
+            <div class="card-stat"><span class="stat-label">Cain</span><span class="stat-val">Inverts the center of gravity</span></div>
+            <div class="card-stat"><span class="stat-label">Effect</span><span class="stat-val">A unified, vertical rocket-strike of violet fire and dense mass</span></div>
+          </div>
+          <blockquote class="card-quote">They drop upward into the sky, riding the very weapons meant to destroy them. A kinetic bullet that effortlessly pierces the core of The Thrones.</blockquote>
+        </div>
+
+        <!-- RARE DROP — full width -->
+        <div class="fusion-card rare reveal">
+          <p class="card-type-tag">✦ Rare Drop ✦</p>
+          <h3 class="card-name">Item: The True Heartspire</h3>
+          <div class="rare-grid">
+            <div class="rare-col">
+              <p>A crystallized helix of pure potential, layered flame, and primordial dust</p>
+              <p>The physical manifestation of the original heartbeat of creation</p>
+            </div>
+            <div class="rare-col">
+              <p>Pulses with the harmonic frequency of the First Impact</p>
+              <p>Glows from within with slow-moving fire, like a living galaxy trapped in a glass membrane</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"><span class="divider-diamond">◆</span></div>
+
+    <!-- ═══════════════════════════════════════════════
+         THE RETURN TO ORIGINAL STATE
+    ═══════════════════════════════════════════════ -->
+    <section class="return-state reveal">
+      <p class="return-tag">✦ The Awakening Era ✦ The Hollow Threshold ✦</p>
+      <h2 class="return-title">The Return to Original State</h2>
+      <p class="return-subtitle">Ignition Meets Structure.</p>
+
+      <p class="return-body">
+        They didn't fight the Echoes. They touched the Spire.<br/>
+        Monroe poured the First Spark into the crystal.<br/>
+        Cain poured the First Descent into the foundation.
+      </p>
+
+      <p class="return-result">
+        The Echoes of the Faithful clarify.<br/>
+        They bow to the vibration of home.
+      </p>
+
+      <p class="the-song-quote">
+        "We don't play the song, Cain.<br/>
+        <strong>We ARE the song."</strong>
+      </p>
+    </section>
+
+  </div><!-- end .page -->
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════ -->
+  <footer>
+    <p class="footer-logo">Monroe Reign — The Chaos Covenstead</p>
+    <ul class="footer-nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="monroe.html">Monroe</a></li>
+      <li><a href="cain.html">Cain</a></li>
+      <li><a href="shadow-archive.html">Shadow Archive</a></li>
+      <li><a href="mythic-past.html">The Mythic Past</a></li>
+      <li><a href="trojan-horse.html">High Heels & Headaches</a></li>
+    </ul>
+    <p class="footer-copy">If one falls, the universe breaks.</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

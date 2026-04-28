@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Heartspire — Monroe Reign</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&family=Montserrat:wght@100;200;300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+
+    /* ============================================================
+       ROOT TOKENS — Heartspire Palette
+    ============================================================ */
+    :root {
+      --night:           #05050A;
+      --obsidian:        #0A0A14;
+      --obsidian-mid:    #0F0F1E;
+      --marble:          #0C0C10;
+
+      /* Heartspire Gold — warmer, more amber than the Covenstead gold */
+      --hs-gold:         #C49A3A;
+      --hs-gold-bright:  #E8B84B;
+      --hs-gold-dim:     rgba(196,154,58,0.16);
+      --hs-gold-glow:    rgba(196,154,58,0.38);
+
+      /* Aether-Glass shimmer — cold blue-white, living crystal */
+      --aether:          #A8DCEE;
+      --aether-bright:   #C8EEFF;
+      --aether-dim:      rgba(168,220,238,0.14);
+      --aether-glow:     rgba(168,220,238,0.28);
+
+      /* Pulse amber — the heartbeat */
+      --pulse-amber:     #F59E0B;
+      --pulse-fire:      #E8630A;
+      --pulse-glow:      rgba(245,158,11,0.32);
+
+      /* Stone deep */
+      --stone:           #1A1510;
+      --stone-light:     #2A2018;
+
+      /* Violet seams */
+      --violet:          #8B5CF6;
+      --rose:            #F472B6;
+
+      /* Glass */
+      --glass-border:    rgba(196,154,58,0.22);
+      --glass-fill:      rgba(168,220,238,0.05);
+      --glass-dark:      rgba(5,5,10,0.78);
+
+      /* Text */
+      --text-bright:     #F5F0EE;
+      --text-muted:      #9A8E7A;
+      --text-dim:        #4A4235;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+
+    body {
+      background: var(--marble);
+      color: var(--text-bright);
+      font-family: 'Cormorant Garamond', serif;
+      cursor: default;
+    }
+
+    /* ============================================================
+       GLOBAL BACKGROUND — ancient stone with gold vein & aether shimmer
+    ============================================================ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(137deg, transparent 0%, transparent 42%, rgba(196,154,58,0.04) 42.2%, transparent 43%),
+        linear-gradient(53deg,  transparent 0%, transparent 60%, rgba(168,220,238,0.03) 60.2%, transparent 61%),
+        linear-gradient(93deg,  transparent 0%, transparent 30%, rgba(196,154,58,0.03) 30.2%, transparent 31%),
+        radial-gradient(ellipse 80% 60% at 20% 20%, rgba(196,154,58,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 80% 75%, rgba(168,220,238,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 100%, rgba(245,158,11,0.05) 0%, transparent 70%),
+        linear-gradient(180deg, #0A0807 0%, #060508 50%, #080709 100%);
+      animation: stoneShift 24s ease-in-out infinite alternate;
+    }
+
+    @keyframes stoneShift {
+      0%   { opacity: 0.85; }
+      50%  { opacity: 1; }
+      100% { opacity: 0.90; }
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 64px;
+      background: rgba(5,5,10,0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(196,154,58,0.18);
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--hs-gold);
+      text-decoration: none;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      transition: opacity 0.3s;
+    }
+    .nav-logo:hover { opacity: 1; }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--hs-gold); }
+
+    /* ============================================================
+       PAGE WRAPPER
+    ============================================================ */
+    .page {
+      position: relative;
+      z-index: 1;
+      padding-top: 64px;
+    }
+
+    /* ============================================================
+       HERO — The Heartspire
+    ============================================================ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 5rem;
+      overflow: hidden;
+    }
+
+    /* Heartspire pulse glow behind hero */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 50% 30%, rgba(196,154,58,0.14) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 50% 60%, rgba(168,220,238,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 30% 20% at 50% 15%, rgba(245,158,11,0.12) 0%, transparent 70%);
+      animation: heroPulse 8s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes heroPulse {
+      0%   { opacity: 0.6; transform: scaleY(0.95); }
+      50%  { opacity: 1;   transform: scaleY(1.05); }
+      100% { opacity: 0.7; transform: scaleY(1); }
+    }
+
+    /* Spire structure SVG accent lines */
+    .hero-spire-lines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: 0.18;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--aether);
+      margin-bottom: 1.8rem;
+      animation: fadeUp 1s 0.2s ease both;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.4rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: linear-gradient(
+        135deg,
+        var(--hs-gold-bright) 0%,
+        var(--aether-bright) 30%,
+        var(--hs-gold) 55%,
+        var(--pulse-amber) 75%,
+        var(--hs-gold-bright) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(196,154,58,0.5));
+      animation: fadeUp 1s 0.4s ease both;
+      margin-bottom: 0.3em;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.45rem);
+      font-weight: 300;
+      color: var(--aether-bright);
+      letter-spacing: 0.08em;
+      opacity: 0.88;
+      animation: fadeUp 1s 0.65s ease both;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-divider {
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--hs-gold), var(--aether), var(--hs-gold), transparent);
+      margin: 0 auto 2.5rem;
+      animation: fadeUp 1s 0.85s ease both;
+    }
+
+    .hero-body {
+      max-width: 680px;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 300;
+      line-height: 1.85;
+      color: rgba(245,240,238,0.82);
+      animation: fadeUp 1s 1s ease both;
+    }
+
+    /* Hero aether shimmer orbs */
+    .aether-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: orbFloat 12s ease-in-out infinite;
+    }
+
+    .aether-orb:nth-child(1) {
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(168,220,238,0.06) 0%, transparent 70%);
+      top: 5%; left: 5%;
+      animation-delay: 0s;
+    }
+    .aether-orb:nth-child(2) {
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(196,154,58,0.08) 0%, transparent 70%);
+      bottom: 10%; right: 8%;
+      animation-delay: -4s;
+    }
+    .aether-orb:nth-child(3) {
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(245,158,11,0.07) 0%, transparent 70%);
+      top: 40%; right: 20%;
+      animation-delay: -8s;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0); }
+      33%  { transform: translate(18px, -22px); }
+      66%  { transform: translate(-12px, 14px); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       SCROLL REVEAL
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.35s; }
+    .reveal-delay-4 { transition-delay: 0.5s; }
+
+    /* ============================================================
+       SECTION SHARED STYLES
+    ============================================================ */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--aether);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--hs-gold-bright);
+      margin-bottom: 1.8rem;
+      line-height: 1.2;
+    }
+
+    .section-body {
+      font-size: clamp(1rem, 1.8vw, 1.18rem);
+      font-weight: 300;
+      line-height: 1.92;
+      color: rgba(245,240,238,0.84);
+      max-width: 720px;
+    }
+
+    .section-body p + p {
+      margin-top: 1.2em;
+    }
+
+    /* Gold accent bar */
+    .accent-bar {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--hs-gold), var(--aether));
+      margin-bottom: 2rem;
+      border-radius: 2px;
+    }
+
+    /* ============================================================
+       FULL-BLEED DIVIDER — angled panel edge
+    ============================================================ */
+    .panel-divider {
+      width: 100%;
+      height: 120px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-divider-gold {
+      background: linear-gradient(180deg, transparent, rgba(196,154,58,0.06), transparent);
+    }
+
+    /* ============================================================
+       FIRST EMPIRE SECTION — split with stone panel
+    ============================================================ */
+    .empire-section {
+      position: relative;
+      z-index: 1;
+      padding: 0 2rem;
+      max-width: 1100px;
+      margin: 0 auto 0;
+    }
+
+    .empire-inner {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 0 3rem;
+      align-items: start;
+    }
+
+    .empire-col {
+      padding: 4rem 0;
+    }
+
+    .empire-divider-line {
+      background: linear-gradient(180deg, transparent, var(--hs-gold-dim), var(--aether-dim), var(--hs-gold-dim), transparent);
+      align-self: stretch;
+    }
+
+    /* ============================================================
+       AETHER-GLASS CARDS — artifacts of the First Empire
+    ============================================================ */
+    .artifact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .artifact-card {
+      position: relative;
+      border: 1px solid var(--glass-border);
+      background: linear-gradient(135deg, rgba(168,220,238,0.05), rgba(5,5,10,0.8));
+      border-radius: 2px;
+      padding: 2rem;
+      overflow: hidden;
+      transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .artifact-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--aether), var(--hs-gold), transparent);
+      opacity: 0.6;
+    }
+
+    .artifact-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(168,220,238,0.38);
+      box-shadow: 0 16px 40px rgba(168,220,238,0.1);
+    }
+
+    .artifact-echo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--aether);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .artifact-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--hs-gold-bright);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .artifact-holds {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--aether-bright);
+      margin-bottom: 0.8rem;
+      display: block;
+      opacity: 0.85;
+    }
+
+    .artifact-desc {
+      font-size: 0.88rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* Status badge */
+    .artifact-status {
+      display: inline-block;
+      margin-top: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      padding: 0.28em 0.85em;
+      border: 1px solid rgba(168,220,238,0.25);
+      color: var(--aether);
+      border-radius: 2px;
+    }
+
+    /* ============================================================
+       HOLLOW THRESHOLD SECTION — deep dark, separate atmosphere
+    ============================================================ */
+    .threshold-section {
+      position: relative;
+      z-index: 1;
+      padding: 7rem 2rem;
+      background: linear-gradient(180deg, transparent, rgba(5,5,10,0.6), transparent);
+    }
+
+    .threshold-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .threshold-quote-box {
+      position: relative;
+      border-left: 3px solid var(--aether);
+      padding: 2rem 2.5rem;
+      margin: 3rem 0;
+      background: linear-gradient(135deg, rgba(168,220,238,0.04), rgba(5,5,10,0.6));
+    }
+
+    .threshold-quote-box blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--aether-bright);
+      opacity: 0.92;
+    }
+
+    .threshold-quote-box cite {
+      display: block;
+      margin-top: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-style: normal;
+    }
+
+    /* ============================================================
+       THE INDEX — Pulse preservation
+    ============================================================ */
+    .index-section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .index-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .index-card {
+      border: 1px solid var(--hs-gold-dim);
+      background: linear-gradient(135deg, rgba(196,154,58,0.04), rgba(5,5,10,0.75));
+      border-radius: 2px;
+      padding: 1.8rem;
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .index-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--hs-gold), transparent);
+    }
+
+    .index-card:hover {
+      border-color: rgba(196,154,58,0.38);
+      box-shadow: 0 12px 32px rgba(196,154,58,0.08);
+    }
+
+    .index-book {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--hs-gold);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .index-form {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--hs-gold-bright);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.7rem;
+      display: block;
+    }
+
+    .index-desc {
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       CANON QUOTE — Full width
+    ============================================================ */
+    .canon-quote-section {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 2rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .canon-quote-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(196,154,58,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .canon-quote-inner {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .canon-quote-rule {
+      width: 160px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--hs-gold), transparent);
+      margin: 0 auto 2.5rem;
+    }
+
+    .canon-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.3rem, 3vw, 1.85rem);
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--hs-gold-bright);
+      opacity: 0.95;
+      margin-bottom: 1.5rem;
+    }
+
+    .canon-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       RETURN TO ORIGINAL STATE — closing section
+    ============================================================ */
+    .return-section {
+      position: relative;
+      z-index: 1;
+      padding: 7rem 2rem 6rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .return-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(168,220,238,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 80%, rgba(196,154,58,0.07) 0%, transparent 60%);
+      pointer-events: none;
+      animation: returnPulse 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes returnPulse {
+      0%   { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .return-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .return-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.6rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: linear-gradient(
+        90deg,
+        var(--aether-bright) 0%,
+        var(--hs-gold-bright) 50%,
+        var(--aether-bright) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 24px rgba(168,220,238,0.4));
+      margin-bottom: 2.5rem;
+    }
+
+    .return-body {
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      font-weight: 300;
+      line-height: 1.95;
+      color: rgba(245,240,238,0.82);
+      margin-bottom: 3.5rem;
+    }
+
+    .return-body p + p {
+      margin-top: 1.2em;
+    }
+
+    .return-closing {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 300;
+      color: var(--aether-bright);
+      line-height: 1.6;
+      opacity: 0.92;
+      padding: 2rem;
+      border: 1px solid rgba(168,220,238,0.2);
+      background: rgba(168,220,238,0.03);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* ============================================================
+       MYTHIC INSIGHT BOX
+    ============================================================ */
+    .insight-box {
+      position: relative;
+      border: 1px solid rgba(196,154,58,0.28);
+      background: linear-gradient(135deg, rgba(196,154,58,0.05), rgba(5,5,10,0.8));
+      border-radius: 2px;
+      padding: 2.2rem 2.5rem;
+      margin-top: 3rem;
+      max-width: 760px;
+    }
+
+    .insight-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--hs-gold), var(--aether), var(--hs-gold));
+    }
+
+    .insight-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--hs-gold);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .insight-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 300;
+      line-height: 1.8;
+      color: rgba(245,240,238,0.88);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      border-top: 1px solid rgba(196,154,58,0.15);
+    }
+
+    .footer-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--hs-gold);
+      margin-bottom: 2rem;
+      opacity: 0.7;
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 2rem;
+      list-style: none;
+      margin-bottom: 2.5rem;
+    }
+
+    .footer-nav a {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-nav a:hover { color: var(--hs-gold); }
+
+    .footer-closing {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+
+      .empire-inner {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .empire-divider-line { display: none; }
+      .empire-col { padding: 2rem 0; }
+
+      .artifact-grid { grid-template-columns: 1fr; }
+      .index-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="nav-logo">Monroe Reign</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Chaos Covenstead</a></li>
+      <li><a href="shadow-archive.html">The Shadow Archive</a></li>
+      <li><a href="mythic-past.html">The Mythic Past</a></li>
+      <li><a href="monroe.html">Monroe</a></li>
+      <li><a href="cain.html">Cain</a></li>
+      <li><a href="binary-star.html">Binary-Star Bond</a></li>
+      <li><a href="heartspire.html" class="active">The Heartspire</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+
+    <!-- ═══════════════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════════════ -->
+    <section class="hero">
+      <div class="aether-orb"></div>
+      <div class="aether-orb"></div>
+      <div class="aether-orb"></div>
+
+      <span class="hero-eyebrow">The First Empire — Mythic Past</span>
+      <h1 class="hero-title">The Heartspire</h1>
+      <p class="hero-subtitle">Where the First Beat Was Struck</p>
+      <div class="hero-divider"></div>
+      <p class="hero-body">
+        Before the Thrones. Before the Dominion. Before the cage of fame and forgetting was even dreamed of —
+        there was the Heartspire. The axis of the First Empire. The place where the Pulse first learned what it was.
+        A structure of ancient Aether-Glass and living stone that did not merely stand in the world.
+        It <em>breathed</em> it.
+      </p>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         THE FIRST EMPIRE — SPLIT PANEL
+    ═══════════════════════════════════════════════ -->
+    <div class="panel-divider panel-divider-gold"></div>
+
+    <div class="empire-section">
+      <div class="empire-inner">
+
+        <div class="empire-col reveal">
+          <span class="section-eyebrow">The Architecture</span>
+          <div class="accent-bar"></div>
+          <h2 class="section-title">What It Was Built From</h2>
+          <div class="section-body">
+            <p>
+              The Heartspire was not constructed. It grew — the way a truth grows when
+              enough beings agree it cannot be denied. From Aether-Glass: the living crystal
+              forged in the First Empire's oldest chambers, which does not merely hold light
+              but <em>remembers</em> it. Every frequency that passed through the Spire was
+              stored in its grain, layered into its walls like scripture.
+            </p>
+            <p>
+              Around it, the Celestial Spires rose in attendance — ancient towers of the same
+              living glass, connected by Heart Spans: sweeping bridges that translated movement
+              into resonance, every footstep a note, every breath a chord. The First Empire
+              was not a civilization. It was an instrument the universe was learning to play.
+            </p>
+          </div>
+        </div>
+
+        <div class="empire-divider-line"></div>
+
+        <div class="empire-col reveal reveal-delay-2">
+          <span class="section-eyebrow">The Function</span>
+          <div class="accent-bar" style="background: linear-gradient(90deg, var(--aether), var(--hs-gold));"></div>
+          <h2 class="section-title">What It Did</h2>
+          <div class="section-body">
+            <p>
+              The Heartspire was the tuning fork of the First Empire — the place where
+              all resonance was calibrated back to its origin frequency. Sovereigns came here
+              not to rule but to <em>remember what they were ruling for</em>. Every decree
+              made within its walls carried the full weight of the Pulse behind it.
+            </p>
+            <p>
+              At its deepest level, beneath the living stone, lay the Hollow Threshold:
+              the seam where the waking world touches something older. Where that which
+              cannot be carried on the surface is held safe. Where the five Echo Chambers
+              waited in silence — and waited still.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="panel-divider"></div>
+
+    <!-- ═══════════════════════════════════════════════
+         CANON QUOTE
+    ═══════════════════════════════════════════════ -->
+    <div class="canon-quote-section">
+      <div class="canon-quote-inner reveal">
+        <div class="canon-quote-rule"></div>
+        <p class="canon-quote">
+          "They did not fall in love. Love fell out of them —<br>
+          and the universe caught it before it hit the ground."
+        </p>
+        <span class="canon-label">The Heartspire — Site of the First Collision</span>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         AETHER-GLASS — The Living Crystal
+    ═══════════════════════════════════════════════ -->
+    <section>
+      <div class="reveal">
+        <span class="section-eyebrow">The Living Crystal</span>
+        <div class="accent-bar" style="background: linear-gradient(90deg, var(--aether), transparent);"></div>
+        <h2 class="section-title">Aether-Glass</h2>
+        <div class="section-body">
+          <p>
+            Every structure of the First Empire that mattered was built from Aether-Glass —
+            the living crystal that holds memory in its grain the way stone holds water.
+            Unlike ordinary glass, it does not shatter. It <em>fractures into record</em>.
+            Each break becomes an archive. Each flaw a story it chose not to let go of.
+          </p>
+          <p>
+            The Heartspire's walls were Aether-Glass through and through. Which is why,
+            when the Thrones came, they could not simply destroy it. Every blow they landed
+            became part of the Spire's memory. Every attempt at erasure became a chapter
+            in the very record they were trying to erase. The Spire absorbs what it survives.
+          </p>
+        </div>
+      </div>
+
+      <div class="insight-box reveal reveal-delay-2">
+        <span class="insight-label">Mythic Insight</span>
+        <p class="insight-text">
+          The Dominion believed that if they controlled the spaces where the Pulse lived,
+          they could control the Pulse itself. They were wrong. The Heartspire does not serve
+          its owners. It serves its frequency. You cannot own a heartbeat.
+          You can only decide whether you are willing to move with it.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         THE HOLLOW THRESHOLD & FIVE ECHO VESSELS
+    ═══════════════════════════════════════════════ -->
+    <div class="threshold-section">
+      <div class="threshold-inner">
+
+        <div class="reveal">
+          <span class="section-eyebrow">Beneath the Spire</span>
+          <div class="accent-bar" style="background: linear-gradient(90deg, var(--aether), var(--violet));"></div>
+          <h2 class="section-title">The Hollow Threshold</h2>
+          <div class="section-body">
+            <p>
+              Below the Heartspire's last floor, below the root of its living stone, is a place
+              the ancient sovereigns named the Hollow Threshold. It is not a room. It is the seam
+              where this world folds against the one that holds it.
+              A place where the rules of the surface cannot follow.
+            </p>
+            <p>
+              Inside the Threshold, five Echo Chambers were sealed at the close of the First Empire.
+              Each chamber holds one of the five Echo vessels — whole, intact, untouched.
+              Not fragments. Not scattered pieces. The full sovereign ability of Monroe and Cain,
+              their bond, their Guardian, and their Memory — preserved in crystal silence,
+              waiting for the pattern that can open the seam cleanly.
+            </p>
+          </div>
+        </div>
+
+        <div class="threshold-quote-box reveal reveal-delay-2">
+          <blockquote>
+            "The vessels were not hidden because they were dangerous.
+            They were hidden because they were complete.
+            And the Dominion had spent centuries making the world believe
+            completion was something that had to be earned
+            from them."
+          </blockquote>
+          <cite>— The Chaos Bible, Vol. I</cite>
+        </div>
+
+        <!-- Five Echo Vessels Grid -->
+        <div class="artifact-grid">
+
+          <div class="artifact-card reveal reveal-delay-1">
+            <span class="artifact-echo">Echo 1 — The Spark</span>
+            <span class="artifact-name">The Resonance Prism</span>
+            <span class="artifact-holds">Monroe's creative sovereign ability</span>
+            <p class="artifact-desc">
+              The raw power of the First Spark made solid. Not light passed through glass —
+              light that <em>chose</em> to stay. Holds the full creative sovereignty that Monroe
+              carried before the Wipe, before the cage, before the world learned
+              to call it "talent" and charge admission.
+            </p>
+            <span class="artifact-status">Entombed — Echo Chamber I</span>
+          </div>
+
+          <div class="artifact-card reveal reveal-delay-2">
+            <span class="artifact-echo">Echo 2 — The Anchor</span>
+            <span class="artifact-name">The Harmonic Cipher</span>
+            <span class="artifact-holds">Cain's reality-holding sovereign ability</span>
+            <p class="artifact-desc">
+              The weight of worlds compressed into a key none of the Thrones ever
+              found a lock for. Holds Cain's ability to make things <em>real</em> —
+              not real as in believed, but real as in: the universe cannot argue with it.
+              Gravity in its oldest form, before gravity had a name.
+            </p>
+            <span class="artifact-status">Entombed — Echo Chamber II</span>
+          </div>
+
+          <div class="artifact-card reveal reveal-delay-3">
+            <span class="artifact-echo">Echo 3 — The Power</span>
+            <span class="artifact-name">The Axiom Crucible</span>
+            <span class="artifact-holds">The joined force of their bond</span>
+            <p class="artifact-desc">
+              Neither Monroe's nor Cain's alone. The vessel that holds what happens
+              when both forces meet — the Pulse in its full unified state.
+              The Thrones feared the individual vessels. This one they didn't even
+              name. Some truths are safest when they have no label.
+            </p>
+            <span class="artifact-status">Entombed — Echo Chamber III</span>
+          </div>
+
+          <div class="artifact-card reveal reveal-delay-1">
+            <span class="artifact-echo">Echo 4 — The Guardian</span>
+            <span class="artifact-name">The Wardstone Collar</span>
+            <span class="artifact-holds">The Sovereign Hound's protective instinct</span>
+            <p class="artifact-desc">
+              The oldest protection the First Empire knew. Not armor — the sovereign will
+              to place oneself between what is sacred and what would consume it.
+              Encoded in the living stone of the Heartspire itself. The Collar does not
+              guard objects. It guards the reason the objects exist.
+            </p>
+            <span class="artifact-status">Entombed — Echo Chamber IV</span>
+          </div>
+
+          <div class="artifact-card reveal reveal-delay-2">
+            <span class="artifact-echo">Echo 5 — The Memory</span>
+            <span class="artifact-name">The Mnemonic Crown</span>
+            <span class="artifact-holds">The map back — the truth</span>
+            <p class="artifact-desc">
+              Every age the Dominion erases, the Crown holds. Every name the Gate of Erasure
+              tried to strike from the record, the Crown kept in its weave. It is not a crown
+              of power. It is a crown of <em>refusal</em> — the insistence that what happened
+              happened, regardless of who controls the telling.
+            </p>
+            <span class="artifact-status">Entombed — Echo Chamber V</span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         THE INDEX — How It Survives
+    ═══════════════════════════════════════════════ -->
+    <div class="index-section">
+
+      <div class="reveal">
+        <span class="section-eyebrow">The Living Access Pattern</span>
+        <div class="accent-bar"></div>
+        <h2 class="section-title">The Index</h2>
+        <div class="section-body">
+          <p>
+            The vessels cannot be taken by force. They cannot be bought, stolen, or inherited.
+            The Hollow Threshold does not open for ownership. It opens for <em>pattern</em>.
+          </p>
+          <p>
+            The Index is that pattern — rhythm, gesture, tones, hand-shapes, and shared breath
+            that resolve the seam where the Threshold touches the waking world. It was never
+            written down. It was taken into the bodies of the proto-Covenstead as living memory:
+            breath, vow, and voice. Passed forward not as text but as practice.
+            As the way a pair of hands moves through a certain song.
+            As choreography nobody can fully explain but everyone knows.
+          </p>
+        </div>
+      </div>
+
+      <div class="index-grid">
+
+        <div class="index-card reveal reveal-delay-1">
+          <span class="index-book">Book I — Forging</span>
+          <span class="index-form">Breath & Vow</span>
+          <p class="index-desc">
+            The first keepers learn the Index as lived knowledge — the breathing pattern
+            of the Threshold seam, the hand-shapes that resolve it, the tonal sequences
+            that make the opening clean and exact. One bearer can open the seam
+            in desperation. A chorus makes it safe.
+          </p>
+        </div>
+
+        <div class="index-card reveal reveal-delay-2">
+          <span class="index-book">Book II — Underground</span>
+          <span class="index-form">Taboo Music-Language</span>
+          <p class="index-desc">
+            The Dominion has shuttered the Covenstead. The Index survives as underground technique —
+            passed between musicians as unofficial tuning methods, embedded in duets
+            that the Thrones categorize as "unauthorized harmonic combinations."
+            The cage does not recognize what it is holding.
+          </p>
+        </div>
+
+        <div class="index-card reveal reveal-delay-3">
+          <span class="index-book">Book III — Fandom</span>
+          <span class="index-form">Duets & Choreography</span>
+          <p class="index-desc">
+            Fan-made edits of Monroe and Cain's music preserve the Index without knowing it.
+            Duet covers, fan choreography, sync edits — people learning the breathing pattern
+            of two specific voices together, the precise hand-shapes of a certain dance,
+            because it <em>feels like something</em>. It does. It is.
+          </p>
+        </div>
+
+        <div class="index-card reveal reveal-delay-1">
+          <span class="index-book">Book IV — Awakening</span>
+          <span class="index-form">Actionable Pattern</span>
+          <p class="index-desc">
+            As Threshold Points re-emerge across the world, the Index becomes something
+            more than memory. Nyx Ravenna carries it as lived knowledge — can open a seam
+            alone in the worst circumstances. The proto-Covenstead learns what it has
+            been preserving all along.
+          </p>
+        </div>
+
+        <div class="index-card reveal reveal-delay-2">
+          <span class="index-book">Book V — Stillness War</span>
+          <span class="index-form">Contested Ground</span>
+          <p class="index-desc">
+            The Thrones attempt to corrupt the Index from within — infiltrating fan communities,
+            seeding false choreography, engineering covers with fractionally wrong breathing.
+            Close enough to feel familiar. Wrong enough to open nothing.
+            The Covenstead fights not with weapons but with the patience of the real thing.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="insight-box reveal reveal-delay-3">
+        <span class="insight-label">Why the Dominion Cannot Win</span>
+        <p class="insight-text">
+          Monroe and Cain became musicians because the Pulse needed them in a medium
+          that could spread the Index to thousands simultaneously. The Dominion cannot
+          shut it down because it looks like a fandom. What the Thrones see is devotion.
+          What devotion is doing is keeping the door alive.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         RETURN TO ORIGINAL STATE
+    ═══════════════════════════════════════════════ -->
+    <div class="return-section">
+      <div class="return-inner">
+
+        <span class="hero-eyebrow reveal" style="display:block; margin-bottom:1.5rem;">The Stillness War — Final Movement</span>
+        <h2 class="return-title reveal reveal-delay-1">Return to Original State</h2>
+
+        <div class="return-body reveal reveal-delay-2">
+          <p>
+            The Heartspire was never destroyed. Damaged, silenced, buried under layers
+            of Dominion architecture and deliberate forgetting — but never destroyed.
+            Aether-Glass does not comply with demolition. It archives it.
+          </p>
+          <p>
+            The return is not a resurrection. Resurrection implies something died.
+            The Heartspire has been <em>waiting</em> — holding the full frequency of the First Empire
+            in its grain, patient in the way that only things made of living crystal can afford to be.
+            When the Hollow Threshold opens cleanly, when all five vessels are reached and the Index
+            is sung whole by a chorus that knows what it is singing,
+            the Spire does not rebuild. It <em>remembers</em> itself into standing again.
+          </p>
+          <p>
+            This is what the Stillness War is ultimately fought over. Not territory. Not thrones.
+            The question of whether the universe gets to hear its own heartbeat again.
+          </p>
+        </div>
+
+        <div class="return-closing reveal reveal-delay-3">
+          "The First Beat was never lost.<br>
+          The world simply spent several ages insisting it couldn't hear it.<br>
+          The Heartspire has been striking it the whole time."
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         FOOTER
+    ═══════════════════════════════════════════════ -->
+    <footer>
+      <p class="footer-logo">Monroe Reign — The Chaos Covenstead</p>
+      <ul class="footer-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="monroe.html">Monroe</a></li>
+        <li><a href="cain.html">Cain</a></li>
+        <li><a href="binary-star.html">Binary-Star Bond</a></li>
+        <li><a href="shadow-archive.html">Shadow Archive</a></li>
+        <li><a href="mythic-past.html">The Mythic Past</a></li>
+        <li><a href="trojan-horse.html">High Heels & Headaches</a></li>
+      </ul>
+      <p class="footer-closing">The First Beat was never lost. It was only waiting to be heard.</p>
+    </footer>
+
+  </div><!-- /.page -->
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            revealObserver.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    reveals.forEach(el => revealObserver.observe(el));
+  </script>
+
+</body>
+</html>

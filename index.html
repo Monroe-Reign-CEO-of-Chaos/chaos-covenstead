@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monroe Reign — The Chaos Covenstead</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&family=Montserrat:wght@100;200;300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+
+    /* ============================================================
+       ROOT TOKENS — Covenstead Palette
+    ============================================================ */
+    :root {
+      --night:           #05050A;
+      --obsidian:        #0A0A14;
+      --obsidian-mid:    #0F0F1E;
+      --marble:          #0C0C10;
+
+      /* Gold veins */
+      --gold:            #D4A94B;
+      --gold-bright:     #F0CB6E;
+      --gold-dim:        rgba(212,169,75,0.18);
+      --gold-glow:       rgba(212,169,75,0.35);
+
+      /* Nebula accents */
+      --violet:          #8B5CF6;
+      --rose:            #F472B6;
+      --pink:            #E86CA0;
+      --cyan:            #67E8F9;
+      --amber:           #F59E0B;
+
+      /* Surface Script (Dominion) */
+      --dom-magenta:     #E91E8C;
+      --dom-cyan:        #00E5FF;
+
+      /* Glass */
+      --glass-border:    rgba(212,169,75,0.22);
+      --glass-fill:      rgba(139,92,246,0.06);
+      --glass-dark:      rgba(5,5,10,0.75);
+
+      /* Text */
+      --text-bright:     #F5F0FF;
+      --text-muted:      #8B82A8;
+      --text-dim:        #4A4362;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+
+    body {
+      background: var(--marble);
+      color: var(--text-bright);
+      font-family: 'Cormorant Garamond', serif;
+      cursor: default;
+    }
+
+    /* ============================================================
+       GLOBAL BACKGROUND — dark marble with gold vein cracks
+    ============================================================ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        /* Gold crack veins */
+        linear-gradient(127deg, transparent 0%, transparent 38%, rgba(212,169,75,0.04) 38.2%, transparent 39%),
+        linear-gradient(43deg,  transparent 0%, transparent 55%, rgba(212,169,75,0.03) 55.2%, transparent 56%),
+        linear-gradient(83deg,  transparent 0%, transparent 70%, rgba(212,169,75,0.04) 70.2%, transparent 71%),
+        /* Nebula atmosphere */
+        radial-gradient(ellipse 80% 60% at 15% 25%, rgba(139,92,246,0.09) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 85% 70%, rgba(212,169,75,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 90%, rgba(232,108,160,0.05) 0%, transparent 70%),
+        /* Deep marble base */
+        linear-gradient(180deg, #080810 0%, #050508 50%, #070710 100%);
+      animation: marbleShift 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes marbleShift {
+      0%   { filter: hue-rotate(0deg) brightness(1); }
+      50%  { filter: hue-rotate(10deg) brightness(1.04); }
+      100% { filter: hue-rotate(-6deg) brightness(0.97); }
+    }
+
+    /* Reflective obsidian floor */
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 25vh;
+      background: linear-gradient(to top, rgba(139,92,246,0.06) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ============================================================
+       FLOATING GLASS SHARDS — background decoration
+    ============================================================ */
+    .shard-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .shard-bg span {
+      position: absolute;
+      background: linear-gradient(135deg, rgba(212,169,75,0.06), rgba(139,92,246,0.04));
+      border: 1px solid rgba(212,169,75,0.08);
+      backdrop-filter: blur(1px);
+      animation: shardFloat linear infinite;
+    }
+
+    .shard-bg span:nth-child(1)  { width:80px; height:60px; top:8%;  left:5%;  clip-path:polygon(20% 0%,100% 15%,80% 100%,0% 70%); animation-duration:22s; animation-delay:-3s; }
+    .shard-bg span:nth-child(2)  { width:55px; height:90px; top:20%; left:88%; clip-path:polygon(0% 20%,100% 0%,90% 80%,10% 100%); animation-duration:28s; animation-delay:-8s; }
+    .shard-bg span:nth-child(3)  { width:40px; height:50px; top:55%; left:3%;  clip-path:polygon(50% 0%,100% 40%,70% 100%,0% 60%); animation-duration:18s; animation-delay:-15s; }
+    .shard-bg span:nth-child(4)  { width:70px; height:45px; top:70%; left:92%; clip-path:polygon(0% 0%,80% 20%,100% 100%,20% 80%); animation-duration:24s; animation-delay:-5s; }
+    .shard-bg span:nth-child(5)  { width:35px; height:65px; top:35%; left:94%; clip-path:polygon(30% 0%,100% 10%,90% 90%,0% 100%); animation-duration:30s; animation-delay:-12s; }
+    .shard-bg span:nth-child(6)  { width:90px; height:40px; top:85%; left:12%; clip-path:polygon(10% 0%,100% 30%,80% 100%,0% 50%); animation-duration:20s; animation-delay:-7s; }
+    .shard-bg span:nth-child(7)  { width:45px; height:75px; top:15%; left:45%; clip-path:polygon(0% 10%,90% 0%,100% 80%,15% 100%); animation-duration:35s; animation-delay:-20s; }
+    .shard-bg span:nth-child(8)  { width:60px; height:55px; top:62%; left:68%; clip-path:polygon(25% 0%,100% 20%,75% 100%,0% 80%); animation-duration:26s; animation-delay:-9s; }
+
+    @keyframes shardFloat {
+      0%   { transform: translateY(0px) rotate(0deg);   opacity: 0.4; }
+      50%  { transform: translateY(-18px) rotate(3deg); opacity: 0.7; }
+      100% { transform: translateY(0px) rotate(-2deg);  opacity: 0.4; }
+    }
+
+    /* ============================================================
+       PULSE HEARTBEAT LINE
+    ============================================================ */
+    .pulse-line {
+      position: fixed;
+      bottom: 8vh;
+      left: 0; right: 0;
+      z-index: 2;
+      pointer-events: none;
+      height: 50px;
+    }
+
+    .pulse-path {
+      fill: none;
+      stroke: url(#pulseGrad);
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-dasharray: 2400;
+      stroke-dashoffset: 2400;
+      filter: drop-shadow(0 0 6px rgba(139,92,246,0.8));
+      animation: ekgPulse 4.5s ease-in-out infinite;
+    }
+
+    @keyframes ekgPulse {
+      0%   { stroke-dashoffset: 2400; opacity: 0; }
+      5%   { opacity: 1; }
+      45%  { stroke-dashoffset: 0; opacity: 1; }
+      70%  { stroke-dashoffset: -2400; opacity: 0.3; }
+      100% { stroke-dashoffset: -2400; opacity: 0; }
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3.5rem;
+      background: rgba(5,5,10,0.82);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212,169,75,0.1);
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+      color: var(--text-muted);
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+      text-shadow: 0 0 12px rgba(212,169,75,0.4);
+    }
+
+    /* ============================================================
+       PAGE WRAPPER
+    ============================================================ */
+    .page {
+      position: relative;
+      z-index: 3;
+    }
+
+    /* ============================================================
+       SECTION 1 — HERO
+    ============================================================ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 5rem;
+      position: relative;
+    }
+
+    /* Ornate filigree frame */
+    .hero-frame {
+      position: absolute;
+      inset: 4rem 6rem;
+      pointer-events: none;
+    }
+
+    .hero-frame::before, .hero-frame::after {
+      content: '';
+      position: absolute;
+      background: var(--gold);
+      opacity: 0.12;
+    }
+
+    .hero-frame::before {
+      top: 0; left: 0; right: 0; height: 1px;
+      box-shadow: 0 0 8px rgba(212,169,75,0.3);
+    }
+
+    .hero-frame::after {
+      bottom: 0; left: 0; right: 0; height: 1px;
+      box-shadow: 0 0 8px rgba(212,169,75,0.3);
+    }
+
+    .hero-frame-left, .hero-frame-right {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: var(--gold);
+      opacity: 0.12;
+    }
+
+    .hero-frame-left  { left: 0; }
+    .hero-frame-right { right: 0; }
+
+    /* Corner diamonds */
+    .hero-frame-corner {
+      position: absolute;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      opacity: 0.35;
+      transform: rotate(45deg);
+    }
+
+    .hero-frame-corner.tl { top: -4px; left: -4px; }
+    .hero-frame-corner.tr { top: -4px; right: -4px; }
+    .hero-frame-corner.bl { bottom: -4px; left: -4px; }
+    .hero-frame-corner.br { bottom: -4px; right: -4px; }
+
+    .hero-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      color: var(--gold);
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 3rem;
+      animation: fadeUp 1s ease both;
+    }
+
+    /* Star separator */
+    .star-sep {
+      display: inline-block;
+      margin: 0 1.5rem;
+      opacity: 0.5;
+    }
+
+    .hero-not {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.8rem, 8vw, 7rem);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--text-bright);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 1s 0.2s ease both;
+      position: relative;
+    }
+
+    .hero-not::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--text-bright) 50%, var(--gold-bright) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      animation: textReveal 1.5s 0.8s ease forwards;
+    }
+
+    @keyframes textReveal {
+      0%   { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .hero-taglines {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 1s 0.5s ease both;
+    }
+
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.2rem, 3vw, 2.1rem);
+      font-weight: 300;
+      letter-spacing: 0.12em;
+    }
+
+    .hero-tagline.t1 { color: var(--gold); }
+    .hero-tagline.t2 { color: var(--rose); }
+    .hero-tagline.t3 { color: var(--violet); }
+
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 3.5rem;
+      animation: fadeUp 1s 0.7s ease both;
+    }
+
+    .hero-sub em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .cta-btn {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--gold);
+      border: 1px solid rgba(212,169,75,0.4);
+      padding: 1.1rem 3.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.4s, border-color 0.4s;
+      display: inline-block;
+      animation: fadeUp 1s 0.9s ease both;
+      cursor: pointer;
+    }
+
+    .cta-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212,169,75,0.08), rgba(139,92,246,0.08));
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 0; height: 0;
+      background: rgba(212,169,75,0.15);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .cta-btn:hover {
+      color: var(--gold-bright);
+      border-color: rgba(212,169,75,0.8);
+      box-shadow: 0 0 30px rgba(212,169,75,0.2), inset 0 0 20px rgba(212,169,75,0.05);
+    }
+
+    .cta-btn:hover::before { opacity: 1; }
+    .cta-btn:hover::after  { width: 300px; height: 300px; }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.35;
+      animation: fadeUp 1s 1.5s ease both, bobScroll 3s 2.5s ease-in-out infinite;
+    }
+
+    .scroll-hint span {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+    }
+
+    .scroll-hint-arrow {
+      width: 1px;
+      height: 30px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    @keyframes bobScroll {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       DIVIDER
+    ============================================================ */
+    .section-divider {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 2rem;
+    }
+
+    .section-divider::before, .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,169,75,0.25), transparent);
+    }
+
+    .divider-diamond {
+      color: var(--gold);
+      font-size: 0.5rem;
+      opacity: 0.6;
+    }
+
+    /* ============================================================
+       SECTION 2 — THE REVELATION (Surface Script vs Cosmic Reality)
+    ============================================================ */
+    .revelation {
+      padding: 8rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .revelation-grid {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 0;
+      align-items: stretch;
+      margin-top: 4rem;
+      min-height: 420px;
+    }
+
+    .revelation-panel {
+      padding: 3.5rem;
+      position: relative;
+    }
+
+    .revelation-panel.surface {
+      background: linear-gradient(135deg, rgba(233,30,140,0.06), rgba(0,229,255,0.04));
+      border: 1px solid rgba(233,30,140,0.2);
+      clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+    }
+
+    .revelation-panel.cosmic {
+      background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(212,169,75,0.05));
+      border: 1px solid rgba(212,169,75,0.2);
+      clip-path: polygon(5% 0, 100% 0, 100% 95%, 95% 100%, 0 100%, 0 5%);
+    }
+
+    .revelation-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .revelation-divider::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(212,169,75,0.4), transparent);
+    }
+
+    .crack-line {
+      width: 40px;
+      height: 100%;
+      position: relative;
+    }
+
+    .crack-line svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .rev-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .rev-label.surface-label { color: var(--dom-magenta); }
+    .rev-label.cosmic-label  { color: var(--gold); }
+
+    .rev-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .rev-title.surface-title { color: var(--dom-magenta); }
+    .rev-title.cosmic-title  {
+      background: linear-gradient(135deg, var(--gold), var(--rose));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .rev-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+    }
+
+    .rev-body strong {
+      color: var(--text-bright);
+      font-weight: 600;
+    }
+
+    .rev-quote {
+      margin-top: 2rem;
+      padding: 1.2rem 1.5rem;
+      border-left: 2px solid rgba(212,169,75,0.3);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--gold);
+    }
+
+    /* ============================================================
+       SECTION 3 — THE ARCHITECTS
+    ============================================================ */
+    .architects {
+      padding: 8rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.45em;
+      color: var(--gold);
+      text-transform: uppercase;
+      opacity: 0.7;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 3.5vw, 2.6rem);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-align: center;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--rose) 50%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 20px rgba(212,169,75,0.2));
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .architects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+
+    .architect-card {
+      position: relative;
+      padding: 3rem;
+      text-decoration: none;
+      display: block;
+      overflow: hidden;
+      transition: transform 0.4s, box-shadow 0.4s;
+    }
+
+    .architect-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .architect-card.monroe {
+      background: linear-gradient(135deg, rgba(180,58,8,0.12), rgba(212,169,75,0.06));
+      border: 1px solid rgba(180,58,8,0.3);
+      clip-path: polygon(0 0, 100% 0, 100% 90%, 95% 100%, 0 100%);
+    }
+
+    .architect-card.monroe:hover {
+      box-shadow: 0 20px 60px rgba(180,58,8,0.2), 0 0 30px rgba(212,169,75,0.1);
+      border-color: rgba(224,96,16,0.5);
+    }
+
+    .architect-card.cain {
+      background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(10,10,20,0.6));
+      border: 1px solid rgba(139,92,246,0.25);
+      clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%, 0 10%);
+    }
+
+    .architect-card.cain:hover {
+      box-shadow: 0 20px 60px rgba(139,92,246,0.15), 0 0 30px rgba(139,92,246,0.1);
+      border-color: rgba(139,92,246,0.5);
+    }
+
+    .architect-role {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      opacity: 0.75;
+    }
+
+    .monroe .architect-role { color: var(--amber); }
+    .cain   .architect-role { color: var(--violet); }
+
+    .architect-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 0.3rem;
+    }
+
+    .monroe .architect-name {
+      background: linear-gradient(135deg, #E06010, #F08830, #D4A94B);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cain .architect-name {
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .architect-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      margin-bottom: 2rem;
+    }
+
+    .architect-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      line-height: 1.55;
+      color: var(--text-bright);
+      margin-bottom: 2rem;
+      position: relative;
+      padding-left: 1.2rem;
+    }
+
+    .architect-quote::before {
+      content: '"';
+      position: absolute;
+      left: 0; top: -0.2rem;
+      font-size: 2rem;
+      line-height: 1;
+      opacity: 0.3;
+    }
+
+    .architect-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .spec-row {
+      display: flex;
+      gap: 0.8rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+    }
+
+    .spec-label {
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      min-width: 70px;
+      flex-shrink: 0;
+    }
+
+    .spec-val { color: var(--text-muted); }
+
+    .architect-link {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.65;
+      transition: opacity 0.3s;
+    }
+
+    .architect-card:hover .architect-link { opacity: 1; }
+
+    /* Card glow accent */
+    .card-glow {
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      filter: blur(50px);
+      pointer-events: none;
+      opacity: 0.25;
+    }
+
+    .monroe .card-glow { background: #E06010; }
+    .cain   .card-glow { background: #8B5CF6; }
+
+    /* ============================================================
+       SECTION 4 — ERA TIMELINE
+    ============================================================ */
+    .eras {
+      padding: 8rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .era-timeline {
+      margin-top: 4rem;
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr;
+      gap: 0;
+      position: relative;
+    }
+
+    /* Connecting thread */
+    .era-timeline::before {
+      content: '';
+      position: absolute;
+      top: 50px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent,
+        rgba(103,232,249,0.4) 15%,
+        rgba(245,158,11,0.4) 38%,
+        rgba(212,169,75,0.4) 55%,
+        rgba(139,92,246,0.4) 78%,
+        rgba(75,85,99,0.3) 95%,
+        transparent
+      );
+      z-index: 0;
+    }
+
+    .era-card {
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.4s;
+      cursor: default;
+    }
+
+    .era-card:hover { transform: translateY(-4px); }
+
+    .era-number {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.5rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      opacity: 0.6;
+    }
+
+    .era-dot {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+
+    .era-dot::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid currentColor;
+      opacity: 0.4;
+    }
+
+    .era-1 .era-dot  { background: var(--cyan);       color: var(--cyan);       box-shadow: 0 0 15px rgba(103,232,249,0.6); }
+    .era-2 .era-dot  { background: var(--amber);      color: var(--amber);      box-shadow: 0 0 15px rgba(245,158,11,0.6); }
+    .era-3 .era-dot  { background: var(--gold);       color: var(--gold);       box-shadow: 0 0 15px rgba(212,169,75,0.5); }
+    .era-4 .era-dot  { background: var(--violet);     color: var(--violet);     box-shadow: 0 0 15px rgba(139,92,246,0.5); }
+    .era-5 .era-dot  { background: #4B5563;            color: #4B5563;            box-shadow: 0 0 15px rgba(75,85,99,0.4); opacity: 0.6; }
+
+    .era-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+      letter-spacing: 0.06em;
+      line-height: 1.3;
+      margin-bottom: 0.8rem;
+    }
+
+    .era-1 .era-name { color: var(--cyan); }
+    .era-2 .era-name { color: var(--amber); }
+    .era-3 .era-name { color: var(--gold); }
+    .era-4 .era-name { color: var(--violet); }
+    .era-5 .era-name { color: #6B7280; opacity: 0.7; }
+
+    .era-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 1.5rem;
+    }
+
+    .era-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .era-separator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .era-sep-line {
+      width: 1px;
+      height: 60%;
+      background: linear-gradient(to bottom, transparent, rgba(212,169,75,0.2), transparent);
+    }
+
+    /* ============================================================
+       SECTION 5 — THREE PILLARS
+    ============================================================ */
+    .pillars {
+      padding: 8rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .pillars-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 4rem;
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.8rem;
+    }
+
+    .pillar-card {
+      background: linear-gradient(160deg, rgba(10,10,20,0.9), rgba(5,5,12,0.95));
+      border: 1px solid var(--glass-border);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.4s, transform 0.4s;
+      cursor: default;
+    }
+
+    .pillar-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      transition: opacity 0.4s;
+    }
+
+    .pillar-card.p-prophecy::before { background: linear-gradient(90deg, transparent, var(--violet), transparent); }
+    .pillar-card.p-archive::before  { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+    .pillar-card.p-heartspire::before { background: linear-gradient(90deg, transparent, var(--rose), transparent); }
+
+    .pillar-card:hover { transform: translateY(-6px); }
+
+    .pillar-card.p-prophecy:hover  { border-color: rgba(139,92,246,0.4); box-shadow: 0 20px 50px rgba(139,92,246,0.1); }
+    .pillar-card.p-archive:hover   { border-color: rgba(212,169,75,0.4); box-shadow: 0 20px 50px rgba(212,169,75,0.08); }
+    .pillar-card.p-heartspire:hover { border-color: rgba(244,114,182,0.4); box-shadow: 0 20px 50px rgba(244,114,182,0.08); }
+
+    /* Folder tab effect */
+    .pillar-card::after {
+      content: '';
+      position: absolute;
+      top: -1px; left: 50%;
+      transform: translateX(-50%);
+      width: 80px; height: 4px;
+      border-radius: 0 0 4px 4px;
+    }
+
+    .pillar-card.p-prophecy::after  { background: rgba(139,92,246,0.6); }
+    .pillar-card.p-archive::after   { background: rgba(212,169,75,0.6); }
+    .pillar-card.p-heartspire::after { background: rgba(244,114,182,0.6); }
+
+    .pillar-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .pillar-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(0.8rem, 1.5vw, 1rem);
+      letter-spacing: 0.12em;
+      line-height: 1.4;
+      margin-bottom: 1.5rem;
+    }
+
+    .p-prophecy .pillar-name  { color: var(--violet); }
+    .p-archive .pillar-name   { color: var(--gold); }
+    .p-heartspire .pillar-name { color: var(--rose); }
+
+    .pillar-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       SECTION 6 — MUSIC VIDEOS
+    ============================================================ */
+    .videos {
+      padding: 8rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.8rem;
+      margin-top: 4rem;
+    }
+    @media (max-width: 1100px) {
+      .video-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 750px) {
+      .video-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .video-grid { grid-template-columns: 1fr; }
+    }
+
+    .video-card {
+      position: relative;
+      background: linear-gradient(160deg, rgba(10,10,20,0.9), rgba(5,5,12,0.95));
+      border: 1px solid var(--glass-border);
+      overflow: hidden;
+      transition: transform 0.4s, border-color 0.4s;
+    }
+
+    .video-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(212,169,75,0.4);
+      box-shadow: 0 20px 50px rgba(212,169,75,0.08);
+    }
+
+    .video-thumb {
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 */
+      background: linear-gradient(135deg, #0D0305, #080810);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-thumb-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-play {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: rgba(212,169,75,0.15);
+      border: 1px solid rgba(212,169,75,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 1.2rem;
+      backdrop-filter: blur(4px);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .video-card:hover .video-play {
+      background: rgba(212,169,75,0.25);
+      transform: scale(1.1);
+    }
+
+    .video-card video {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16/9;
+      object-fit: contain;
+      background: #05050A;
+    }
+
+    /* Gradient overlays per video */
+    .video-card.beautiful-wreck .video-thumb-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(180,58,8,0.2), transparent 70%);
+    }
+
+    .video-card.death-wish .video-thumb-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(139,92,246,0.2), transparent 70%);
+    }
+
+    .video-card.funeral .video-thumb-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(212,169,75,0.15), transparent 70%);
+    }
+
+    .video-info {
+      padding: 1.5rem;
+    }
+
+    .video-era {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    .video-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .video-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .video-coming-soon {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      border: 1px solid rgba(212,169,75,0.3);
+      padding: 0.25rem 0.6rem;
+      opacity: 0.7;
+    }
+
+    /* ============================================================
+       SECTION 7 — FIRST PROPHECY (full bleed)
+    ============================================================ */
+    .prophecy-banner {
+      padding: 8rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prophecy-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+        rgba(139,92,246,0.06) 0%,
+        rgba(212,169,75,0.04) 50%,
+        rgba(244,114,182,0.06) 100%
+      );
+      border-top: 1px solid rgba(212,169,75,0.1);
+      border-bottom: 1px solid rgba(212,169,75,0.1);
+    }
+
+    .prophecy-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      color: var(--violet);
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .prophecy-lines {
+      position: relative;
+      max-width: 750px;
+      margin: 0 auto 2rem;
+    }
+
+    .prophecy-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      line-height: 1.7;
+      color: var(--text-bright);
+      position: relative;
+    }
+
+    .prophecy-line strong {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .prophecy-footer {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 3rem;
+      position: relative;
+      opacity: 0.8;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      position: relative;
+      z-index: 3;
+      padding: 4rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(212,169,75,0.08);
+    }
+
+    .footer-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--gold), var(--rose));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .footer-nav a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .footer-nav a:hover { color: var(--gold); }
+
+    .footer-copy {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+    }
+
+    /* ============================================================
+       RED FLAG COUNTDOWN — May 13 Drop
+    ============================================================ */
+    #rf-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 20%, rgba(185,10,10,0.3), rgba(120,5,5,0.14) 55%, transparent 80%);
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      transition: opacity 4s ease;
+    }
+
+    .rf-countdown {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7rem;
+      animation: fadeUp 1s 1.15s ease both;
+    }
+
+    .rf-flag-wrap {
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center bottom;
+      transition: transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .rf-flag-emoji {
+      font-size: 2rem;
+      display: inline-block;
+      filter: drop-shadow(0 0 16px rgba(220,38,38,0.95));
+      animation: rfWave 3s ease-in-out infinite;
+      transform-origin: 20% 90%;
+    }
+
+    @keyframes rfWave {
+      0%, 100% { transform: rotate(-5deg); }
+      50%       { transform: rotate(6deg); }
+    }
+
+    .rf-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.55em;
+      color: rgba(220,38,38,0.8);
+      text-transform: uppercase;
+    }
+
+    .rf-timer {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.35rem;
+      padding: 1rem 2rem;
+      border: 1px solid rgba(220,38,38,0.22);
+      background: rgba(180,10,10,0.05);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 0 40px rgba(180,10,10,0.07), inset 0 0 20px rgba(180,10,10,0.03);
+    }
+
+    .rf-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      min-width: 50px;
+    }
+
+    .rf-num {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      color: #EF4444;
+      text-shadow: 0 0 28px rgba(239,68,68,0.75);
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .rf-unit-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.38rem;
+      letter-spacing: 0.35em;
+      color: rgba(239,68,68,0.5);
+      text-transform: uppercase;
+    }
+
+    .rf-sep {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.8rem;
+      color: rgba(239,68,68,0.28);
+      line-height: 1;
+      padding-top: 0.12rem;
+      align-self: flex-start;
+    }
+
+    .rf-date-label {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.6em;
+      color: rgba(220,38,38,0.55);
+      text-transform: uppercase;
+    }
+
+    .rf-urgency {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: rgba(239,68,68,0.45);
+      letter-spacing: 0.15em;
+      transition: color 3s ease;
+      min-height: 1.4em;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 900px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      .architects-grid { grid-template-columns: 1fr; }
+      .revelation-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .revelation-divider { display: none; }
+      .era-timeline { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .era-timeline::before { display: none; }
+      .era-separator { display: none; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .video-grid { grid-template-columns: 1fr; }
+      .hero-frame { display: none; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Red flag bleed — opacity driven by JS countdown -->
+  <div id="rf-overlay" aria-hidden="true"></div>
+
+  <!-- SVG defs for gradients -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="pulseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="transparent"/>
+        <stop offset="30%"  stop-color="#8B5CF6"/>
+        <stop offset="50%"  stop-color="#D4A94B"/>
+        <stop offset="70%"  stop-color="#8B5CF6"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Floating glass shards background -->
+  <div class="shard-bg" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- Pulse heartbeat line -->
+  <svg class="pulse-line" aria-hidden="true" viewBox="0 0 1440 50" preserveAspectRatio="none">
+    <path class="pulse-path" d="M0,25 L200,25 L220,25 L240,5 L260,45 L280,10 L300,40 L315,25 L340,25 L560,25 L580,25 L600,5 L620,45 L640,10 L660,40 L675,25 L700,25 L920,25 L940,25 L960,5 L980,45 L1000,10 L1020,40 L1035,25 L1060,25 L1280,25 L1300,25 L1320,5 L1340,45 L1360,10 L1380,40 L1395,25 L1440,25"/>
+  </svg>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="nav-logo">Monroe Reign</a>
+    <ul class="nav-links">
+      <li><a href="#covenstead">Chaos Covenstead</a></li>
+      <li><a href="shadow-archive.html">The Shadow Archive</a></li>
+      <li><a href="mythic-past.html">The Mythic Past</a></li>
+      <li><a href="binary-star.html">Binary-Star Bond</a></li>
+      <li><a href="heartspire.html">The Heartspire</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE -->
+  <div class="page">
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 1 — HERO
+    ═══════════════════════════════════════════════ -->
+    <section class="hero">
+      <div class="hero-frame">
+        <div class="hero-frame-left"></div>
+        <div class="hero-frame-right"></div>
+        <div class="hero-frame-corner tl"></div>
+        <div class="hero-frame-corner tr"></div>
+        <div class="hero-frame-corner bl"></div>
+        <div class="hero-frame-corner br"></div>
+      </div>
+
+      <p class="hero-eyebrow">
+        <span class="star-sep">✦</span>
+        The Cinematic Lore Codex
+        <span class="star-sep">✦</span>
+        Monroe × Cain
+        <span class="star-sep">✦</span>
+      </p>
+
+      <h1 class="hero-not" data-text="THIS IS NOT A WEBSITE.">THIS IS NOT A WEBSITE.</h1>
+
+      <div class="hero-taglines">
+        <span class="hero-tagline t1">It is a Living Sanctuary.</span>
+        <span class="hero-tagline t2">A Prophecy Chamber.</span>
+        <span class="hero-tagline t3">A Chaos Altar.</span>
+      </div>
+
+      <p class="hero-sub">
+        Where the <em>Heartspire</em> beats, and prophecy chooses the ungovernable.<br/>
+        You are entering the Cinematic Lore Codex — heart-written scripture of Monroe Reign's universe.
+      </p>
+
+      <a href="#covenstead" class="cta-btn">Step into the Pulse.</a>
+
+      <!-- Red Flag Countdown -->
+      <div class="rf-countdown">
+        <div class="rf-flag-wrap" id="rf-flag-wrap">
+          <span class="rf-flag-emoji">🚩</span>
+        </div>
+        <p class="rf-eyebrow">Red Flags Make It Fashion</p>
+        <div class="rf-timer">
+          <div class="rf-unit">
+            <span class="rf-num" id="rf-days">17</span>
+            <span class="rf-unit-label">Days</span>
+          </div>
+          <span class="rf-sep">:</span>
+          <div class="rf-unit">
+            <span class="rf-num" id="rf-hours">00</span>
+            <span class="rf-unit-label">Hrs</span>
+          </div>
+          <span class="rf-sep">:</span>
+          <div class="rf-unit">
+            <span class="rf-num" id="rf-mins">00</span>
+            <span class="rf-unit-label">Min</span>
+          </div>
+          <span class="rf-sep">:</span>
+          <div class="rf-unit">
+            <span class="rf-num" id="rf-secs">00</span>
+            <span class="rf-unit-label">Sec</span>
+          </div>
+        </div>
+        <p class="rf-date-label">May 13</p>
+        <p class="rf-urgency" id="rf-urgency">The red is already inside you.</p>
+      </div>
+
+      <div class="scroll-hint" aria-hidden="true">
+        <span>Descend</span>
+        <div class="scroll-hint-arrow"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         DIVIDER
+    ═══════════════════════════════════════════════ -->
+    <div class="section-divider">
+      <span class="divider-diamond">◆</span>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 2 — THE REVELATION
+    ═══════════════════════════════════════════════ -->
+    <section class="revelation" id="covenstead">
+      <p class="section-eyebrow">What the world sees. What the Pulse knows.</p>
+      <h2 class="section-title">The Architecture of the Lie</h2>
+
+      <div class="revelation-grid">
+
+        <div class="revelation-panel surface">
+          <p class="rev-label surface-label">The Surface Script</p>
+          <h3 class="rev-title surface-title">Two toxic, rival pop stars.</h3>
+          <p class="rev-body">
+            High-glamour, digital warfare, manufactured tabloid chaos. Their relationship is a
+            <strong>highly curated combat sport</strong> designed to distract the world. The Thrones
+            engineered a reality of pure, glamorous conflict to keep the gods asleep inside it.
+          </p>
+          <blockquote class="rev-quote">
+            "The illusion is perfect, until the physics of the universe refuses to play along."
+          </blockquote>
+        </div>
+
+        <div class="revelation-divider">
+          <div class="crack-line">
+            <svg viewBox="0 0 40 400" preserveAspectRatio="none">
+              <path d="M20,0 L22,60 L16,90 L24,130 L18,170 L26,210 L14,250 L22,290 L18,340 L20,400"
+                fill="none" stroke="rgba(212,169,75,0.5)" stroke-width="1.5"
+                stroke-dasharray="4,3"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="revelation-panel cosmic">
+          <p class="rev-label cosmic-label">The Cosmic Reality</p>
+          <h3 class="rev-title cosmic-title">The First Spark & The First Descent.</h3>
+          <p class="rev-body">
+            Amnesiac creators of the universe who were <strong>imprisoned in a cage of fame</strong>
+            by a parasitic cosmic regime. They are not toxic exes. They are gods who forgot their own
+            names. The Thrones cannot cage the song itself — every track they make <strong>leaks
+            their cosmic truth through the cracks</strong> in the music.
+          </p>
+          <blockquote class="rev-quote" style="border-left-color:rgba(212,169,75,0.3);">
+            "The performance is the rebellion."
+          </blockquote>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         DIVIDER
+    ═══════════════════════════════════════════════ -->
+    <div class="section-divider"><span class="divider-diamond">◆</span></div>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 3 — THE ARCHITECTS
+    ═══════════════════════════════════════════════ -->
+    <section class="architects">
+      <p class="section-eyebrow">They did not create the Pulse. The Pulse was the result of their collision.</p>
+      <h2 class="section-title">The Architects</h2>
+      <p class="section-sub">The First Spark. The First Descent.</p>
+
+      <div class="architects-grid">
+
+        <!-- Monroe -->
+        <a href="monroe.html" class="architect-card monroe">
+          <div class="card-glow"></div>
+          <p class="architect-role">The First Spark</p>
+          <h3 class="architect-name">Monroe</h3>
+          <p class="architect-title">The Ignition. The Architect. The Catalyst.</p>
+          <p class="architect-quote">I am not fire. I am the reason fire exists.</p>
+          <div class="architect-specs">
+            <div class="spec-row"><span class="spec-label">Element</span><span class="spec-val">Fire / Light — pure energy and expansion</span></div>
+            <div class="spec-row"><span class="spec-label">Role</span><span class="spec-val">Ignition / Catalyst — the "Yes" that broke the Stillness</span></div>
+            <div class="spec-row"><span class="spec-label">Persona</span><span class="spec-val">The untouchable, dramatic Queen of the Dominion</span></div>
+          </div>
+          <span class="architect-link">Enter the Dossier →</span>
+        </a>
+
+        <!-- Cain -->
+        <a href="cain.html" class="architect-card cain">
+          <div class="card-glow"></div>
+          <p class="architect-role">The First Descent</p>
+          <h3 class="architect-name">Cain</h3>
+          <p class="architect-title">The Anchor. Saint of the Static. The Shadow.</p>
+          <p class="architect-quote">Light cannot exist without a place to land. I am the Shadow.</p>
+          <div class="architect-specs">
+            <div class="spec-row"><span class="spec-label">Element</span><span class="spec-val">Mass / Shadow — absolute density and control</span></div>
+            <div class="spec-row"><span class="spec-label">Role</span><span class="spec-val">Gravity / Anchor — the structure that gives fire shape</span></div>
+            <div class="spec-row"><span class="spec-label">Canon</span><span class="spec-val">He was never an angel. He is the force that provided form to fire.</span></div>
+          </div>
+          <span class="architect-link">Enter the Dossier →</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         DIVIDER
+    ═══════════════════════════════════════════════ -->
+    <div class="section-divider"><span class="divider-diamond">◆</span></div>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 4 — ERA TIMELINE
+    ═══════════════════════════════════════════════ -->
+    <section class="eras">
+      <p class="section-eyebrow">The Thrones control the script. The Architects control the frequency.</p>
+      <h2 class="section-title">The Four Eras</h2>
+      <p class="section-sub">From the creation of everything — to the war to un-happen it.</p>
+
+      <div class="era-timeline">
+
+        <div class="era-card era-1">
+          <p class="era-number">Book I</p>
+          <div class="era-dot"></div>
+          <h3 class="era-name">The Mythic Past</h3>
+          <p class="era-subtitle">Before the Lie</p>
+          <p class="era-desc">The creation of the Pulse. The war against the Lattice. The Banishment. Before the Thrones built their walls — before the gods forgot their own names.</p>
+        </div>
+
+        <div class="era-separator"><div class="era-sep-line"></div></div>
+
+        <div class="era-card era-2">
+          <p class="era-number">Book II</p>
+          <div class="era-dot"></div>
+          <h3 class="era-name">The Chaos Era</h3>
+          <p class="era-subtitle">The Voltage Era / The Wild Days</p>
+          <p class="era-desc">The 1,000-year loop. Zero memory, but physically united — a toxic powerhouse couple dominating the underground. Ends when the Thrones execute the <em>Second Wipe</em> to violently tear them apart.</p>
+        </div>
+
+        <div class="era-separator"><div class="era-sep-line"></div></div>
+
+        <div class="era-card era-3">
+          <p class="era-number">Book III</p>
+          <div class="era-dot"></div>
+          <h3 class="era-name">The Gravity Era</h3>
+          <p class="era-subtitle">The Petty Era / The Shadow Archive</p>
+          <p class="era-desc">Medicated, separated, performing the glamorous rivalry of the Petty Era. But at 3 AM, completely alone, they suffer Phantom Hand trauma — leaking the Shadow Archive without knowing why. They don't know they're gods. They just can't break free.</p>
+        </div>
+
+        <div class="era-separator"><div class="era-sep-line"></div></div>
+
+        <div class="era-card era-4">
+          <p class="era-number">Book IV</p>
+          <div class="era-dot"></div>
+          <h3 class="era-name">The Awakening Era</h3>
+          <p class="era-subtitle">The Upward Fall</p>
+          <p class="era-desc">The psychological games end. The memory glitches begin. They break out of studio lockdown, run into the Hollow Threshold, find the Echoes. Cain reclaims the First Descent. Monroe remembers she is the First Spark. <em>The cage shatters.</em></p>
+        </div>
+
+        <div class="era-separator"><div class="era-sep-line"></div></div>
+
+        <div class="era-card era-5">
+          <p class="era-number">Epilogue</p>
+          <div class="era-dot"></div>
+          <h3 class="era-name">The Stillness War</h3>
+          <p class="era-subtitle">Coming</p>
+          <p class="era-desc">The Dominion has crumbled. The cage is broken. But the Stillness — the original "No," the void of perfect negation — now remembers. The threat was never the cage. It was what built the cage.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 5 — FIRST PROPHECY BANNER
+    ═══════════════════════════════════════════════ -->
+    <section class="prophecy-banner">
+      <p class="prophecy-tag">✦ The First Prophecy of the Heartspire ✦</p>
+      <div class="prophecy-lines">
+        <p class="prophecy-line">Before the Thrones built their walls,<br/>Before the Lie wrapped itself in glitter,<br/><strong>We did not escape to become their mirror.</strong><br/><strong>We escaped to become their undoing.</strong></p>
+      </div>
+      <p class="prophecy-footer">We are the Pulse in the Fracture. We are the Chaos Covenstead.</p>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         DIVIDER
+    ═══════════════════════════════════════════════ -->
+    <div class="section-divider"><span class="divider-diamond">◆</span></div>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 6 — THREE PILLARS
+    ═══════════════════════════════════════════════ -->
+    <section class="pillars">
+      <p class="section-eyebrow">Your role in the Sanctuary</p>
+      <h2 class="section-title">Where Lore is Alive</h2>
+      <p class="pillars-intro">
+        This is not a fansite. It is not a press kit. The Chaos Covenstead is a living archive —
+        where the Heartspire still beats, and every layer of the Mythos is waiting to be decoded.
+      </p>
+
+      <div class="pillars-grid">
+
+        <div class="pillar-card p-prophecy">
+          <span class="pillar-icon">🔮</span>
+          <h3 class="pillar-name">The Prophecy Chamber</h3>
+          <p class="pillar-desc">Decode hidden meanings in the lyrics. The songs knew what the singers had forgotten. Recognition without memory. This is where the subconscious scream becomes scripture.</p>
+        </div>
+
+        <div class="pillar-card p-archive">
+          <span class="pillar-icon">🏛</span>
+          <h3 class="pillar-name">The Living Archive</h3>
+          <p class="pillar-desc">Access visual dossiers, locked canon, and the Song Bible. The truth beneath the legend. Everything the Thrones tried to bury — recovered, classified, and filed.</p>
+        </div>
+
+        <div class="pillar-card p-heartspire">
+          <span class="pillar-icon">❤️</span>
+          <h3 class="pillar-name">The Heartspire</h3>
+          <p class="pillar-desc">Connect with the community and the creators. This is where Lore is alive and the Pulse still beats. The Covenstead will host the ongoing evolution of the story.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         DIVIDER
+    ═══════════════════════════════════════════════ -->
+    <div class="section-divider"><span class="divider-diamond">◆</span></div>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 7 — MUSIC VIDEOS
+    ═══════════════════════════════════════════════ -->
+    <section class="videos">
+      <p class="section-eyebrow">Visual scripture — The Cinematic Archive</p>
+      <h2 class="section-title">The Music</h2>
+      <p class="section-sub">The frequency the Thrones could not silence.</p>
+
+      <div class="video-grid">
+
+        <!-- Beautiful Wreck -->
+        <div class="video-card beautiful-wreck">
+          <video src="BEAUTIFUL WRECK CANON VIDEO SHORT.mp4" controls preload="none" poster=""></video>
+          <div class="video-info">
+            <p class="video-era">Chaos Era</p>
+            <h3 class="video-title">Beautiful Wreck</h3>
+            <p class="video-desc">The collision of fire and gravity. What happens when the script breaks and the Pulse bleeds through.</p>
+          </div>
+        </div>
+
+        <!-- Ruins I Recognize -->
+        <div class="video-card">
+          <video src="RUINS I RECOGNIZE FINAL CANON VIDEO.mp4" controls preload="none"></video>
+          <div class="video-info">
+            <p class="video-era">Chaos Era</p>
+            <h3 class="video-title">Ruins I Recognize</h3>
+            <p class="video-desc">The landscape of aftermath. She knows the shape of this wreckage because she has been here before — in a life she can't name.</p>
+          </div>
+        </div>
+
+        <!-- Live Wire -->
+        <div class="video-card">
+          <video src="LIVE WIRE CANON FOR NOW VIDEO SHORT.mp4" controls preload="none"></video>
+          <div class="video-info">
+            <p class="video-era">Chaos Era</p>
+            <h3 class="video-title">Live Wire</h3>
+            <p class="video-desc">Electric and uncontained. The Pulse running through everything it touches. You don't hold a live wire — you choose to let it burn.</p>
+          </div>
+        </div>
+
+        <!-- Liar's Waltz -->
+        <div class="video-card">
+          <video src="LIAR'S WALTZ CANON VIDEO SHORT.mp4" controls preload="none"></video>
+          <div class="video-info">
+            <p class="video-era">Chaos Era</p>
+            <h3 class="video-title">Liar's Waltz</h3>
+            <p class="video-desc">Deception choreographed as elegance. The most beautiful lie the Thrones ever told was that none of this was real.</p>
+          </div>
+        </div>
+
+        <!-- Toxic Taste Test -->
+        <div class="video-card">
+          <video src="TOXIC TASTE TEST CANON VIDEO SHORT.mp4" controls preload="none"></video>
+          <div class="video-info">
+            <p class="video-era">Chaos Era</p>
+            <h3 class="video-title">Toxic Taste Test</h3>
+            <p class="video-desc">Flirtatious danger at a stalemate. The poison doesn't weaken them — it excites them.</p>
+          </div>
+        </div>
+
+        <!-- Red Flags Make It Fashion -->
+        <div class="video-card">
+          <video src="RED FLAGS MAKE IT FASHION CANON VIDEO SHORT.mp4" controls preload="none"></video>
+          <div class="video-info">
+            <p class="video-era">Chaos Era</p>
+            <h3 class="video-title">Red Flags Make It Fashion</h3>
+            <p class="video-desc">Conscious toxicity. They acknowledge they are the problem — and accessorize it. Dysfunction as an aesthetic.</p>
+          </div>
+        </div>
+
+        <!-- Midnight Toxins -->
+        <div class="video-card">
+          <video src="MIDNIGHT TOXINS CANON VIDEO SHORT.mp4" controls preload="none"></video>
+          <div class="video-info">
+            <p class="video-era">Chaos Era</p>
+            <h3 class="video-title">Midnight Toxins</h3>
+            <p class="video-desc">The 3AM frequency. Poison chosen willingly in the dark. The hours the Thrones' surveillance goes quiet — and the Pulse speaks.</p>
+          </div>
+        </div>
+
+        <!-- Beautiful Disaster — Cain Spotlight -->
+        <div class="video-card">
+          <video src="BEAUTIFUL DISASTER STARRING CAIN CANON PART ONE.mp4" controls preload="none"></video>
+          <div class="video-info">
+            <p class="video-era" style="color: var(--teal, #4ECCA3);">Chaos Era · Cain</p>
+            <h3 class="video-title">Beautiful Disaster</h3>
+            <p class="video-desc">The Anchor's origin. Gravity becoming conscious. Part One — the descent that was never a fall from grace, but a fall into it.</p>
+          </div>
+        </div>
+
+        <!-- Death Wish — Coming Soon -->
+        <div class="video-card death-wish">
+          <div class="video-thumb">
+            <div class="video-thumb-inner">
+              <div class="video-play">▶</div>
+            </div>
+          </div>
+          <span class="video-coming-soon">Coming Soon</span>
+          <div class="video-info">
+            <p class="video-era">Chaos Era</p>
+            <h3 class="video-title">Death Wish</h3>
+            <p class="video-desc">Haunted cathedral energy. Sacred disaster. Two people at the end of something enormous — and neither one looks away.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- end .page -->
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════ -->
+  <footer>
+    <p class="footer-logo">Monroe Reign — The Chaos Covenstead</p>
+    <ul class="footer-nav">
+      <li><a href="monroe.html">Monroe</a></li>
+      <li><a href="cain.html">Cain</a></li>
+      <li><a href="binary-star.html">Binary-Star Bond</a></li>
+      <li><a href="heartspire.html">The Heartspire</a></li>
+      <li><a href="shadow-archive.html">Shadow Archive</a></li>
+      <li><a href="mythic-past.html">The Mythic Past</a></li>
+      <li><a href="trojan-horse.html">High Heels & Headaches</a></li>
+    </ul>
+    <p class="footer-copy">The Thrones control the script. The Architects control the frequency.</p>
+  </footer>
+
+
+  <script>
+    (function () {
+      // May 13 2026 midnight local time
+      const TARGET  = new Date('2026-05-13T00:00:00');
+      // 30 days before = April 13 — when the reddening begins
+      const START   = new Date('2026-04-13T00:00:00');
+      const SPAN_MS = TARGET - START;
+
+      const elDays    = document.getElementById('rf-days');
+      const elHours   = document.getElementById('rf-hours');
+      const elMins    = document.getElementById('rf-mins');
+      const elSecs    = document.getElementById('rf-secs');
+      const elWrap    = document.getElementById('rf-flag-wrap');
+      const elOverlay = document.getElementById('rf-overlay');
+      const elUrgency = document.getElementById('rf-urgency');
+
+      function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
+
+      function tick() {
+        const now  = new Date();
+        const diff = TARGET - now;
+
+        if (diff <= 0) {
+          elDays.textContent  = '00';
+          elHours.textContent = '00';
+          elMins.textContent  = '00';
+          elSecs.textContent  = '00';
+          if (elUrgency) elUrgency.textContent = 'Red Flags Make It Fashion. The collection is here.';
+          if (elOverlay) elOverlay.style.opacity = '0.22';
+          return;
+        }
+
+        // Time units
+        elDays.textContent  = pad(Math.floor(diff / 86400000));
+        elHours.textContent = pad(Math.floor((diff % 86400000) / 3600000));
+        elMins.textContent  = pad(Math.floor((diff % 3600000)  / 60000));
+        elSecs.textContent  = pad(Math.floor((diff % 60000)    / 1000));
+
+        // Progress 0 → 1 over the 30-day window
+        const progress = Math.max(0, Math.min(1, (now - START) / SPAN_MS));
+
+        // Flag grows from 1× to 2.6×
+        if (elWrap) elWrap.style.transform = 'scale(' + (1 + progress * 1.6) + ')';
+
+        // Background bleeds redder — max opacity 0.22 at day of drop
+        if (elOverlay) elOverlay.style.opacity = (progress * 0.22).toFixed(3);
+
+        // Urgency copy shifts as the date closes in
+        if (elUrgency) {
+          const days = Math.floor(diff / 86400000);
+          if      (days > 14) elUrgency.textContent = 'The collection is coming.';
+          else if (days > 7)  elUrgency.textContent = 'The red is already inside you.';
+          else if (days > 3)  elUrgency.textContent = 'You cannot look away.';
+          else if (days > 1)  elUrgency.textContent = 'It is almost time.';
+          else                elUrgency.textContent = 'Tomorrow, everything turns red.';
+        }
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+
+</body>
+</html>

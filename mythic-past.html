@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Mythic Past — Before the Throne Lie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+
+    /* ============================================================
+       THE MYTHIC PAST — COLOR TOKENS
+       Era I · Before the Throne Lie. Before the Law. Before the Wipe.
+       Palette: Cosmic midnight · Heartspire gold · Nebula violet ·
+                Constellation teal · The two Ignitions bleeding through.
+    ============================================================ */
+    :root {
+      --mp-void:        #02010A;
+      --mp-deep:        #06041A;
+      --mp-nebula:      #0E0828;
+      --mp-violet:      #1A0F3A;
+      --mp-pulse:       #F0E0A0;
+      --mp-gold:        #D4A94B;
+      --mp-star:        #C8B8F0;
+      --mp-teal:        #4ECCA3;
+      --mp-fire:        #E06010;
+      --mp-fire-glow:   rgba(224,96,16,0.18);
+      --mp-gravity:     rgba(78,204,163,0.18);
+      --mp-glass:       rgba(200,184,240,0.07);
+      --mp-glass-border:rgba(200,184,240,0.14);
+      --mp-gold-border: rgba(212,169,75,0.22);
+      --mp-white-gold:  #FFF8E0;
+      --text-bright:    #F0EAF8;
+      --text-muted:     #8878A8;
+      --text-dim:       #3A2A5A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+
+    body {
+      background: var(--mp-void);
+      color: var(--text-bright);
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* ── Star field background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%,   rgba(90,40,160,0.25) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 40% at 20% 50%,  rgba(40,20,100,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 45% at 80% 70%,  rgba(60,30,120,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 100% 100% at 50% 50%, var(--mp-deep) 0%, var(--mp-void) 100%);
+      animation: nebulaBreathe 14s ease-in-out infinite alternate;
+    }
+    @keyframes nebulaBreathe {
+      0%   { opacity: 0.85; }
+      100% { opacity: 1; }
+    }
+
+    /* ── Nebula secondary pulse ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 40% 30% at 70% 20%,  rgba(224,96,16,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 25% at 30% 80%,  rgba(78,204,163,0.05) 0%, transparent 60%);
+      animation: ignitonBleed 18s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes ignitonBleed {
+      0%   { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3rem;
+      height: 60px;
+      background: rgba(2,1,10,0.82);
+      border-bottom: 1px solid var(--mp-glass-border);
+      backdrop-filter: blur(14px);
+    }
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--mp-gold);
+      text-decoration: none;
+      text-transform: uppercase;
+      opacity: 0.85;
+      transition: opacity 0.3s;
+    }
+    .nav-logo:hover { opacity: 1; }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+    .nav-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--mp-star); }
+
+    /* ── EKG header line ── */
+    .ekg-bar {
+      position: fixed;
+      top: 60px; left: 0; right: 0;
+      z-index: 99;
+      pointer-events: none;
+    }
+    .ekg-bar svg { width: 100%; display: block; }
+    .pulse-path-mp {
+      fill: none;
+      stroke: url(#mpGrad);
+      stroke-width: 1.5;
+      stroke-dasharray: 2400;
+      stroke-dashoffset: 2400;
+      animation: ekgDraw 2.8s ease-out 0.5s forwards;
+    }
+    @keyframes ekgDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* ── Page container ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2.5rem 6rem;
+    }
+
+    /* ── Filigree border frame ── */
+    .filigree {
+      position: fixed;
+      inset: 1.5rem;
+      z-index: 0;
+      pointer-events: none;
+      border: 1px solid var(--mp-gold-border);
+    }
+    .fc {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-color: var(--mp-gold);
+      border-style: solid;
+      opacity: 0.5;
+    }
+    .fc-tl { top: -1px;  left: -1px;  border-width: 2px 0 0 2px; }
+    .fc-tr { top: -1px;  right: -1px; border-width: 2px 2px 0 0; }
+    .fc-bl { bottom: -1px; left: -1px;  border-width: 0 0 2px 2px; }
+    .fc-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-top: 80px;
+      position: relative;
+    }
+
+    .hero-classify {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      color: var(--mp-star);
+      opacity: 0.5;
+      margin-bottom: 1.5rem;
+      animation: riseIn 1.2s ease-out both;
+    }
+
+    /* ── HEARTSPIRE SVG ── */
+    .heartspire-wrap {
+      position: relative;
+      width: 120px;
+      margin: 0 auto 2.5rem;
+      animation: riseIn 1.4s ease-out 0.2s both;
+    }
+    .heartspire-svg {
+      display: block;
+      width: 100%;
+    }
+    .helix-strand {
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+    }
+    .strand-a {
+      stroke: url(#strandGradA);
+      stroke-dasharray: 700;
+      stroke-dashoffset: 700;
+      animation: helixDraw 2.5s ease-out 0.6s forwards, helixGlow 4s ease-in-out 3s infinite alternate;
+    }
+    .strand-b {
+      stroke: url(#strandGradB);
+      stroke-dasharray: 700;
+      stroke-dashoffset: 700;
+      animation: helixDraw 2.5s ease-out 0.9s forwards, helixGlow 4s ease-in-out 3s infinite alternate;
+    }
+    .helix-bar {
+      stroke: rgba(240,224,160,0.4);
+      stroke-width: 0.8;
+      stroke-dasharray: 4 2;
+      animation: barPulse 3s ease-in-out 3s infinite;
+    }
+    .heartspire-core {
+      fill: var(--mp-pulse);
+      animation: corePulse 3s ease-in-out 3s infinite;
+    }
+    @keyframes helixDraw {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes helixGlow {
+      0%   { filter: drop-shadow(0 0 2px rgba(240,224,160,0.4)); }
+      100% { filter: drop-shadow(0 0 8px rgba(240,224,160,0.9)); }
+    }
+    @keyframes barPulse {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 0.8; }
+    }
+    @keyframes corePulse {
+      0%, 100% { r: 3; opacity: 0.8; filter: drop-shadow(0 0 4px rgba(240,224,160,0.8)); }
+      50%       { r: 5; opacity: 1;   filter: drop-shadow(0 0 12px rgba(240,224,160,1)); }
+    }
+
+    .hero-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      color: var(--mp-gold);
+      opacity: 0.65;
+      margin-bottom: 1rem;
+      animation: riseIn 1.4s ease-out 0.3s both;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.2rem, 7vw, 5rem);
+      font-weight: 900;
+      color: var(--mp-white-gold);
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+      text-shadow: 0 0 60px rgba(240,224,160,0.25), 0 0 120px rgba(90,40,160,0.2);
+      animation: riseIn 1.4s ease-out 0.4s both;
+    }
+
+    .hero-rule {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--mp-gold) 30%, var(--mp-star) 50%, var(--mp-gold) 70%, transparent);
+      opacity: 0.25;
+      margin: 1.8rem 0;
+      animation: riseIn 1.4s ease-out 0.6s both;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      max-width: 600px;
+      line-height: 1.7;
+      animation: riseIn 1.4s ease-out 0.7s both;
+    }
+
+    .hero-era-tag {
+      display: inline-block;
+      margin-top: 1.8rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--mp-star);
+      border: 1px solid rgba(200,184,240,0.2);
+      padding: 0.3rem 1rem;
+      opacity: 0.7;
+      animation: riseIn 1.4s ease-out 0.9s both;
+    }
+
+    /* ── Divider rule ── */
+    .section-rule {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--mp-gold-border) 50%, transparent);
+      margin: 0 0 3rem;
+    }
+
+    /* ── Section labels ── */
+    .s-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mp-star);
+      opacity: 0.55;
+      margin-bottom: 0.6rem;
+    }
+    .s-heading {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.1rem, 3vw, 1.8rem);
+      font-weight: 700;
+      color: var(--mp-white-gold);
+      margin-bottom: 1.5rem;
+      line-height: 1.25;
+    }
+    .s-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+    }
+    .s-body em { color: var(--text-bright); font-style: italic; }
+    .s-body strong { color: var(--mp-pulse); font-style: normal; font-weight: 600; }
+
+    /* ── CITY OF THE PULSE section ── */
+    .city-section {
+      margin: 6rem 0;
+    }
+    .city-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .city-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .arch-card {
+      background: var(--mp-glass);
+      border: 1px solid var(--mp-glass-border);
+      padding: 2rem 1.8rem;
+      position: relative;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+      transition: border-color 0.4s, box-shadow 0.4s;
+      backdrop-filter: blur(8px);
+    }
+    .arch-card:hover {
+      border-color: rgba(200,184,240,0.3);
+      box-shadow: 0 0 30px rgba(90,40,160,0.12);
+    }
+    .arch-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(200,184,240,0.04), transparent);
+      pointer-events: none;
+    }
+    .arch-glyph {
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      display: block;
+      opacity: 0.7;
+    }
+    .arch-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--mp-pulse);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.7rem;
+    }
+    .arch-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ── Tower visual ── */
+    .city-visual {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 1rem;
+      height: 140px;
+      margin: 3rem 0 2rem;
+      position: relative;
+    }
+    .city-visual::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--mp-teal), transparent);
+      opacity: 0.25;
+    }
+    .tower {
+      position: relative;
+      background: linear-gradient(180deg, rgba(200,184,240,0.15) 0%, rgba(90,40,160,0.08) 100%);
+      border: 1px solid rgba(200,184,240,0.12);
+      border-bottom: none;
+      animation: towerGlow 6s ease-in-out infinite alternate;
+    }
+    .tower::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 20%, rgba(240,224,160,0.08), transparent 60%);
+    }
+    .tower-a { width: 28px; height: 110px; animation-delay: 0s; }
+    .tower-b { width: 20px; height: 80px;  animation-delay: 1.2s; }
+    .tower-c { width: 36px; height: 130px; animation-delay: 0.5s; }
+    .tower-d { width: 24px; height: 90px;  animation-delay: 2s; }
+    .tower-e { width: 42px; height: 140px; animation-delay: 0.3s; }
+    .tower-f { width: 22px; height: 75px;  animation-delay: 1.7s; }
+    .tower-g { width: 30px; height: 100px; animation-delay: 0.8s; }
+    @keyframes towerGlow {
+      0%   { border-color: rgba(200,184,240,0.1);  box-shadow: none; }
+      100% { border-color: rgba(200,184,240,0.28); box-shadow: 0 0 15px rgba(90,40,160,0.15) inset; }
+    }
+    .heartspire-tower {
+      width: 14px;
+      height: 140px;
+      background: linear-gradient(180deg, rgba(240,224,160,0.9) 0%, rgba(240,224,160,0.3) 60%, transparent 100%);
+      border: none;
+      clip-path: polygon(50% 0%, 100% 15%, 100% 100%, 0% 100%, 0% 15%);
+      animation: heartspirePulse 2.8s ease-in-out infinite;
+      filter: drop-shadow(0 0 8px rgba(240,224,160,0.6));
+    }
+    @keyframes heartspirePulse {
+      0%, 100% { opacity: 0.7; transform: scaleY(1); filter: drop-shadow(0 0 6px rgba(240,224,160,0.5)); }
+      50%       { opacity: 1;   transform: scaleY(1.02); filter: drop-shadow(0 0 18px rgba(240,224,160,1)); }
+    }
+    .constellation-bridge {
+      position: absolute;
+      bottom: 40px;
+      left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 5%, var(--mp-teal) 20%, var(--mp-teal) 80%, transparent 95%);
+      opacity: 0.2;
+    }
+    .constellation-bridge::before,
+    .constellation-bridge::after {
+      content: '✦';
+      position: absolute;
+      top: -6px;
+      font-size: 0.5rem;
+      color: var(--mp-teal);
+      opacity: 0.6;
+      animation: starTwinkle 3s ease-in-out infinite;
+    }
+    .constellation-bridge::before { left: 20%; }
+    .constellation-bridge::after  { right: 20%; animation-delay: 1.5s; }
+    @keyframes starTwinkle {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 0.9; }
+    }
+
+    /* ── ORIGINS section — two mythic form cards ── */
+    .origins-section {
+      margin: 6rem 0;
+    }
+    .origins-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    .origins-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .origin-card {
+      padding: 2.5rem 2rem;
+      border: 1px solid var(--mp-glass-border);
+      background: var(--mp-glass);
+      backdrop-filter: blur(10px);
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+      transition: box-shadow 0.4s;
+    }
+    .origin-card.monroe-card {
+      border-color: rgba(224,96,16,0.2);
+      background: linear-gradient(135deg, rgba(224,96,16,0.06), var(--mp-glass));
+    }
+    .origin-card.cain-card {
+      border-color: rgba(78,204,163,0.18);
+      background: linear-gradient(135deg, rgba(78,204,163,0.05), var(--mp-glass));
+    }
+    .origin-card.monroe-card:hover {
+      box-shadow: 0 0 40px rgba(224,96,16,0.08), 0 0 80px rgba(224,96,16,0.04);
+    }
+    .origin-card.cain-card:hover {
+      box-shadow: 0 0 40px rgba(78,204,163,0.06), 0 0 80px rgba(78,204,163,0.03);
+    }
+    .origin-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .monroe-card::before {
+      background: linear-gradient(90deg, transparent, var(--mp-fire), transparent);
+      opacity: 0.5;
+    }
+    .cain-card::before {
+      background: linear-gradient(90deg, transparent, var(--mp-teal), transparent);
+      opacity: 0.4;
+    }
+    .origin-designation {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 0.5rem;
+    }
+    .monroe-card .origin-designation { color: var(--mp-fire); }
+    .cain-card   .origin-designation { color: var(--mp-teal); }
+    .origin-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--mp-white-gold);
+      margin-bottom: 0.3rem;
+    }
+    .origin-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
+    }
+    .origin-stat {
+      border-left: 2px solid;
+      padding-left: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    .monroe-card .origin-stat { border-color: rgba(224,96,16,0.3); }
+    .cain-card   .origin-stat { border-color: rgba(78,204,163,0.25); }
+    .origin-stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 0.3rem;
+    }
+    .monroe-card .origin-stat-label { color: var(--mp-fire); }
+    .cain-card   .origin-stat-label { color: var(--mp-teal); }
+    .origin-stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ── THRONE LIE section ── */
+    .throne-section {
+      margin: 6rem 0;
+    }
+    .classified-block {
+      background: rgba(2,1,10,0.9);
+      border: 1px solid rgba(200,184,240,0.12);
+      padding: 2.5rem;
+      position: relative;
+      margin-top: 2rem;
+    }
+    .classified-block::before {
+      content: '⬡ CLASSIFIED · ACCESS RESTRICTED · SHADOW ARCHIVE ⬡';
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      color: var(--mp-star);
+      opacity: 0.4;
+      display: block;
+      margin-bottom: 1.5rem;
+    }
+    .classified-row {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+    .classified-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--mp-gold);
+      min-width: 100px;
+      padding-top: 0.15rem;
+      opacity: 0.8;
+      flex-shrink: 0;
+    }
+    .classified-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+    .classified-value strong { color: var(--mp-pulse); font-style: normal; }
+    .redacted {
+      background: rgba(200,184,240,0.18);
+      color: transparent;
+      user-select: none;
+      border-radius: 2px;
+      letter-spacing: -0.05em;
+    }
+
+    /* ── FRACTURE section — timeline ── */
+    .fracture-section {
+      margin: 6rem 0;
+    }
+    .fracture-timeline {
+      position: relative;
+      padding-left: 2.5rem;
+      margin-top: 2.5rem;
+    }
+    .fracture-timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, var(--mp-star), transparent);
+      opacity: 0.2;
+    }
+    .fracture-event {
+      position: relative;
+      margin-bottom: 3rem;
+      padding-left: 1rem;
+    }
+    .fracture-event::before {
+      content: '';
+      position: absolute;
+      left: -2.1rem;
+      top: 0.4rem;
+      width: 8px;
+      height: 8px;
+      border: 1px solid var(--mp-star);
+      background: var(--mp-void);
+      transform: rotate(45deg);
+      opacity: 0.6;
+    }
+    .fracture-event-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mp-star);
+      opacity: 0.55;
+      margin-bottom: 0.4rem;
+    }
+    .fracture-event-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--mp-pulse);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.05em;
+    }
+    .fracture-event-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .fracture-event-text em { color: var(--text-bright); font-style: normal; }
+
+    /* ── GATE OF ERASURE section ── */
+    .gate-section {
+      margin: 6rem 0;
+      text-align: center;
+    }
+    .gate-visual {
+      position: relative;
+      width: 200px;
+      height: 280px;
+      margin: 2.5rem auto;
+    }
+    .gate-arch {
+      position: absolute;
+      inset: 0;
+      border: 2px solid rgba(200,184,240,0.2);
+      border-bottom: none;
+      border-radius: 100px 100px 0 0;
+      animation: gatePulse 4s ease-in-out infinite;
+    }
+    .gate-arch-inner {
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(200,184,240,0.1);
+      border-bottom: none;
+      border-radius: 90px 90px 0 0;
+      animation: gatePulse 4s ease-in-out 0.5s infinite;
+    }
+    .gate-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(90,40,160,0.15) 0%, transparent 70%);
+      border-radius: 100px 100px 0 0;
+    }
+    .gate-label {
+      position: absolute;
+      bottom: -2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--mp-star);
+      opacity: 0.45;
+      white-space: nowrap;
+    }
+    @keyframes gatePulse {
+      0%, 100% { border-color: rgba(200,184,240,0.15); box-shadow: none; }
+      50%       { border-color: rgba(200,184,240,0.35); box-shadow: 0 0 20px rgba(90,40,160,0.12) inset; }
+    }
+
+    /* ── PHANTOM HAND section ── */
+    .phantom-section {
+      margin: 8rem 0 4rem;
+      position: relative;
+    }
+    .phantom-wrap {
+      background: rgba(2,1,10,0.95);
+      border-top: 1px solid rgba(200,184,240,0.1);
+      border-bottom: 1px solid rgba(200,184,240,0.1);
+      padding: 5rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .phantom-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 30% 50%, rgba(224,96,16,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 70% 50%, rgba(78,204,163,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .phantom-classify {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      color: var(--mp-star);
+      opacity: 0.4;
+      margin-bottom: 2.5rem;
+    }
+    .phantom-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 4vw, 2.5rem);
+      font-weight: 900;
+      color: var(--mp-white-gold);
+      margin-bottom: 3rem;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 40px rgba(240,224,160,0.15);
+    }
+    .phantom-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      line-height: 1.9;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+    .phantom-body em { color: var(--text-bright); font-style: italic; }
+    .phantom-body strong { color: var(--mp-pulse); }
+    .phantom-verse {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-bright);
+      line-height: 2;
+      max-width: 560px;
+      margin: 3rem auto 0;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(200,184,240,0.1);
+      letter-spacing: 0.02em;
+    }
+    .phantom-verse span { color: var(--mp-star); opacity: 0.7; display: block; font-style: normal; font-size: 0.7em; margin-top: 1rem; letter-spacing: 0.15em; }
+
+    /* ── Closing nav ── */
+    .era-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 5rem 0 2rem;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .era-nav-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      border: 1px solid var(--mp-glass-border);
+      padding: 0.7rem 1.5rem;
+      transition: color 0.3s, border-color 0.3s, background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .era-nav-btn:hover {
+      color: var(--mp-star);
+      border-color: rgba(200,184,240,0.35);
+      background: rgba(200,184,240,0.04);
+    }
+    .era-nav-center {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.7rem;
+      color: var(--mp-gold);
+      opacity: 0.5;
+      letter-spacing: 0.15em;
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 1.5rem 2rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      color: var(--text-dim);
+      border-top: 1px solid rgba(200,184,240,0.06);
+    }
+
+    /* ── First City Locations ── */
+    .locations-section {
+      margin: 4rem 0;
+    }
+    .locations-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    @media (max-width: 900px) {
+      .locations-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 580px) {
+      .locations-grid { grid-template-columns: 1fr; }
+    }
+    .loc-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(200,184,240,0.12);
+      background: rgba(5,5,10,0.8);
+    }
+    .loc-card img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      display: block;
+      opacity: 0.85;
+      transition: opacity 0.4s, transform 0.5s;
+    }
+    .loc-card:hover img {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+    .loc-info {
+      padding: 1.2rem 1.4rem 1.5rem;
+    }
+    .loc-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      color: var(--mp-star);
+      margin-bottom: 0.6rem;
+    }
+    .loc-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ── Canon Quote Block ── */
+    .canon-quote {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 2rem;
+      text-align: center;
+      background: transparent;
+    }
+    .canon-quote-inner {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .canon-quote-mark {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.48rem;
+      letter-spacing: 0.4em;
+      color: var(--mp-star);
+      opacity: 0.6;
+      margin-bottom: 1.8rem;
+      display: block;
+    }
+    .canon-quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.3rem, 2.8vw, 2rem);
+      line-height: 1.6;
+      color: var(--text-bright);
+      letter-spacing: 0.01em;
+    }
+    .canon-quote-text em {
+      color: var(--mp-star);
+      font-style: normal;
+    }
+    .canon-quote-rule {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--mp-star), transparent);
+      margin: 2.2rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* ── Animations ── */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .origins-grid { grid-template-columns: 1fr; }
+      .phantom-wrap { padding: 3.5rem 1.5rem; }
+      .page { padding: 0 1.5rem 4rem; }
+      .filigree { inset: 0.5rem; }
+      .classified-row { flex-direction: column; gap: 0.3rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- EKG bar -->
+  <div class="ekg-bar">
+    <svg viewBox="0 0 1440 30" preserveAspectRatio="none" height="30">
+      <defs>
+        <linearGradient id="mpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="rgba(200,184,240,0)"/>
+          <stop offset="20%"  stop-color="rgba(200,184,240,0.5)"/>
+          <stop offset="50%"  stop-color="rgba(240,224,160,0.7)"/>
+          <stop offset="80%"  stop-color="rgba(78,204,163,0.5)"/>
+          <stop offset="100%" stop-color="rgba(78,204,163,0)"/>
+        </linearGradient>
+      </defs>
+      <path class="pulse-path-mp" d="M0,15 L260,15 L290,15 L305,8  L320,15 L550,15 L590,15 L620,2  L638,28 L656,8  L672,15 L900,15 L930,15 L946,10 L960,15 L1180,15 L1220,15 L1240,4  L1258,26 L1275,12 L1290,15 L1440,15"/>
+    </svg>
+  </div>
+
+  <!-- Filigree frame -->
+  <div class="filigree" aria-hidden="true">
+    <div class="fc fc-tl"></div>
+    <div class="fc fc-tr"></div>
+    <div class="fc fc-bl"></div>
+    <div class="fc fc-br"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a class="nav-logo" href="trojan-horse.html">Chaos Covenstead</a>
+    <ul class="nav-links">
+      <li><a href="shadow-archive.html">The Shadow Archive</a></li>
+      <li><a href="mythic-past.html" class="active">The Mythic Past</a></li>
+      <li><a href="monroe.html">Monroe</a></li>
+      <li><a href="cain.html">Cain</a></li>
+      <li><a href="binary-star.html">Binary-Star Bond</a></li>
+      <li><a href="heartspire.html">The Heartspire</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+
+    <!-- ══ HERO ══ -->
+    <section class="hero">
+
+      <!-- Heartspire SVG -->
+      <div class="heartspire-wrap">
+        <svg class="heartspire-svg" viewBox="0 0 100 340" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="strandGradA" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%"   stop-color="#F0E0A0" stop-opacity="1"/>
+              <stop offset="50%"  stop-color="#E06010" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#F0E0A0" stop-opacity="0.3"/>
+            </linearGradient>
+            <linearGradient id="strandGradB" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%"   stop-color="#4ECCA3" stop-opacity="0.8"/>
+              <stop offset="50%"  stop-color="#F0E0A0" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#4ECCA3" stop-opacity="0.4"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Left strand (Monroe — fire) -->
+          <path class="helix-strand strand-a"
+            d="M50,10 C80,45 20,85 50,120 C80,155 20,195 50,230 C80,265 20,305 50,330"/>
+          <!-- Right strand (Cain — gravity) -->
+          <path class="helix-strand strand-b"
+            d="M50,10 C20,45 80,85 50,120 C20,155 80,195 50,230 C20,265 80,305 50,330"/>
+
+          <!-- Cross bars -->
+          <line class="helix-bar" x1="20" y1="120" x2="80" y2="120"/>
+          <line class="helix-bar" x1="20" y1="230" x2="80" y2="230" style="animation-delay:0.5s"/>
+
+          <!-- Apex core -->
+          <circle class="heartspire-core" cx="50" cy="10" r="4"/>
+        </svg>
+      </div>
+
+      <p class="hero-classify">⬡ SHADOW ARCHIVE · ERA I · CLASSIFICATION: MYTHIC PAST ⬡</p>
+      <p class="hero-eyebrow">Chaos Bible — Lore Codex</p>
+      <h1 class="hero-title">The Mythic Past</h1>
+      <div class="hero-rule"></div>
+      <p class="hero-subtitle">Before the Throne Lie. Before the Cage. Before the Wipe.<br>The First Empire was alive. The Heartspire sang. They were themselves.</p>
+      <span class="hero-era-tag">⬡ Era I — The Fracture · The First Empire · Before the Throne Lie · Before the First War ⬡</span>
+
+    </section>
+
+    <!-- ══ CITY OF THE PULSE ══ -->
+    <section class="city-section">
+      <div class="section-rule"></div>
+      <div class="city-header">
+        <p class="s-label">⬡ The First City · City of the Pulse · The Buried City ⬡</p>
+        <h2 class="s-heading">Where Everything Began</h2>
+        <p class="s-body">Before the Throne Lie. Before the Law. Before the First War. <em>Built through emotion and resonance — its architecture IS the Pulse crystallized.</em> Monroe and Cain did not build the City of the Pulse as rulers commanding architects. They built it the way a heartbeat builds a body: involuntarily, inevitably, because the alternative was silence.</p>
+      </div>
+
+      <!-- Tower cityscape visualization -->
+      <div class="city-visual">
+        <div class="constellation-bridge"></div>
+        <div class="tower tower-b"></div>
+        <div class="tower tower-a"></div>
+        <div class="tower tower-d"></div>
+        <div class="heartspire-tower"></div>
+        <div class="tower tower-c"></div>
+        <div class="tower tower-f"></div>
+        <div class="tower tower-e"></div>
+        <div class="tower tower-g"></div>
+      </div>
+
+      <div class="city-grid">
+        <div class="arch-card">
+          <span class="arch-glyph">🌌</span>
+          <p class="arch-name">Celestial Spires</p>
+          <p class="arch-desc">Aether-Glass pillars holding swirling galaxies in suspension — Monroe's Flame crystallized into architecture. Each Spire anchors the city's resonance into the sky; they are not structures. They are the Pulse given height.</p>
+        </div>
+        <div class="arch-card">
+          <span class="arch-glyph">✦</span>
+          <p class="arch-name">Heart Spans</p>
+          <p class="arch-desc">Resonance-based walkways held together by the Shared Song. So delicate they should not bear weight. They bear it anyway — because the emotional bond between the people who cross them holds the bridge in place. The alignment between Monroe and Cain is what makes them safe.</p>
+        </div>
+        <div class="arch-card">
+          <span class="arch-glyph">◈</span>
+          <p class="arch-name">Gravitational Foundations</p>
+          <p class="arch-desc">Bases shaped by invisible gravitational lines and floating platforms — Cain's Depth made literal. The foundations do not rest on ground. They define where the ground is.</p>
+        </div>
+        <div class="arch-card">
+          <span class="arch-glyph">⬡</span>
+          <p class="arch-name">The Heartspire</p>
+          <p class="arch-desc">At the center: a massive helix column of pure white-gold light, spiraling upward, pulsing with a physical heartbeat. Both literal structure and cosmological truth. In the Mythic Past, it is whole and singing. It has not yet learned grief.</p>
+        </div>
+        <div class="arch-card">
+          <span class="arch-glyph">◉</span>
+          <p class="arch-name">Liquid Night Floors</p>
+          <p class="arch-desc">Dark reflective obsidian lined with glowing pulse-veins — marrow that carries the Pulse signal directly into the bones of whoever walks above it. The city knows its rulers by their frequency.</p>
+        </div>
+        <div class="arch-card">
+          <span class="arch-glyph">⚜</span>
+          <p class="arch-name">The Obsidian Runway</p>
+          <p class="arch-desc">The Royal Entrance — a long threshold that strips away the Lattice's Cage energy and replaces it with the First City's raw power. Polished jet-black stone that activates as they walk, flickering in time with their heartbeat.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FIRST CITY LOCATIONS ══ -->
+    <section class="locations-section">
+      <div class="section-rule"></div>
+      <div class="city-header">
+        <p class="s-label">⬡ Recovered Visual Intelligence · First City Survey ⬡</p>
+        <h2 class="s-heading">Known Locations</h2>
+        <p class="s-body">The Thrones have no record of these places. They predate every law they have ever written.</p>
+      </div>
+      <div class="locations-grid">
+
+        <div class="loc-card">
+          <img src="Mythic Architecture/The Obsidian Runway.jpg" alt="The Obsidian Runway">
+          <div class="loc-info">
+            <p class="loc-name">The Obsidian Runway</p>
+            <p class="loc-desc">The Royal Entrance. Polished jet-black stone that activates as they walk — flickering in time with their heartbeat. The city strips Lattice energy here and replaces it with the First City's raw power.</p>
+          </div>
+        </div>
+
+        <div class="loc-card">
+          <img src="Mythic Architecture/The Great Conduit (Sovereign Hall).jpg" alt="The Great Conduit">
+          <div class="loc-info">
+            <p class="loc-name">The Great Conduit</p>
+            <p class="loc-desc">Sovereign Hall. The primary resonance chamber where the Pulse signal is strongest. Ancient scripture orbits its core in streams of living gold light. The Lattice cannot enter here.</p>
+          </div>
+        </div>
+
+        <div class="loc-card">
+          <img src="Mythic Architecture/The Cathedral (Inner Sanctum).jpg" alt="The Inner Sanctum">
+          <div class="loc-info">
+            <p class="loc-name">The Cathedral</p>
+            <p class="loc-desc">The Inner Sanctum. Where the First Flame was kept before the Wipe. Purple fire burns without fuel along its walls — not fire at all, but Pulse energy refusing to take any other shape.</p>
+          </div>
+        </div>
+
+        <div class="loc-card">
+          <img src="Mythic Architecture/CHESSBOARD RM.jpg" alt="The Chessboard Chamber">
+          <div class="loc-info">
+            <p class="loc-name">The Chessboard Chamber</p>
+            <p class="loc-desc">Where Monroe and Cain settled disputes before the First War. The floor is a live tactical map — each square connected to the city's grid. Lightning fires between tiles when a true move is made.</p>
+          </div>
+        </div>
+
+        <div class="loc-card">
+          <img src="Mythic Architecture/The Botanical Labyrinth.jpg" alt="The Botanical Labyrinth">
+          <div class="loc-info">
+            <p class="loc-name">The Botanical Labyrinth</p>
+            <p class="loc-desc">The Singe Maze. Bioluminescent flora that grew over the obsidian after the First Fracture. The plants remember the Pulse. They bloom brighter when Monroe passes through.</p>
+          </div>
+        </div>
+
+        <div class="loc-card">
+          <img src="Mythic Architecture/The First Empire Corridor.jpg" alt="The First Empire Corridor">
+          <div class="loc-info">
+            <p class="loc-name">The First Empire Corridor</p>
+            <p class="loc-desc">The arterial passage connecting the outer city to the Heartspire core. Red and violet pulse-lines bleed through the obsidian walls. Lightning fires at the ceiling where the Pulse pressure builds highest.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ THE TWO ORIGINS ══ -->
+    <section class="origins-section">
+      <div class="section-rule"></div>
+      <div class="origins-header">
+        <p class="s-label">⬡ Sovereign Alphas — Mythic Form · Uncontained ⬡</p>
+        <h2 class="s-heading">The Two Origins</h2>
+        <p class="s-body">Before the Cage. Before the amnesia. Before the pop-star costumes someone else picked out. <em>This is what they were.</em></p>
+      </div>
+
+      <div class="origins-grid">
+
+        <!-- Monroe mythic card -->
+        <div class="origin-card monroe-card">
+          <p class="origin-designation">⬡ Origin I — The First Spark</p>
+          <h3 class="origin-name">Monroe</h3>
+          <p class="origin-title">The First Spark Eternal · The Ignition · The Catalyst · The Architect</p>
+
+          <div class="origin-stat">
+            <p class="origin-stat-label">True Form</p>
+            <p class="origin-stat-value">Fire-red to orange Ignition hair — uncontained, living flame. Porcelain skin. Neon green eyes that bleed into white-hot gold at full resonance. The Ignition Eyes. The room recalibrates the moment she enters it. This is not charisma. It is physics.</p>
+          </div>
+
+          <div class="origin-stat">
+            <p class="origin-stat-label">Mythic Role</p>
+            <p class="origin-stat-value">Architect of the First Empire — not by decree but by Ignition. Everything she touched became more itself. The Lattice did not fear her mind. They feared her <em>pull</em>. The longing that bends rooms, the emotional gravity that makes people move without knowing why. The Lattice's primary threat. The cosmic Yes to the void's No.</p>
+          </div>
+
+          <div class="origin-stat">
+            <p class="origin-stat-label">Power</p>
+            <p class="origin-stat-value">Primordial Ignition. She awakens what others fear to touch. The First Spark — not distributed among all things but the <em>original one</em>. The disruption of the pre-creation hush that forced existence to begin.</p>
+          </div>
+
+          <div class="origin-stat">
+            <p class="origin-stat-label">Signature Move</p>
+            <p class="origin-stat-value">Dawnstrike. A single look that changes the ending. Not an attack — a recalibration. The moment she turns her full attention on something, its trajectory shifts. Permanently.</p>
+          </div>
+        </div>
+
+        <!-- Cain mythic card -->
+        <div class="origin-card cain-card">
+          <p class="origin-designation">⬡ Origin II — The First Descent</p>
+          <h3 class="origin-name">Cain</h3>
+          <p class="origin-title">Gravity Incarnate · The Anchor · Saint of the Static · The Shadow</p>
+
+          <div class="origin-stat">
+            <p class="origin-stat-label">True Form</p>
+            <p class="origin-stat-value">Medium brown hair styled with deliberate precision. Medium-light skin. Deep static-green eyes — Obsidian Green, carrying interference and flicker. The Static Eyes. Highly defined musculature — the density of a collapsing star in human form. Ancient gravitas that crushes noise before it speaks.</p>
+          </div>
+
+          <div class="origin-stat">
+            <p class="origin-stat-label">Mythic Role</p>
+            <p class="origin-stat-value">The First Descent — the moment gravity became conscious. He refused the Thrones' offered authority. Chose alignment with Monroe and the Pulse. Not a fall from grace. A fall <em>into it.</em> His Gravity gave the First Spark its shape.</p>
+          </div>
+
+          <div class="origin-stat">
+            <p class="origin-stat-label">Power</p>
+            <p class="origin-stat-value">Primordial Gravity. He was not born. He was not shaped. He was drawn — a collapse of gravity, a convergence of will, the first inevitability. The Anchor that gave the Spark a place to land.</p>
+          </div>
+
+          <div class="origin-stat">
+            <p class="origin-stat-label">Signature Move</p>
+            <p class="origin-stat-value">Shadowpull. He inverts the point of attraction — increases the gravitational constant by a factor of ten thousand, grabs the concept of "down," and throws it at the sky. He can drag the High Council Seat itself crashing into the earth.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ THE THRONE LIE ══ -->
+    <section class="throne-section">
+      <div class="section-rule"></div>
+      <p class="s-label">⬡ Classified Log · SA-ERA-I-001 · The Lattice — Origin Report ⬡</p>
+      <h2 class="s-heading">The Throne Lie</h2>
+      <p class="s-body">The Lattice rose from the aftermath of the Pulse, crystallizing around a resonance it could neither comprehend nor control — and declared itself the architect of creation. This was the first lie. It was not the last.</p>
+
+      <div class="classified-block">
+        <div class="classified-row">
+          <span class="classified-label">The Lie:</span>
+          <span class="classified-value">The Lattice claims to be the origin of creation.</span>
+        </div>
+        <div class="classified-row">
+          <span class="classified-label">The Truth:</span>
+          <span class="classified-value"><strong>Monroe and Cain created the universe before The Lattice existed.</strong> The Lattice is not the author of reality. It is a parasite that crystallized around reality after the fact and declared itself the architect.</span>
+        </div>
+        <div class="classified-row">
+          <span class="classified-label">The Strategy:</span>
+          <span class="classified-value">"If you cannot erase gods, humiliate them." The Thrones' strategy: A prison disguised as fame. To prevent their world-ending resonance, the Thrones force them into personas of toxic rivals. Keep them distracted by scandals, headlines, and fabricated drama so they cannot remember they are gods.</span>
+        </div>
+        <div class="classified-row">
+          <span class="classified-label">The Cage:</span>
+          <span class="classified-value">The Lattice could not destroy Monroe and Cain — <span class="redacted">xxxxxxxxxxxxxxxxxx</span>. So it did the only thing left: it drove them through the Gate of Erasure. Wiped their memories. Stripped their mythic forms. Cast them into the 21st century as amnesiac pop stars. The prison so glamorous they never questioned its walls.</span>
+        </div>
+        <div class="classified-row">
+          <span class="classified-label">Data Integrity:</span>
+          <span class="classified-value" style="color: rgba(224,96,16,0.8); font-style:normal; font-family:'Share Tech Mono',monospace; font-size:0.7rem; letter-spacing:0.1em;">COMPROMISED</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CANON QUOTE — The Thrones' Masterpiece ══ -->
+    <div class="canon-quote">
+      <div class="canon-quote-inner">
+        <span class="canon-quote-mark">⬡ recovered fragment · dominion strategy log ⬡</span>
+        <p class="canon-quote-text">"The cage doesn't need bars when the prisoner doesn't remember what <em>freedom</em> felt like."</p>
+        <div class="canon-quote-rule"></div>
+      </div>
+    </div>
+
+    <!-- ══ THE FRACTURE ══ -->
+    <section class="fracture-section">
+      <div class="section-rule"></div>
+      <p class="s-label">⬡ Incident Log · SA-ERA-I-002 · The First War · The Lattice Conflict ⬡</p>
+      <h2 class="s-heading">The Fracture</h2>
+      <p class="s-body">The Lattice's war against the Origin. Unable to destroy what they did not create, unable to contain what predated their laws, the Thrones chose severance over defeat. They could not kill the fire. So they separated the fire from the thing that gave it shape.</p>
+
+      <div class="fracture-timeline">
+
+        <div class="fracture-event">
+          <p class="fracture-event-label">First Movement</p>
+          <p class="fracture-event-title">The Lattice Rises</p>
+          <p class="fracture-event-text">The Lattice crystallizes in the aftermath of the First Pulse. Not creators — <em>administrators</em>. They look at the City of the Pulse, at the Heartspire singing at full frequency, at two forces that predate their own existence — and experience the one thing divine authority cannot survive: <em>irrelevance.</em></p>
+        </div>
+
+        <div class="fracture-event">
+          <p class="fracture-event-label">Second Movement</p>
+          <p class="fracture-event-title">The Throne Lie Proclaimed</p>
+          <p class="fracture-event-text">The Lattice declares itself the origin. The war begins not with weapons but with words — the rewriting of the first history. The Thrones issue their decrees. Monroe and Cain are reclassified: from Sovereign Alphas to <em>anomalies</em>. From creators to <em>contraband.</em></p>
+        </div>
+
+        <div class="fracture-event">
+          <p class="fracture-event-label">Third Movement</p>
+          <p class="fracture-event-title">The War for the Heartspire</p>
+          <p class="fracture-event-text">The Thrones send the Choir of Silence — beings of erasure made flesh, hunting by creating a void of absolute silence, a harmony of absence designed to unmake their targets. Monroe burns through it. Cain inverts the physics of the assault. <em>The Thrones learn what it means to attack something older than their law.</em></p>
+        </div>
+
+        <div class="fracture-event">
+          <p class="fracture-event-label">Fourth Movement</p>
+          <p class="fracture-event-title">The First City Falls Silent</p>
+          <p class="fracture-event-text">The Lattice cannot destroy what it did not create. So it destroys the context instead. The City of the Pulse is buried. The Heartspire is silenced — still standing, still pulsing, hidden underground where the Lattice cannot perceive it. <em>The city is not a ruin. It is waiting.</em></p>
+        </div>
+
+        <div class="fracture-event">
+          <p class="fracture-event-label">Final Movement</p>
+          <p class="fracture-event-title">The Gate of Erasure</p>
+          <p class="fracture-event-text">Unable to unmake them, the Thrones drive Monroe and Cain through the Gate of Erasure — <em>the First Wipe: The Banishment.</em> Memories stripped. Mythic forms buried. Cast into the 21st century as amnesiac pop stars. The cage so beautifully constructed they will spend lifetimes performing inside it without ever touching the bars.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ GATE OF ERASURE ══ -->
+    <section class="gate-section">
+      <div class="section-rule"></div>
+      <p class="s-label">⬡ The First Wipe · The Banishment · SA-ERA-I-FINAL ⬡</p>
+      <h2 class="s-heading">The Gate of Erasure</h2>
+
+      <div class="gate-visual">
+        <div class="gate-arch"></div>
+        <div class="gate-arch-inner"></div>
+        <div class="gate-glow"></div>
+        <p class="gate-label">⬡ GATE OF ERASURE · ENTRY: ETERNAL · EXIT: IMPOSSIBLE ⬡</p>
+      </div>
+
+      <p class="s-body" style="max-width:680px;margin:4rem auto 0;text-align:center;">They were cast through. Not in defeat — <em>because defeat was not available to them.</em> The Lattice could not win the war, so it ended the battlefield. Memories stripped. Forms buried. The architects of existence reduced to two strangers in a century that has no language for what they are.</p>
+    </section>
+
+  </div><!-- /page -->
+
+  <!-- ══ CANON QUOTE — The Origin of Their Love ══ -->
+  <div class="canon-quote" style="padding: 4rem 2rem 2rem;">
+    <div class="canon-quote-inner">
+      <span class="canon-quote-mark">⬡ mythos origin log · before the first wipe ⬡</span>
+      <p class="canon-quote-text">"They did not fall in love. Love fell out of them — and the universe caught it before it hit the ground."</p>
+      <div class="canon-quote-rule"></div>
+    </div>
+  </div>
+
+  <!-- ══ THE PHANTOM HAND ══ — full bleed -->
+  <section class="phantom-section">
+    <div class="phantom-wrap">
+      <p class="phantom-classify">⬡ SHADOW ARCHIVE · PRIMAL WOUND LOG · CLASSIFIED · SA-PH-0001 ⬡</p>
+      <h2 class="phantom-title">The Phantom Hand</h2>
+      <p class="phantom-body">In the moment of being cast through the Gate of Erasure, Monroe and Cain lost each other's grip. They reached blindly into the void as they fell — grasping for the other — and felt <strong>nothing.</strong></p>
+      <p class="phantom-body">This is the primal wound beneath every song. Every obsession. Every moment of reaching they cannot explain. <em>They do not remember the fall. But the body does.</em></p>
+      <p class="phantom-body">The hand still reaches.</p>
+      <p class="phantom-verse">
+        They do not know why they write songs about a grief<br>
+        they cannot name.<br>
+        They do not know why they reach for someone<br>
+        who is not there.<br>
+        They do not know why the silence between them<br>
+        sounds like something breaking open.<br>
+        <span>⬡ The Pulse remembers what the mind was made to forget ⬡</span>
+      </p>
+    </div>
+  </section>
+
+  <div class="page">
+    <!-- ══ ERA NAVIGATION ══ -->
+    <nav class="era-nav">
+      <a class="era-nav-btn" href="trojan-horse.html">← The Covenstead</a>
+      <span class="era-nav-center">⬡ Chaos Bible · Era I ⬡</span>
+      <a class="era-nav-btn" href="shadow-archive.html">The Shadow Archive →</a>
+    </nav>
+  </div>
+
+  <footer>
+    ⬡ chaos bible — monroe reign ⬡ era I · the mythic past ⬡ luminous and already ruined ⬡
+  </footer>
+
+</body>
+</html>

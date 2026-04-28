@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Shadow Archive — Recovered Logs</title>
+  <style>
+
+    /* ============================================================
+       FONTS & VARIABLES
+    ============================================================ */
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Share+Tech+Mono&display=swap');
+
+    :root {
+      /* Liquid Night Palette */
+      --night:          #05050A;
+      --obsidian:       #0A0A14;
+      --obsidian-mid:   #0F0F1E;
+      --obsidian-glass: rgba(12, 10, 22, 0.82);
+
+      /* Aether-Glass Accents */
+      --nebula-gold:    #D4A94B;
+      --nebula-pink:    #E86CA0;
+      --nebula-violet:  #8B5CF6;
+      --nebula-rose:    #F472B6;
+      --nebula-amber:   #F59E0B;
+
+      /* Glass Tones */
+      --glass-border:   rgba(212, 169, 75, 0.25);
+      --glass-fill:     rgba(139, 92, 246, 0.06);
+      --glass-sheen:    rgba(255, 255, 255, 0.05);
+      --glass-inner:    rgba(232, 108, 160, 0.08);
+
+      /* Text */
+      --text-bright:    #F5F0FF;
+      --text-muted:     #8B82A8;
+      --text-dim:       #4A4362;
+
+      /* Pulse */
+      --pulse-glow:     rgba(139, 92, 246, 0.6);
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--night);
+      color: var(--text-bright);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ============================================================
+       BACKGROUND — LIQUID NIGHT
+       Layered obsidian + two slow swirling nebula radials
+    ============================================================ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 20% 30%,  rgba(139, 92, 246, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 45% at 80% 70%,  rgba(212, 169, 75,  0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 90% 80% at 50% 50%,  rgba(232, 108, 160, 0.04) 0%, transparent 80%),
+        linear-gradient(180deg, var(--obsidian) 0%, var(--night) 100%);
+      animation: nebulaShift 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes nebulaShift {
+      0%   { filter: hue-rotate(0deg) brightness(1); }
+      50%  { filter: hue-rotate(12deg) brightness(1.04); }
+      100% { filter: hue-rotate(-8deg) brightness(0.97); }
+    }
+
+    /* ============================================================
+       PULSE LINE — heartbeat through background
+    ============================================================ */
+    .pulse-line {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--nebula-violet) 30%,
+        var(--nebula-gold)   50%,
+        var(--nebula-violet) 70%,
+        transparent 100%
+      );
+      opacity: 0;
+      z-index: 1;
+      animation: heartbeat 4.2s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%   { opacity: 0;    transform: scaleX(0.3); }
+      8%   { opacity: 0.55; transform: scaleX(1); }
+      16%  { opacity: 0.15; transform: scaleX(0.7); }
+      24%  { opacity: 0.45; transform: scaleX(1); }
+      40%  { opacity: 0;    transform: scaleX(0.4); }
+      100% { opacity: 0;    transform: scaleX(0.3); }
+    }
+
+    /* ============================================================
+       REFLECTIVE FLOOR — obsidian sheen at bottom
+    ============================================================ */
+    .floor-reflection {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 30vh;
+      background: linear-gradient(
+        to top,
+        rgba(139, 92, 246, 0.07) 0%,
+        transparent 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       LAYOUT WRAPPER
+    ============================================================ */
+    .page-wrapper {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 2rem 8rem;
+    }
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+    .archive-hero {
+      width: 100%;
+      position: relative;
+      height: 520px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .archive-hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0.65;
+    }
+    .archive-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(5,5,10,0.3) 0%,
+        rgba(5,5,10,0.1) 40%,
+        rgba(5,5,10,0.7) 80%,
+        rgba(5,5,10,1) 100%);
+    }
+    .archive-hero-text {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    header {
+      width: 100%;
+      max-width: 1100px;
+      padding: 2rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .archive-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.45em;
+      color: var(--nebula-gold);
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 1rem;
+    }
+
+    .archive-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.8rem, 5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      background: linear-gradient(
+        135deg,
+        var(--nebula-gold)   0%,
+        var(--nebula-rose)   40%,
+        var(--nebula-violet) 80%,
+        var(--nebula-gold)   100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 30px rgba(212,169,75,0.25));
+    }
+
+    .archive-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      letter-spacing: 0.18em;
+      margin-top: 0.75rem;
+    }
+
+    .header-rule {
+      width: 100%;
+      height: 1px;
+      margin-top: 2.5rem;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--nebula-violet) 25%,
+        var(--nebula-gold) 50%,
+        var(--nebula-violet) 75%,
+        transparent
+      );
+      opacity: 0.4;
+    }
+
+    /* ============================================================
+       CLASSIFICATION BADGE
+    ============================================================ */
+    .classification-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: var(--nebula-rose);
+      border: 1px solid rgba(232,108,160,0.3);
+      padding: 0.35rem 1.2rem;
+      display: inline-block;
+      margin: 1.5rem auto 0;
+      opacity: 0.8;
+      animation: badgePulse 5s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { opacity: 0.55; }
+      50%       { opacity: 0.9;  }
+    }
+
+    /* ============================================================
+       SHARD FIELD — container for the tracklist shards
+    ============================================================ */
+    .shard-field {
+      width: 100%;
+      max-width: 1100px;
+      margin-top: 5rem;
+      position: relative;
+      /* min-height so shards have space to float */
+      min-height: 620px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* ============================================================
+       GLASS SHARD — individual track card
+       Each shard uses a clip-path polygon to look like broken glass
+    ============================================================ */
+    .shard {
+       background-image: url('SHARD.png');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      width: 240px;
+      min-height: 320px;
+      cursor: pointer;
+      transform-style: preserve-3d;
+
+      /* Each shard gets a slightly different float animation assigned in JS */
+      animation: floatBase 8s ease-in-out infinite;
+    }
+
+    /* Unique float offset per shard — classes assigned in HTML */
+    .shard:nth-child(1)  { animation-delay: 0s;     animation-duration: 8.5s; }
+    .shard:nth-child(2)  { animation-delay: -2.1s;  animation-duration: 9.1s; }
+    .shard:nth-child(3)  { animation-delay: -1.3s;  animation-duration: 7.8s; }
+    .shard:nth-child(4)  { animation-delay: -3.5s;  animation-duration: 9.6s; }
+    .shard:nth-child(5)  { animation-delay: -0.7s;  animation-duration: 8.2s; }
+    .shard:nth-child(6)  { animation-delay: -4.2s;  animation-duration: 10s;  }
+    .shard:nth-child(7)  { animation-delay: -1.9s;  animation-duration: 7.5s; }
+    .shard:nth-child(8)  { animation-delay: -2.8s;  animation-duration: 9.3s; }
+
+    @keyframes floatBase {
+      0%   { transform: translateY(0px)   rotate(var(--tilt, -3deg)); }
+      40%  { transform: translateY(-16px) rotate(calc(var(--tilt, -3deg) + 1.5deg)); }
+      70%  { transform: translateY(-8px)  rotate(calc(var(--tilt, -3deg) - 1deg)); }
+      100% { transform: translateY(0px)   rotate(var(--tilt, -3deg)); }
+    }
+
+    /* Tilt per shard */
+    .shard:nth-child(1) { --tilt: -4deg; }
+    .shard:nth-child(2) { --tilt:  3deg; }
+    .shard:nth-child(3) { --tilt: -2deg; }
+    .shard:nth-child(4) { --tilt:  5deg; }
+    .shard:nth-child(5) { --tilt: -6deg; }
+    .shard:nth-child(6) { --tilt:  2deg; }
+    .shard:nth-child(7) { --tilt: -3deg; }
+    .shard:nth-child(8) { --tilt:  4deg; }
+
+    /* Shard glass face */
+    .shard-inner {
+      width: 100%;
+      height: 100%;
+      min-height: 320px;
+      padding: 2rem 2.5rem 5rem 2rem;
+      position: relative;
+      overflow: hidden;
+
+      /* Irregular glass polygon */
+      clip-path: polygon(
+        8% 0%,
+        95% 3%,
+        100% 12%,
+        97% 85%,
+        88% 97%,
+        3% 100%,
+        0% 90%,
+        2% 8%
+      );
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(139, 92, 246, 0.1)  0%,
+          rgba(212, 169, 75,  0.06) 40%,
+          rgba(232, 108, 160, 0.08) 100%
+        ),
+        rgba(10, 8, 20, 0.75);
+
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px);
+      transition: clip-path 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Shard highlight sheen — the bright edge of glass */
+    .shard-inner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(
+        125deg,
+        rgba(255,255,255,0.09) 0%,
+        transparent 55%
+      );
+      pointer-events: none;
+    }
+
+    /* Shard nebula swirl */
+    .shard-inner::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; right: -20px;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(139, 92, 246, 0.2) 0%,
+        rgba(212, 169, 75, 0.1) 50%,
+        transparent 75%
+      );
+      filter: blur(18px);
+      pointer-events: none;
+    }
+
+    /* Hover state: shard brightens and "floats closer" */
+    .shard:hover .shard-inner {
+      transform: scale(1.03);
+      box-shadow:
+        0 0 30px rgba(139, 92, 246, 0.35),
+        0 0 60px rgba(212, 169, 75, 0.12),
+        inset 0 0 20px rgba(139, 92, 246, 0.08);
+      clip-path: polygon(
+        6% 0%,
+        96% 2%,
+        100% 10%,
+        98% 87%,
+        90% 98%,
+        2% 100%,
+        0% 88%,
+        1% 6%
+      );
+    }
+
+    /* Active: shard "clicks in" */
+    .shard:active .shard-inner {
+      transform: scale(0.97);
+    }
+
+    /* ——— Shard Typography ——— */
+    .shard-track-number {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      color: var(--nebula-gold);
+      opacity: 0.7;
+      margin-bottom: 0.9rem;
+    }
+
+    .shard-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text-bright);
+      margin-bottom: 0.6rem;
+    }
+
+    .shard-alias {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.8rem;
+      color: var(--nebula-rose);
+      opacity: 0.85;
+      margin-bottom: 1.4rem;
+    }
+
+    .shard-divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--nebula-violet), transparent);
+      margin-bottom: 1.2rem;
+    }
+
+    .shard-excerpt {
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Glow dot — status indicator */
+    .shard-status {
+      position: absolute;
+      top: 1.2rem; right: 1.5rem;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--nebula-violet);
+      box-shadow: 0 0 8px var(--nebula-violet);
+      animation: dotPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.5); }
+    }
+
+    /* ============================================================
+       FULL-SCREEN DUAL-PANE OVERLAY
+    ============================================================ */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Entry animation — glass pieces fly in from center */
+    .overlay.open .pane-left,
+    .overlay.open .pane-right {
+      animation: paneReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .overlay.open .pane-right {
+      animation-delay: 0.08s;
+    }
+
+    @keyframes paneReveal {
+      from {
+        opacity: 0;
+        clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+      }
+      to {
+        opacity: 1;
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+      }
+    }
+
+    /* ——— LEFT PANE — Pop-star glossy image & lyrics ——— */
+    .pane-left {
+      flex: 1;
+      position: relative;
+      overflow-y: auto;
+      background: var(--obsidian);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    /* The "image" placeholder — swap for a real <img> later */
+    .pane-left-image {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(5,5,10,0.1) 0%,
+          rgba(5,5,10,0.7) 60%,
+          rgba(5,5,10,0.96) 100%
+        ),
+        /* placeholder gradient simulating a glossy photo */
+        linear-gradient(
+          135deg,
+          #1a0a2e 0%,
+          #2d1b69 30%,
+          #11001f 60%,
+          #0a0a14 100%
+        );
+      background-size: cover;
+      background-position: center;
+    }
+
+    .pane-left-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.7;
+      mix-blend-mode: luminosity;
+    }
+
+    /* Image overlay shimmer */
+    .pane-left-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        45deg,
+        rgba(212,169,75,0.06) 0%,
+        transparent 50%,
+        rgba(232,108,160,0.06) 100%
+      );
+    }
+
+    /* Left pane text area */
+    .pane-left-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem 3rem 3.5rem;
+    }
+
+    .pane-track-number {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: var(--nebula-gold);
+      opacity: 0.7;
+      margin-bottom: 0.6rem;
+    }
+
+    .pane-track-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 900;
+      line-height: 1.2;
+      background: linear-gradient(
+        135deg,
+        var(--nebula-gold) 0%,
+        var(--nebula-rose) 60%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .pane-track-alias {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--nebula-rose);
+      margin-bottom: 2rem;
+    }
+
+    .pane-lyrics-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.45em;
+      color: var(--nebula-violet);
+      opacity: 0.7;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .pane-lyrics {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 2;
+      color: rgba(245,240,255,0.75);
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+      /* scrollbar */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(139,92,246,0.4) transparent;
+    }
+
+    .pane-lyrics::-webkit-scrollbar { width: 3px; }
+    .pane-lyrics::-webkit-scrollbar-track { background: transparent; }
+    .pane-lyrics::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.4); border-radius: 2px; }
+
+    /* ——— PANE DIVIDER — cracked glass seam ——— */
+    .pane-divider {
+      width: 2px;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        var(--nebula-gold) 20%,
+        var(--nebula-violet) 50%,
+        var(--nebula-rose) 80%,
+        transparent 100%
+      );
+      position: relative;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 8px rgba(139,92,246,0.8));
+    }
+
+    /* Crack jaggedness */
+    .pane-divider::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -1px;
+      width: 4px; height: 100%;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(255,255,255,0.12) 35%,
+        rgba(255,255,255,0.04) 65%,
+        transparent 100%
+      );
+    }
+
+    /* ——— RIGHT PANE — Classified document ——— */
+    .pane-right {
+      flex: 1;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 28px,
+          rgba(139,92,246,0.025) 28px,
+          rgba(139,92,246,0.025) 29px
+        ),
+        linear-gradient(
+          180deg,
+          rgba(8, 6, 18, 0.97) 0%,
+          rgba(5, 5, 10, 0.99) 100%
+        );
+      padding: 4rem 3.5rem;
+      overflow-y: auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      scrollbar-width: thin;
+      scrollbar-color: rgba(212,169,75,0.3) transparent;
+    }
+
+    .pane-right::-webkit-scrollbar { width: 3px; }
+    .pane-right::-webkit-scrollbar-track { background: transparent; }
+    .pane-right::-webkit-scrollbar-thumb { background: rgba(212,169,75,0.3); }
+
+    /* Document header block */
+    .doc-header {
+      border: 1px solid rgba(212,169,75,0.3);
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .doc-header::before {
+      content: '▓▒░ SHADOW ARCHIVE — RECOVERED LOG ░▒▓';
+      position: absolute;
+      top: -0.55rem;
+      left: 1rem;
+      background: var(--night);
+      padding: 0 0.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      color: var(--nebula-gold);
+      opacity: 0.8;
+    }
+
+    .doc-classification {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.5em;
+      color: var(--nebula-rose);
+      margin-bottom: 0.5rem;
+      animation: badgePulse 4s ease-in-out infinite;
+    }
+
+    .doc-id-row {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .doc-id-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .doc-id-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.35em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .doc-id-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--nebula-gold);
+      opacity: 0.9;
+    }
+
+    /* Redaction bar */
+    .redacted {
+      display: inline-block;
+      background: rgba(139,92,246,0.5);
+      color: transparent;
+      user-select: none;
+      padding: 0 0.3rem;
+      border-radius: 2px;
+      font-size: inherit;
+      line-height: inherit;
+    }
+
+    /* Document body */
+    .doc-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .doc-section-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      color: var(--nebula-violet);
+      opacity: 0.7;
+      border-bottom: 1px solid rgba(139,92,246,0.2);
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .doc-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: rgba(245,240,255,0.65);
+    }
+
+    .doc-text em {
+      color: var(--nebula-rose);
+      font-style: italic;
+    }
+
+    /* Stamped RECOVERED mark */
+    .stamp {
+      position: absolute;
+      bottom: 3rem;
+      right: 3.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.1rem;
+      letter-spacing: 0.3em;
+      color: rgba(212,169,75,0.18);
+      border: 2px solid rgba(212,169,75,0.15);
+      padding: 0.4rem 1rem;
+      transform: rotate(-8deg);
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       CLOSE BUTTON
+    ============================================================ */
+    .close-btn {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.8rem;
+      z-index: 200;
+      width: 44px; height: 44px;
+      border: 1px solid rgba(139,92,246,0.4);
+      background: rgba(10,8,20,0.8);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, border-color 0.3s ease;
+      clip-path: polygon(15% 0%, 100% 0%, 100% 85%, 85% 100%, 0% 100%, 0% 15%);
+    }
+
+    .close-btn.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .close-btn:hover {
+      border-color: var(--nebula-violet);
+      background: rgba(139,92,246,0.15);
+    }
+
+    .close-btn svg {
+      width: 16px; height: 16px;
+      stroke: var(--nebula-violet);
+      transition: stroke 0.2s;
+    }
+
+    .close-btn:hover svg { stroke: var(--nebula-rose); }
+
+    /* ============================================================
+       SHARD FRACTURE BURST — on click
+       White-ash flash before pane opens
+    ============================================================ */
+    .fracture-burst {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .fracture-burst.fire {
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255,255,255,0.85) 0%,
+        rgba(245, 220, 100, 0.5) 25%,
+        rgba(212, 169, 75, 0.2) 55%,
+        transparent 75%
+      );
+      animation: burstFlash 0.65s ease-out forwards;
+    }
+
+    @keyframes burstFlash {
+      0%   { opacity: 0;   transform: scale(0.5); }
+      15%  { opacity: 0.9; transform: scale(1.05); }
+      40%  { opacity: 0.6; }
+      100% { opacity: 0;   transform: scale(1.2); }
+    }
+
+    /* Fracture shards that scatter during burst */
+    .fracture-piece {
+      position: fixed;
+      z-index: 98;
+      background: rgba(255,255,255,0.25);
+      clip-path: polygon(50% 0%, 100% 60%, 70% 100%, 0% 80%, 20% 20%);
+      pointer-events: none;
+      animation: shardScatter var(--dur, 0.6s) ease-out forwards;
+    }
+
+    @keyframes shardScatter {
+      0%   { opacity: 0.7; transform: translate(0,0) rotate(0deg) scale(1); }
+      100% { opacity: 0;   transform: translate(var(--tx,60px), var(--ty,60px)) rotate(var(--rot,45deg)) scale(0.2); }
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 3rem 2rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      color: var(--text-dim);
+      opacity: 0.6;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .overlay {
+        flex-direction: column;
+      }
+      .pane-divider {
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--nebula-gold), var(--nebula-violet), transparent);
+      }
+      .shard-field {
+        gap: 1.8rem;
+      }
+      .shard {
+        width: 180px;
+        min-height: 260px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .pane-left-content,
+      .pane-right {
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3.5rem;
+      background: rgba(5,5,10,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212,169,75,0.1);
+    }
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-decoration: none;
+      background: linear-gradient(135deg, #D4A94B, #F5D78E);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+      color: rgba(255,255,255,0.45);
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: #D4A94B;
+      text-shadow: 0 0 12px rgba(212,169,75,0.4);
+    }
+    .page-wrapper { padding-top: 68px; }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="nav-logo">Monroe Reign</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Chaos Covenstead</a></li>
+      <li><a href="shadow-archive.html" class="active">The Shadow Archive</a></li>
+      <li><a href="mythic-past.html">The Mythic Past</a></li>
+      <li><a href="monroe.html">Monroe</a></li>
+      <li><a href="cain.html">Cain</a></li>
+      <li><a href="binary-star.html">Binary-Star Bond</a></li>
+      <li><a href="heartspire.html">The Heartspire</a></li>
+    </ul>
+  </nav>
+
+  <!-- Ambient elements -->
+  <div class="pulse-line"></div>
+  <div class="floor-reflection"></div>
+
+  <!-- Close button (shown when overlay is open) -->
+  <button class="close-btn" id="closeBtn" aria-label="Close log">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+
+  <!-- Fracture burst overlay -->
+  <div class="fracture-burst" id="fractureBurst"></div>
+
+  <!-- ============================================================
+       MAIN PAGE CONTENT
+  ============================================================ -->
+  <div class="page-wrapper">
+
+    <!-- Hero Image -->
+    <div class="archive-hero">
+      <img src="Mythic Architecture/THE SHADOW ARCHIVE.jpg" alt="The Shadow Archive">
+      <div class="archive-hero-text">
+        <p class="archive-eyebrow">Chaos Bible — Recovered Artefacts</p>
+        <h1 class="archive-title">The Shadow Archive</h1>
+        <p class="archive-subtitle">recovered logs / classified fragments</p>
+      </div>
+    </div>
+
+    <header>
+      <div class="classification-badge">⬡ CLEARANCE: REMNANT EYES ONLY ⬡</div>
+      <div class="header-rule"></div>
+    </header>
+
+    <!-- ========================================================
+         SHARD FIELD — tracklist
+         Replace data-* attributes with real song metadata.
+         Add real images later via shard-image src.
+    ========================================================= -->
+    <section class="shard-field" aria-label="Track listing">
+
+      <!-- SHARD 1 -->
+      <article class="shard" data-track="01" data-title="High Heels &amp; Headaches" data-alias="The Dominion Hymn" role="button" tabindex="0" aria-label="Open log for Track 01">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 01</p>
+          <h2 class="shard-title">High Heels &amp; Headaches</h2>
+          <p class="shard-alias">The Dominion Hymn</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+           RECOVERED LOG: The rebirth moment. The first visible power shift after a fracture where composure becomes a weapon.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 2 -->
+      <article class="shard" data-track="02" data-title="Don't Clean It Up II" data-alias="The Escalation" role="button" tabindex="0" aria-label="Open log for Track 02">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 02</p>
+          <h2 class="shard-title"> Don't Clean It Up II</h2>
+          <p class="shard-alias">The Escalation</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+           THREAT LEVEL: ESCALATING. The tension shifts to deliberate escalation. Dominance play disguised as attraction.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 3 -->
+      <article class="shard" data-track="03" data-title="Psycho-Symmetry III" data-alias="The Mirror" role="button" tabindex="0" aria-label="Open log for Track 03">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 03</p>
+          <h2 class="shard-title">Psycho-Symmetry III</h2>
+          <p class="shard-alias">The Mirror</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+           ANALYSIS: The illusion of control. Both subjects believe they are orchestrating the game. Mental chess as reflection.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 4 -->
+      <article class="shard" data-track="04" data-title="NERV-WRECK IV" data-alias="The Destabilization" role="button" tabindex="0" aria-label="Open log for Track 04">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 04</p>
+          <h2 class="shard-title">NERV-WRECK IV</h2>
+          <p class="shard-alias">The Destabilization</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+            THREAT LEVEL: CRITICAL. Psychological warfare disguised as strategy. The escalation point where obsession turns destabilizing.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 5 -->
+      <article class="shard" data-track="05" data-title="Horror Show V" data-alias="The Shift in Dominance" role="button" tabindex="0" aria-label="Open log for Track 05">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 05</p>
+          <h2 class="shard-title">Horror Show V</h2>
+          <p class="shard-alias">The Shift in Dominance</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+           ANALYSIS: The shift in dominance. The horror is not chaos, but the slow reveal of a calculated, calmer mind.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 6 -->
+      <article class="shard" data-track="06" data-title="Red Flags Make It Fashion VI" data-alias="Conscious Toxicity" role="button" tabindex="0" aria-label="Open log for Track 06">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 06</p>
+          <h2 class="shard-title">Red Flags Make It Fashion VI</h2>
+          <p class="shard-alias">Conscious Toxicity</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+           ANALYSIS: Conscious toxicity. They acknowledge they are the problem and accessorize it. Dysfunction as an aesthetic.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 7 -->
+      <article class="shard" data-track="07" data-title="Toxic Taste Test VII" data-alias="The Stalemate" role="button" tabindex="0" aria-label="Open log for Track 07">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 07</p>
+          <h2 class="shard-title">Toxic Taste Test VII</h2>
+          <p class="shard-alias">The Stalemate</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+            Flirtatious danger at a stalemate. The poison doesn’t weaken them—it excites them.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 8 -->
+      <article class="shard" data-track="08" data-title="Obsession Looks Good On You VIII" data-alias="The Emotional Lock-In" role="button" tabindex="0" aria-label="Open log for Track 08">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 08</p>
+          <h2 class="shard-title">Obsession Looks Good On You VIII</h2>
+          <p class="shard-alias">The Emotional Lock-In</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+            THREAT LEVEL: UNBREAKABLE. The mutual confession. Obsession is no longer a flaw—it is the standard.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 9 -->
+      <article class="shard" data-track="09" data-title="Love Me Brave IX" data-alias="The Ultraviolet Vow" role="button" tabindex="0" aria-label="Open log for Track 09">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 09</p>
+          <h2 class="shard-title">Love Me Brave IX</h2>
+          <p class="shard-alias">The Ultraviolet Vow</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+           THREAT LEVEL: ELEVATED. Dangerous intimacy—the conscious choice to love in a way that hurts.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 10 -->
+      <article class="shard" data-track="10" data-title="Under My Skin X" data-alias="The Infection" role="button" tabindex="0" aria-label="Open log for Track 10">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 10</p>
+          <h2 class="shard-title">Under My Skin X</h2>
+          <p class="shard-alias">The Infection</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+            ANALYSIS: Psychological embedding. Obsession stops being a choice and becomes a condition.
+          </p>
+        </div>
+      </article>
+
+     <!-- SHARD 11 -->
+      <article class="shard" data-track="11" data-title="Addicted XI" data-alias="The Dependency" role="button" tabindex="0" aria-label="Open log for Track 11">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 11</p>
+          <h2 class="shard-title">Addicted XI</h2>
+          <p class="shard-alias">The Dependency</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+           ANALYSIS: Full dependency awareness. They prefer the high of destruction to the peace of healing.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 12 -->
+      <article class="shard" data-track="12" data-title="Neon Graves XII" data-alias="The Doom-Romance" role="button" tabindex="0" aria-label="Open log for Track 12">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 12</p>
+          <h2 class="shard-title">Neon Graves XII</h2>
+          <p class="shard-alias">The Doom-Romance</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+            THREAT LEVEL: APOCALYPTIC. Romanticized destruction fully embraced. Doom becomes devotion.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 13 -->
+      <article class="shard" data-track="13" data-title="This Ain't Love XIII" data-alias="Brutal Clarity" role="button" tabindex="0" aria-label="Open log for Track 13">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 13</p>
+          <h2 class="shard-title">This Ain't Love XIII</h2>
+          <p class="shard-alias">Brutal Clarity</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+           ANALYSIS: Illusion shattered. The relationship becomes about conquest and domination instead of connection.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 14 -->
+      <article class="shard" data-track="14" data-title="Redline XIV" data-alias="Kinetic Acceleration" role="button" tabindex="0" aria-label="Open log for Track 14">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 14</p>
+          <h2 class="shard-title">Redline XIV</h2>
+          <p class="shard-alias">Kinetic Acceleration</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+            ANALYSIS: Speed as intimacy. Recklessness becomes bonding and pushing limits becomes closeness. 
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 15 -->
+      <article class="shard" data-track="15" data-title="Russian Roulette XV" data-alias="Fatalistic Devotion" role="button" tabindex="0" aria-label="Open log for Track 15">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 15</p>
+          <h2 class="shard-title">Russian Roulette XV</h2>
+          <p class="shard-alias">Fatalistic Devotion</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+            THREAT LEVEL: APOCALYPTIC. Flirting with death as proof of devotion. The risk is the romance.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 16 -->
+      <article class="shard" data-track="16" data-title=" Puppet Strings XVI" data-alias="The Dominance Tug-of-War" role="button" tabindex="0" aria-label="Open log for Track 16">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 16</p>
+          <h2 class="shard-title"> Puppet Strings XVII</h2>
+          <p class="shard-alias">The Dominance Tug-of-War</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+            ANALYSIS: A tension escalation. Neither is willing to surrender control, yet neither can sever the connection.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 17 -->
+      <article class="shard" data-track="17" data-title="Wicked Things XVII" data-alias="Mutual Corruption" role="button" tabindex="0" aria-label="Open log for Track 17">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 17</p>
+          <h2 class="shard-title">Wicked Things XVII</h2>
+          <p class="shard-alias">Mutual Corruption</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+           Ritualistic destruction. The corruption feels intimate. Sacred in its own twisted way.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 18 -->
+      <article class="shard" data-track="18" data-title="Poison Pact XVIII" data-alias="The Formalization of Destruction" role="button" tabindex="0" aria-label="Open log for Track 18">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 18</p>
+          <h2 class="shard-title">Poison Pact VIII</h2>
+          <p class="shard-alias">The Formalization of Destruction</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+            THREAT LEVEL: PERMANENT. A mutual vow: if I go down, you go first. A bond forged in shared self-sabotage.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 19 -->
+      <article class="shard" data-track="19" data-title="Perfect Storm  XIX" data-alias="Realization Without Retreat" role="button" tabindex="0" aria-label="Open log for Track 19">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 19</p>
+          <h2 class="shard-title">Perfect Storm XIX</h2>
+          <p class="shard-alias">Realization Without Retreat</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+         ANALYSIS: The calm before collapse. They acknowledge the inevitable wreckage, and still choose each other.
+          </p>
+        </div>
+      </article>
+
+      <!-- SHARD 20 -->
+      <article class="shard" data-track="20" data-title="Never Heal XX" data-alias="The Final Vow" role="button" tabindex="0" aria-label="Open log for Track 20">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">LOG — 20</p>
+          <h2 class="shard-title">Never Heal XX</h2>
+          <p class="shard-alias">The Final Vow</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">
+           THREAT LEVEL: ETERNAL. The relationship stops pretending healing is the goal. A refusal to recover.
+          </p>
+        </div>
+      </article>
+
+    </section><!-- /shard-field -->
+
+  </div><!-- /page-wrapper -->
+
+  <footer>
+    ⬡ chaos bible — shadow archive ⬡ all logs recovered post-fracture ⬡ do not distribute ⬡
+  </footer>
+
+  <!-- ============================================================
+       DUAL-PANE OVERLAY
+       Populate dynamically via JS. Placeholders below.
+  ============================================================ -->
+  <div class="overlay" id="logOverlay" role="dialog" aria-modal="true" aria-label="Recovered Log">
+
+    <!-- LEFT — Pop star image + lyrics -->
+    <div class="pane-left">
+      <div class="pane-left-image" id="paneImage">
+        <!-- Replace this div with <img src="star-photo.jpg" alt="..."> later -->
+        <!-- Placeholder gradient shows until real image is swapped in -->
+      </div>
+      <div class="pane-left-content">
+        <p class="pane-track-number" id="paneTrackNum">LOG — 00</p>
+        <h2 class="pane-track-title" id="paneTitle">Track Title Placeholder</h2>
+        <p class="pane-track-alias" id="paneAlias">Sub-title / alias here</p>
+        <p class="pane-lyrics-label">▸ recovered lyric fragment</p>
+        <div class="pane-lyrics" id="paneLyrics">
+          <!-- INSERT LYRICS HERE: replace with real verse text -->
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <p>&nbsp;</p>
+          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <p>&nbsp;</p>
+          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+          <p>&nbsp;</p>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</p>
+          <p>&nbsp;</p>
+          <p>Excepteur sint occaecat cupidatat non proident.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="pane-divider"></div>
+
+    <!-- RIGHT — Classified document -->
+    <div class="pane-right">
+
+      <div class="doc-header">
+        <p class="doc-classification" id="docClass">⬛ CLASSIFIED — REMNANT EYES ONLY ⬛</p>
+        <div class="doc-id-row">
+          <div class="doc-id-item">
+            <span class="doc-id-label">Log Reference</span>
+            <span class="doc-id-value" id="docRef">SA-00-000</span>
+          </div>
+          <div class="doc-id-item">
+            <span class="doc-id-label">Archivist</span>
+            <span class="doc-id-value"><span class="redacted">██████ ██████</span></span>
+          </div>
+          <div class="doc-id-item">
+            <span class="doc-id-label">Status</span>
+            <span class="doc-id-value">RECOVERED / FRAGMENTED</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-body">
+
+        <div>
+          <p class="doc-section-label">⬡ SUBJECT PROFILE</p>
+          <p class="doc-text" id="docSubject">
+            <!-- INSERT CHAPTER TEXT HERE -->
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Subject designation: <span class="redacted">████████</span>.
+          </p>
+        </div>
+
+        <div>
+          <p class="doc-section-label">⬡ RECOVERED TESTIMONY</p>
+          <p class="doc-text" id="docTestimony">
+            <!-- INSERT RECOVERED TESTIMONY / STORY PROSE HERE -->
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui <em>officia deserunt mollit anim</em> id est laborum. The record was corrupted at <span class="redacted">████</span> intervals.
+          </p>
+        </div>
+
+        <div>
+          <p class="doc-section-label">⬡ ARCHIVIST ANNOTATION</p>
+          <p class="doc-text" id="docAnnotation">
+            <!-- INSERT ARCHIVIST ANNOTATION / LORE NOTE HERE -->
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+          </p>
+        </div>
+
+      </div><!-- /doc-body -->
+
+      <div class="stamp">RECOVERED</div>
+
+    </div><!-- /pane-right -->
+
+  </div><!-- /overlay -->
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+
+    /* ──────────────────────────────────────────────
+       TRACK DATA
+       Expand this array with real content later.
+       Keys mirror what the dual pane reads.
+    ────────────────────────────────────────────── */
+    const trackData = [
+        {
+        track:      '01',
+        title:      'High Heels &amp; Headaches',
+        alias:      'The First Crack',
+        imageSrc:   'faceswap_4~2.png', // Swapped to your new masterpiece!
+        imageAlt:   'Monroe Reign in a blinding red diamond dress with sparks',
+        lyrics:     `<p>[Monroe – Female Vocals, icy calm]<br>
+                     I wore red for regret. Not mine. Yours.</p>
+                     <p>[Cain – Male Vocals, already defeated]<br>
+                     And I drank for the damage… Also mine.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1]<br>
+                     Walked in late, but took the room<br>
+                     Smelled like sin, heels of doom<br>
+                     You blinked twice, choked on pride<br>
+                     I just smiled, stayed on my side</p>
+                     <p>(Click click)<br>
+                     You brought her—I brought grace<br>
+                     You wore guilt across your face<br>
+                     She held hands, I held stare<br>
+                     And baby, I owned the air</p>`,
+        logRef:     'SA-01-HHH',
+        subject:    'THE REBIRTH (Post-Breakup Proximity). Subject designation: <span class="redacted">THE FIRST SPARK</span>.',
+        testimony:  'Monroe treated the red diamond dress as war paint. She didn\'t yell. She didn\'t cry. She just walked in—and the Anchor fell apart. He looked lethal in his tailored suit, but internally, his gravity was collapsing under the sheer weight of her silence.',
+        annotation: 'RECOVERED ANALYSIS: This represents the rebirth moment — the first visible power shift after a fracture. This is not reconciliation, not longing, not chaos. It is presentation. Monroe returns not to reclaim love, but to reclaim presence. The war is no longer about who left. It’s about who stands taller when they re-enter the room.',
+      },
+     {
+        track:      '02',
+        title:      'Don\'t Clean It Up',
+        alias:      'The Escalation',
+        imageSrc:   '', // Add a new image file name here if you generate one!
+        imageAlt:   'Monroe and Cain in tense proximity',
+        lyrics:     `<p>[Cain – Male Vocals, barely audible]<br>
+                     (Don’t say stop…)</p>
+                     <p>[Monroe – Female Vocals, low laugh]<br>
+                     You won’t mean it.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     Black lace tangled in my hands<br>
+                     You don’t flinch when I command<br>
+                     Every rule you break on sight<br>
+                     Just to feel it hit you right</p>`,
+        logRef:     'SA-02-DCIU',
+        subject:    'MUTUAL PROVOCATION (Dominance Play). Threat Level: <span class="redacted">ESCALATING</span>.',
+        testimony:  'The tension is no longer about absence—it is about deliberate escalation. Both subjects know exactly what they are doing. This is dominance play disguised as attraction, where control is tested, challenged, and reasserted in toxic cycles.',
+        annotation: 'RECOVERED ANALYSIS: They are not trying to fix the damage. They are leaning into it. The conflict stops being emotional and becomes recreational. No one is innocent, and no one is pretending to be.',
+      },
+      {
+        track:      '03',
+        title:      'Psycho-Symmetry',
+        alias:      'The Mirror',
+        imageSrc:   '', 
+        imageAlt:   'Track 03 visual placeholder',
+        lyrics:     `<p>[Cain – Male Vocals, low and gravelly]<br>
+                     You’re looking for a exit that I already boarded up.</p>
+                     <p>[Monroe – Female Vocals, breathy but cold]<br>
+                     I didn't come here to leave, Cain. I came to take the keys.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     I’m the silence in the room before the scream begins,<br>
+                     Mapping out the logic of your "accidental" sins.</p>`,
+        logRef:     'SA-03-PSYC',
+        subject:    'THE ILLUSION OF CONTROL (Mental Warfare).',
+        testimony:  'Both subjects believe they are orchestrating the game—calculating moves, anticipating reactions, proving superiority. Every move is mirrored. Every tactic is matched. Every attempt at dominance is countered.',
+        annotation: 'RECOVERED ANALYSIS: The tragedy is that neither of them realizes they are perfectly balanced. What feels like mental chess is actually reflection. They are not defeating each other; they are revealing themselves.',
+      },
+      {
+        track:      '04',
+        title:      'NERV-WRECK',
+        alias:      'The Destabilization',
+        imageSrc:   '', 
+        imageAlt:   'Track 04 visual placeholder',
+        lyrics:     `<p>[Cain: Male Vocals, low, mocking]<br>
+                     I’m in the walls of your head, Monroe.</p>
+                     <p>[Monroe: Female Vocals, cold, sharp]<br>
+                     Then I hope you like the sound of me burning the house down, Cain.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     I left the deadbolt open, just to watch you freeze<br>
+                     You’re addicted to the terror, down on your knees<br>
+                     I told you the sky was falling, and you started to scream<br>
+                     I’m the one who writes the script for your every dream</p>`,
+        logRef:     'SA-04-NERV',
+        subject:    'PSYCHOLOGICAL WARFARE (Destabilization). Threat Level: <span class="redacted">CRITICAL</span>.',
+        testimony:  'NERV-WRECK is psychological warfare disguised as strategy. Monroe and Cain present their manipulation as calculated “chess,” but beneath the surface they are deliberately forcing each other to relive insecurities, past failures, and private fears. Each move isn’t just tactical — it’s personal.',
+        annotation: 'RECOVERED ANALYSIS: What makes this stage dangerous is that neither admits the emotional stakes. They frame it as control, as intellect, as superiority. But the cracks are forming. The game stops being about winning and starts becoming about survival. This marks the escalation point where obsession turns destabilizing.',
+      },
+      {
+        track:      '05',
+        title:      'Horror Show',
+        alias:      'The Shift in Dominance',
+        imageSrc:   '', 
+        imageAlt:   'Track 05 visual placeholder',
+        lyrics:     `<p>[Monroe Reign: Female, sweetly sinister]<br>
+                     I can see the future, baby<br>
+                     And you lose.</p>
+                     <p>[Cain Saint: Male, low, calm]<br>
+                     We'll see.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Monroe]<br>
+                     I'm the queen of this asylum, check the scoreboard<br>
+                     Got you thinking that my chaos is your reward<br>
+                     I'm the fire, you're the moth, it's so predictable<br>
+                     Watch you circle, getting closer to the impossible</p>`,
+        logRef:     'SA-05-HRSH',
+        subject:    'THE SHIFT IN DOMINANCE (Calculated Composure).',
+        testimony:  'Horror Show marks the first undeniable shift in dominance. While previous tracks maintained symmetry and back-and-forth manipulation, this is where Cain’s composure becomes an advantage. He doesn’t escalate emotionally — he calculates. He doesn’t react — he orchestrates.',
+        annotation: 'RECOVERED ANALYSIS: The psychological warfare continues, but Monroe begins to realize the game board may have been designed by him all along. The horror isn’t chaos. It’s clarity. It’s the slow reveal that the illusion of shared control may have always favored the calmer mind.',
+      },
+      {
+        track:      '06',
+        title:      'Red Flags Make It Fashion',
+        alias:      'Conscious Toxicity',
+        imageSrc:   '', 
+        imageAlt:   'Track 06 visual placeholder',
+        lyrics:     `<p>[Monroe Reign: Female, playful, cocky]<br>
+                     Red flag?<br>
+                     Babe, that’s an accessory.</p>
+                     <p>[Cain Saint: Male, amused, low]<br>
+                     You wear it well.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Monroe]<br>
+                     You said all your exes call you crazy (cute)<br>
+                     I said "perfect, you'll fit in with me" (welcome)<br>
+                     You raise your voice, I raise my eyebrow (try it)<br>
+                     We turn a tiny fight into a live crowd (tickets)</p>`,
+        logRef:     'SA-06-RFMF',
+        subject:    'CONSCIOUS TOXICITY (Dysfunction as Aesthetic).',
+        testimony:  'Red Flags Make It Fashion represents conscious toxicity. There is no denial here, no illusion of innocence, no attempt at justification. Monroe and Cain openly acknowledge that they are both the problem — and they take pride in it. Dysfunction becomes aesthetic. Chaos becomes style.',
+        annotation: 'RECOVERED ANALYSIS: What makes this stage distinct is the self-awareness. They see the warning signs. They know the damage. But instead of retreating, they accessorize it. The destruction becomes part of the identity. Toxicity stops feeling accidental and starts feeling chosen.',
+      },
+      {
+        track:      '07',
+        title:      'Toxic Taste Test',
+        alias:      'The Stalemate',
+        imageSrc:   '', 
+        imageAlt:   'Track 07 visual placeholder',
+        lyrics:     `<p>[Monroe: Female Vocals, playful menace]<br>
+                     You sure you wanna sip that, babe?</p>
+                     <p>[Cain: Male Vocals, smooth]<br>
+                     Too late.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     Glossy lips, that smirk’s a dare<br>
+                     You spike the truth, I breathe it in air<br>
+                     I see the tilt, I feel the trick<br>
+                     But I still drink — I’m that sick</p>`,
+        logRef:     'SA-07-TOXC',
+        subject:    'FLIRTATIOUS DANGER (Mutual Temptation).',
+        testimony:  'Toxic Taste Test represents flirtatious danger at a stalemate. Monroe and Cain knowingly pass the poison back and forth, daring the other to break first — to confess, to flinch, to fold. The game is seductive, theatrical, and layered with temptation.',
+        annotation: 'RECOVERED ANALYSIS: What makes this moment powerful is the standstill. The poison doesn’t weaken them — it excites them. The toxicity isn’t a weakness to escape; it’s a flavor they both crave. No one loses. No one wins. The tension just thickens.',
+      },
+      {
+        track:      '08',
+        title:      'Obsession Looks Good On You',
+        alias:      'The Emotional Lock-In',
+        imageSrc:   '', 
+        imageAlt:   'Track 08 visual placeholder',
+        lyrics:     `<p>[Cain Saint: Male, low and smooth]<br>
+                     (mine)<br>
+                     (say it back)</p>
+                     <p>[Monroe Reign: Female, playful whisper]<br>
+                     (mmm… make me)</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     I memorized your schedule, that ain't creepy<br>
+                     I just like knowing where you are when you ain't with me<br>
+                     You went out Friday, I ain't text you once<br>
+                     But I circled the block twice just because</p>`,
+        logRef:     'SA-08-OBSN',
+        subject:    'MUTUAL CONFESSION (Possessive Pride). Threat Level: <span class="redacted">UNBREAKABLE</span>.',
+        testimony:  'Obsession Looks Good On You is the mutual confession. There is no more pretending this is accidental, circumstantial, or situational. Monroe and Cain openly admit what they are to each other — the sickness and the cure. And they don’t want moderation.',
+        annotation: 'RECOVERED ANALYSIS: This is possessive pride fully embraced. Obsession is no longer a flaw — it’s the standard. They don’t fear intensity; they require it. The relationship stops being about power and starts being about exclusivity. If it isn’t all-consuming, it isn’t enough.',
+      },
+      {
+        track:      '09',
+        title:      'Love Me Brave',
+        alias:      'The Ultraviolet Vow',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 09 visual',
+        lyrics:     `<p>[Cain: Male Vocals, whispered]<br>
+                     (Shut the lights off…)</p>
+                     <p>[Monroe: Female Vocals, breathy laugh]<br>
+                     Mmm… don’t rush it.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     Midnight dripping off the walls<br>
+                     Every shadow hears you call<br>
+                     You wear trouble like perfume<br>
+                     Fill the room, consume the room</p>
+                     <p>Glass on skin, the tension thick<br>
+                     Every second makes me sick<br>
+                     You don’t flinch when danger’s near<br>
+                     That’s what pulled me here.</p>`,
+        logRef:     'SA-09-LMB',
+        subject:    'DANGEROUS INTIMACY (Reckless Devotion). Threat Level: <span class="redacted">ELEVATED</span>.',
+        testimony:  'Love Me Brave represents dangerous intimacy — the conscious choice to love in a way that hurts. Monroe and Cain are no longer posturing or proving dominance. They’re standing close enough to admit the truth: this isn’t safe, and it never will be.',
+        annotation: 'RECOVERED ANALYSIS: The sweetness in the production disguises the risk. The line "love me wrong, love me brave" isn’t about recklessness. It’s about consent to intensity. If you stay, you stay knowing the cost. There is no innocence left — only choice.',
+      },
+      {
+        track:      '10',
+        title:      'Under My Skin',
+        alias:      'The Infection',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 10 visual',
+        lyrics:     `<p>[Cain: Male, whispered]<br>
+                     You think about me when the lights go out.</p>
+                     <p>[Monroe: Female, low]<br>
+                     I think about breaking you.</p>
+                     <p>[Cain: Male]<br>
+                     Same thing, Monroe.</p>
+                     <p>[Monroe: Female]<br>
+                     Not even close, Cain.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     I know the spot behind your ear that makes you freeze,<br>
+                     The way your breath catches when I whisper "please."<br>
+                     I memorized the maps of where you come undone,<br>
+                     You're not a mystery, baby — you're already won.</p>`,
+        logRef:     'SA-10-UMSK',
+        subject:    'PSYCHOLOGICAL EMBEDDING (Obsession as Condition).',
+        testimony:  'Under My Skin represents psychological embedding — the point where the relationship stops being situational and becomes internalized. Monroe and Cain are no longer just reacting to each other; they exist inside each other’s thought patterns. Even in silence, they linger.',
+        annotation: 'RECOVERED ANALYSIS: What makes this stage dangerous is that removal is no longer simple. You can walk away from a person. You can’t walk away from something that has rewired you. This marks the shift from obsession as choice to obsession as condition.',
+      },
+      {
+        track:      '11',
+        title:      'Addicted',
+        alias:      'The Dependency',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 11 visual',
+        lyrics:     `<p>[Monroe: Female, breathless]<br>
+                     "I hate you."</p>
+                     <p>[Cain: Male, amused]<br>
+                     "No, you don't."</p>
+                     <p>[Monroe: Female]<br>
+                     "I do, I swear—"</p>
+                     <p>[Cain: Male]<br>
+                     "Then leave."</p>
+                     <p>[Monroe: Female]<br>
+                     "I can't."</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Both]<br>
+                     We're gasoline and matches<br>
+                     Dynamite and the hand that catches<br>
+                     We're the crash, we're the burn<br>
+                     We're the lesson that you'll never learn</p>`,
+        logRef:     'SA-11-ADDC',
+        subject:    'FULL DEPENDENCY AWARENESS (Chosen Addiction).',
+        testimony:  'Addicted represents full dependency awareness. Monroe and Cain are no longer pretending this is accidental, circumstantial, or temporary. They openly acknowledge the cycle — the breaking, the returning, the damage, the pull.',
+        annotation: 'RECOVERED ANALYSIS: This is not denial. It’s submission to intensity. They admit they are addicted to the way the other dismantles them — and to the way that destruction feels like proof of connection. Pain becomes validation. Damage becomes devotion.',
+      },
+      {
+        track:      '12',
+        title:      'Neon Graves',
+        alias:      'The Doom-Romance',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 12 visual',
+        lyrics:     `<p>[Cain: Male Vocals, whispered]<br>
+                     (Close the door...)</p>
+                     <p>[Monroe: Female Vocals, soft laugh]<br>
+                     Yeah, lock it tight.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     The city’s sleeping, but we’re wide awake<br>
+                     I love the mess that you and I make<br>
+                     You got that look in your eyes again<br>
+                     Hungry for the sweetest of sins</p>
+                     <p>I poured the wine, I dimmed the lights<br>
+                     Ready to devour you tonight<br>
+                     Don't pretend you don't love the danger<br>
+                     I’m the wolf, you’re the stranger.</p>`,
+        logRef:     'SA-12-NEON',
+        subject:    'ROMANTICIZED DESTRUCTION (Mutual Downfall). Threat Level: <span class="redacted">APOCALYPTIC</span>.',
+        testimony:  'Neon Graves represents romanticized destruction fully embraced. There is no denial left, no illusion of rescue, no desire for redemption. Monroe and Cain knowingly dig their own graves — and then decorate them in neon light. What could be tragic becomes intentional.',
+        annotation: 'RECOVERED ANALYSIS: The beauty of this stage lies in the acceptance. The destruction is no longer reactive. It’s ceremonial. They aren’t spiraling out of control. They’re walking into the fire hand in hand, fully aware. Doom becomes devotion.',
+      },
+      {
+        track:      '13',
+        title:      'This Ain\'t Love',
+        alias:      'Brutal Clarity',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 13 visual',
+        lyrics:     `<p>[Cain: Male Vocals, a low, gravelly whisper]<br>
+                     (Don’t you move…)</p>
+                     <p>[Monroe: Female Vocals, slow, deliberate exhale]<br>
+                     Make me.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     The air is thick, smells like your skin and rain<br>
+                     I wanna hear you scream my name in pain<br>
+                     Forget the world outside that pretty door<br>
+                     You’re not the girl they knew before</p>`,
+        logRef:     'SA-13-TAL',
+        subject:    'ILLUSION SHATTERED (Conquest and Domination).',
+        testimony:  'This Ain’t Love is brutal clarity. There is no poetic framing left, no romantic softening, no aesthetic filter. Monroe and Cain openly acknowledge what this is: not love — but domination, ego, and the need to win. They are actively destroying each other, and yet neither stops.',
+        annotation: 'RECOVERED ANALYSIS: What makes this stage pivotal is the awareness without correction. They know it isn’t love. They say it isn’t love. And they continue anyway. This marks the moment the relationship becomes about conquest instead of connection.',
+      },
+      {
+        track:      '14',
+        title:      'Redline',
+        alias:      'Kinetic Acceleration',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 14 visual',
+        lyrics:     `<p>[Monroe: Female, Close, dangerous whisper]<br>
+                     Redline.</p>
+                     <p>[Cain: Male, low, almost a growl]<br>
+                     T-t-tick, t-t-tock.</p>
+                     <p>[Monroe: Female]<br>
+                     Foot on the gas, no brake lights on the dash.</p>
+                     <p>[Cain: Male]<br>
+                     Ride or die? No negotiation. Just move.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     Pedal to the metal, midnight on the dash<br>
+                     Cops in the rearview but we burning past<br>
+                     You're the fever in my engine, fuel in my blood<br>
+                     No seatbelt, no safety, just this hurricane flood</p>`,
+        logRef:     'SA-14-RDLN',
+        subject:    'SPEED AS INTIMACY (Momentum Problem).',
+        testimony:  'Redline represents speed as intimacy. Monroe and Cain aren’t connecting through vulnerability anymore — they’re connecting through adrenaline. The faster they go, the closer they feel. The danger isn’t a side effect; it’s the glue.',
+        annotation: 'RECOVERED ANALYSIS: Recklessness becomes bonding. Risk becomes proof. Pushing limits becomes their version of closeness. They don’t slow down to think — they accelerate to avoid it. The relationship stops being a mind game and becomes a momentum problem.',
+      },
+      {
+        track:      '15',
+        title:      'Russian Roulette',
+        alias:      'Fatalistic Devotion',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 15 visual',
+        lyrics:     `<p>[Monroe: Female Vocals]<br>
+                     I can taste the danger on your lips…<br>
+                     Like whiskey laced with cyanide</p>
+                     <p>[Cain: Male Vocals]<br>
+                     Keep talking, angel…<br>
+                     Your halo's already on fire</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Monroe]<br>
+                     You're the worst decision wrapped in Armani black<br>
+                     Got that smile that promises I'm never coming back<br>
+                     Trace your fingers down my spine like you're signing a pact<br>
+                     Every touch is arson, baby — strike another match</p>`,
+        logRef:     'SA-15-RSRL',
+        subject:    'FATALISTIC GAMBLE (Risk as Romance). Threat Level: <span class="redacted">APOCALYPTIC</span>.',
+        testimony:  'Russian Roulette represents flirting with death as proof of devotion. Monroe and Cain are no longer just reckless — they are intentionally playing with survival. Every touch feels loaded. Every moment feels like a trigger pull.',
+        annotation: 'RECOVERED ANALYSIS: The risk is the romance. They don’t fear the crash. They crave the possibility of it. The closer they get to destruction, the more validated the connection feels. It’s no longer about winning control — it’s about proving commitment through danger.',
+      },
+      {
+        track:      '16',
+        title:      'Puppet Strings',
+        alias:      'The Dominance Tug-of-War',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 16 visual',
+        lyrics:     `<p>[Monroe: Female Vocals, calm, almost bored]<br>
+                     You think you're in control?</p>
+                     <p>[Cain: Male Vocals, dark laugh, whispered]<br>
+                     I know I am.</p>
+                     <p>[Monroe: Female Vocals, smirking]<br>
+                     …cute.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Monroe]<br>
+                     I planted every thought you think is yours<br>
+                     I decorated all your prison doors<br>
+                     You call it love, I call it architecture<br>
+                     Built you a cage and made you think it's shelter</p>`,
+        logRef:     'SA-16-PUPP',
+        subject:    'TENSION ESCALATION (The Illusion of Control).',
+        testimony:  'Puppet Strings represents a dominance tug-of-war with no clear master. Monroe and Cain are both pulling at the same time — trying to control the narrative, the emotion, the outcome. Every attempt to lead is met with resistance. Every attempt to command is countered.',
+        annotation: 'RECOVERED ANALYSIS: What makes this stage volatile is that neither is willing to surrender control, yet neither can fully sever the connection. The strings aren’t just attached to each other — they’re wrapped around both of them. It’s no longer chess — it’s tension.',
+      },
+      {
+        track:      '17',
+        title:      'Wicked Things',
+        alias:      'Mutual Corruption',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 17 visual',
+        lyrics:     `<p>[Cain: Male Vocals, deep vocal fry]<br>
+                     (Don't you breathe...)</p>
+                     <p>[Monroe: Female Vocals, mocking]<br>
+                     Make me.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     The air is thick, the room is dead<br>
+                     I’m crawling through inside your head<br>
+                     You like the way the shadows bend<br>
+                     We ain't lovers, we ain't friends</p>`,
+        logRef:     'SA-17-WCKD',
+        subject:    'RITUALISTIC DESTRUCTION (Ceremonial Damage).',
+        testimony:  'Wicked Things represents mutual corruption elevated into ritual. Monroe and Cain are no longer just reacting to each other’s toxicity — they are refining it, perfecting it, performing it. The seduction is deliberate. The damage is ceremonial.',
+        annotation: 'RECOVERED ANALYSIS: What makes this stage chilling is that neither is being dragged into darkness. They are walking into it together, willingly, almost reverently. The corruption feels intimate. Sacred in its own twisted way.',
+      },
+      {
+        track:      '18',
+        title:      'Poison Pact',
+        alias:      'The Formalization of Destruction',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 18 visual',
+        lyrics:     `<p>[Monroe Reign: Female, whispered]<br>
+                     (you promised)<br>
+                     (remember?)<br>
+                     (no way out)</p>
+                     <p>[Cain Saint: Male, low and flat]<br>
+                     Pact.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Monroe]<br>
+                     I don't do love letters, I do leverage<br>
+                     I know your secrets, that's my necklace<br>
+                     You tried to leave once, how'd that work out?<br>
+                     I showed up smiling at your mama's house</p>`,
+        logRef:     'SA-18-PACT',
+        subject:    'DESTRUCTIVE AGREEMENT (The Vow). Threat Level: <span class="redacted">PERMANENT</span>.',
+        testimony:  'Poison Pact represents the formalization of destruction. This is no longer chaos, no longer thrill, no longer accidental collapse. It is a contract. A mutual vow: if I go down, you go first.',
+        annotation: 'RECOVERED ANALYSIS: They acknowledge the damage, the dependency, the volatility — and they seal it anyway. The relationship becomes less of a romance and more of an agreement. A bond forged in shared self-sabotage.',
+      },
+      {
+        track:      '19',
+        title:      'Perfect Storm',
+        alias:      'Realization Without Retreat',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 19 visual',
+        lyrics:     `<p>[Monroe: Female Vocals]<br>
+                     (You know what this is, don't you?)<br>
+                     (We both do.)</p>
+                     <p>[Cain: Male Vocals]<br>
+                     (And still...)</p>
+                     <p>[Monroe: Female Vocals]<br>
+                     (Yeah.)</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Monroe]<br>
+                     This isn't gentle, isn't kind<br>
+                     It's the wreckage we designed<br>
+                     Every touch, a burning brand<br>
+                     Lost within this promised land</p>`,
+        logRef:     'SA-19-STRM',
+        subject:    'ACCEPTANCE OF INEVITABILITY (The Eye of the Hurricane).',
+        testimony:  'Perfect Storm represents realization without retreat. This is the calm before collapse — not chaotic, not frantic — but wise. Monroe and Cain fully understand what they are to each other. There is no illusion left.',
+        annotation: 'RECOVERED ANALYSIS: The storm isn’t forming — it has already formed. And they are standing in it together, steady. This song marks the emotional maturity of destruction. Not impulsive. Not reactive. Chosen.',
+      },
+      {
+        track:      '20',
+        title:      'Never Heal',
+        alias:      'The Final Vow',
+        imageSrc:   'faceswap_4~2.png', 
+        imageAlt:   'Track 20 visual',
+        lyrics:     `<p>[Cain: Male Vocals, gravelly whisper]<br>
+                     (You shouldn't be here…)</p>
+                     <p>[Monroe: Female Vocals, slow exhale]<br>
+                     Too late now.</p>
+                     <p>&nbsp;</p>
+                     <p>[Verse 1 – Cain]<br>
+                     Your pulse is racing through the walls<br>
+                     I hear you trembling down the hall<br>
+                     That dress is dripping off your sin<br>
+                     Let me in, let me win</p>`,
+        logRef:     'SA-20-HEAL',
+        subject:    'CHOSEN PERMANENCE (Refusal to Recover). Threat Level: <span class="redacted">ETERNAL</span>.',
+        testimony:  'Never Heal is the final vow. Not to love. Not to win. Not to survive. But to remain broken together. This is where the relationship stops pretending healing is the goal.',
+        annotation: 'RECOVERED ANALYSIS: Pain becomes identity. Scars become proof. The toxicity is no longer thrilling — it is permanent. This song closes the album not with explosion — but with commitment. A refusal to recover.',
+      }
+    ];
+
+
+    /* ──────────────────────────────────────────────
+       SHARD INTERACTION
+    ────────────────────────────────────────────── */
+    const shards    = document.querySelectorAll('.shard');
+    const overlay   = document.getElementById('logOverlay');
+    const closeBtn  = document.getElementById('closeBtn');
+    const burst     = document.getElementById('fractureBurst');
+
+    // Pane elements
+    const paneTrackNum  = document.getElementById('paneTrackNum');
+    const paneTitle     = document.getElementById('paneTitle');
+    const paneAlias     = document.getElementById('paneAlias');
+    const paneLyrics    = document.getElementById('paneLyrics');
+    const paneImage     = document.getElementById('paneImage');
+    const docRef        = document.getElementById('docRef');
+    const docSubject    = document.getElementById('docSubject');
+    const docTestimony  = document.getElementById('docTestimony');
+    const docAnnotation = document.getElementById('docAnnotation');
+
+    function triggerFractureBurst(callback) {
+      /* 1 — white-ash flash */
+      burst.className = 'fracture-burst fire';
+      burst.style.opacity = '';
+
+      /* 2 — scatter 10 glass shard pieces randomly */
+      const existingPieces = document.querySelectorAll('.fracture-piece');
+      existingPieces.forEach(p => p.remove());
+
+      for (let i = 0; i < 10; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'fracture-piece';
+        const size = 20 + Math.random() * 55;
+        piece.style.cssText = `
+          width:  ${size}px;
+          height: ${size}px;
+          top:    ${20 + Math.random() * 60}vh;
+          left:   ${20 + Math.random() * 60}vw;
+          --tx:   ${(Math.random() - 0.5) * 400}px;
+          --ty:   ${(Math.random() - 0.5) * 400}px;
+          --rot:  ${(Math.random() - 0.5) * 360}deg;
+          --dur:  ${0.45 + Math.random() * 0.4}s;
+          opacity: 0;
+          background: rgba(${Math.random() > 0.5 ? '212,169,75' : '139,92,246'}, ${0.15 + Math.random() * 0.25});
+        `;
+        document.body.appendChild(piece);
+        /* trigger reflow then animate */
+        requestAnimationFrame(() => {
+          piece.style.opacity = '0.7';
+          piece.style.animation = `shardScatter ${piece.style.getPropertyValue('--dur')} ease-out forwards`;
+        });
+      }
+
+      /* 3 — open overlay after flash peak */
+      setTimeout(() => {
+        burst.className = 'fracture-burst';
+        if (typeof callback === 'function') callback();
+      }, 350);
+    }
+
+    function openLog(index) {
+      const data = trackData[index];
+      if (!data) return;
+
+      /* Populate pane content */
+      paneTrackNum.textContent  = `LOG — ${data.track}`;
+      paneTitle.innerHTML       = data.title;
+      paneAlias.textContent     = data.alias;
+      paneLyrics.innerHTML      = data.lyrics;
+
+      if (data.imageSrc) {
+        paneImage.innerHTML = `<img src="${data.imageSrc}" alt="${data.imageAlt}">`;
+      } else {
+        /* Keep gradient placeholder */
+        paneImage.innerHTML = '';
+      }
+
+      docRef.textContent         = data.logRef;
+      docSubject.innerHTML       = data.subject;
+      docTestimony.innerHTML     = data.testimony;
+      docAnnotation.innerHTML    = data.annotation;
+
+      /* Fire the fracture, then show overlay */
+      triggerFractureBurst(() => {
+        overlay.classList.add('open');
+        closeBtn.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
+    function closeLog() {
+      overlay.classList.remove('open');
+      closeBtn.classList.remove('visible');
+      document.body.style.overflow = '';
+    }
+
+    /* Attach shard listeners */
+    shards.forEach((shard, i) => {
+      shard.addEventListener('click',   () => openLog(i));
+      shard.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLog(i);
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', closeLog);
+
+    /* ESC closes overlay */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeLog();
+    });
+
+    /* Click outside panes to close */
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeLog();
+    });
+
+  </script>
+
+</body>
+</html>

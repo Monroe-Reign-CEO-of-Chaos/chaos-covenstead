@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cain — The First Descent</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+
+    /* ============================================================
+       CAIN — COLOR TOKENS
+       Gravity. The Descent. The Anchor. Static Green. The Shadow.
+    ============================================================ */
+    :root {
+      --night:           #030308;
+      --void-core:       #050510;
+      --void-mid:        #0A0A18;
+      --static-abyss:    #030A06;
+      --static-deep:     #0A1A10;
+      --static-mid:      #1A3A22;
+      --static-bright:   #2D6A3A;
+      --static-electric: #4ECCA3;
+      --static-glow:     rgba(42,106,58,0.45);
+      --static-glass:    rgba(42,106,58,0.07);
+
+      --nebula-gold:     #D4A94B;
+      --glass-border:    rgba(78,204,163,0.18);
+
+      --text-bright:     #E8F5EE;
+      --text-muted:      #7A9A88;
+      --text-dim:        #2A4A35;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+
+    body {
+      background: var(--void-core);
+      color: var(--text-bright);
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* ── Liquid void background — deep, dense, gravitational ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 65% 50% at 30% 40%, rgba(42,106,58,0.12)  0%, transparent 65%),
+        radial-gradient(ellipse 45% 55% at 75% 70%, rgba(78,204,163,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 40% at 50% 5%,  rgba(42,106,58,0.06)  0%, transparent 55%),
+        linear-gradient(180deg, #040A06 0%, var(--void-core) 100%);
+      animation: voidBreathe 20s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes voidBreathe {
+      0%   { filter: hue-rotate(0deg) brightness(1); }
+      50%  { filter: hue-rotate(-8deg) brightness(1.05); }
+      100% { filter: hue-rotate(5deg) brightness(0.93); }
+    }
+
+    /* Gravity floor — deeper and heavier than Monroe's reflection */
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 35vh;
+      background: linear-gradient(to top, rgba(42,106,58,0.09) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Pulse line — Cain's EKG, runs cold and deep ── */
+    .pulse-line-svg {
+      position: fixed;
+      bottom: 14vh;
+      left: 0; right: 0;
+      width: 100%;
+      z-index: 1;
+      pointer-events: none;
+      height: 60px;
+      overflow: visible;
+    }
+
+    .pulse-path {
+      fill: none;
+      stroke: url(#static-grad);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-dasharray: 2200;
+      stroke-dashoffset: 2200;
+      filter: drop-shadow(0 0 5px rgba(78,204,163,0.6));
+      animation: ekgStatic 5.5s ease-in-out infinite;
+    }
+
+    /* Cain's EKG fires slower — heavier, gravitational rhythm */
+    @keyframes ekgStatic {
+      0%   { stroke-dashoffset: 2200; opacity: 0; }
+      6%   { opacity: 0.7; }
+      48%  { stroke-dashoffset: 0; opacity: 0.7; }
+      72%  { stroke-dashoffset: -2200; opacity: 0.25; }
+      100% { stroke-dashoffset: -2200; opacity: 0; }
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3.5rem;
+      background: rgba(3,3,8,0.82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(78,204,163,0.08);
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      background: linear-gradient(135deg, var(--nebula-gold), var(--static-electric));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      color: var(--text-muted);
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--static-electric); }
+
+    /* ── Page wrapper ── */
+    .page {
+      position: relative;
+      z-index: 2;
+      padding: 0 2rem 8rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 9rem 2rem 5rem;
+      position: relative;
+    }
+
+    /* Filigree frame — Cain's version, static-green toned */
+    .filigree {
+      position: absolute;
+      inset: 4rem;
+      border: 1px solid rgba(78,204,163,0.1);
+      pointer-events: none;
+    }
+
+    .filigree::before {
+      content: '◆';
+      position: absolute;
+      top: -0.55rem; left: 50%;
+      transform: translateX(-50%);
+      background: var(--void-core);
+      padding: 0 0.5rem;
+      font-size: 0.6rem;
+      color: rgba(78,204,163,0.45);
+    }
+
+    .filigree::after {
+      content: '◆';
+      position: absolute;
+      bottom: -0.55rem; left: 50%;
+      transform: translateX(-50%);
+      background: var(--void-core);
+      padding: 0 0.5rem;
+      font-size: 0.6rem;
+      color: rgba(78,204,163,0.45);
+    }
+
+    .fc { position: absolute; width: 40px; height: 40px; border-color: rgba(78,204,163,0.2); border-style: solid; }
+    .fc-tl { top:-1px;    left:-1px;   border-width: 1px 0 0 1px; }
+    .fc-tr { top:-1px;    right:-1px;  border-width: 1px 1px 0 0; }
+    .fc-bl { bottom:-1px; left:-1px;   border-width: 0 0 1px 1px; }
+    .fc-br { bottom:-1px; right:-1px;  border-width: 0 1px 1px 0; }
+
+    .hero-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--static-electric);
+      opacity: 0.7;
+      margin-bottom: 1.2rem;
+      animation: riseIn 1s ease-out both;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 6vw, 5rem);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      line-height: 1.05;
+      background: linear-gradient(
+        135deg,
+        var(--static-electric)  0%,
+        var(--nebula-gold)       40%,
+        var(--static-electric)   70%,
+        #8BFFD0                  100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 40px rgba(78,204,163,0.25));
+      animation: riseIn 1.1s ease-out 0.1s both;
+    }
+
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem auto;
+      max-width: 380px;
+      animation: riseIn 1.1s ease-out 0.2s both;
+    }
+
+    .hero-divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--static-electric), transparent);
+      opacity: 0.35;
+    }
+
+    .hero-divider-glyph {
+      font-size: 0.5rem;
+      color: var(--static-electric);
+      opacity: 0.65;
+    }
+
+    .hero-role {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      animation: riseIn 1.1s ease-out 0.3s both;
+    }
+
+    /* ── DOSSIER ── */
+    .dossier {
+      display: flex;
+      gap: 4rem;
+      align-items: flex-start;
+      margin-top: 5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Portrait card */
+    .portrait-card {
+      flex-shrink: 0;
+      width: 280px;
+    }
+
+    .portrait-frame {
+      width: 280px;
+      height: 390px;
+      position: relative;
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      overflow: hidden;
+    }
+
+    /* Cain portrait placeholder — void and static green */
+    .portrait-fill-cain {
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(ellipse 55% 70% at 50% 35%, rgba(42,106,58,0.4) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 45% at 70% 65%, rgba(78,204,163,0.15) 0%, transparent 55%),
+        linear-gradient(175deg,
+          #030A06 0%,
+          #0A1A10 20%,
+          #1A3A22 45%,
+          #0A1A10 65%,
+          #03030A 100%
+        );
+      /* ↓ SWAP FOR REAL IMAGE: */
+      /* background-image: url('cain-portrait.jpg'); background-size: cover; */
+      position: relative;
+    }
+
+    /* Static electricity tendrils — subtle CSS lines */
+    .portrait-fill-cain::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(35deg, transparent 0%, rgba(78,204,163,0.06) 48%, transparent 52%, transparent 100%),
+        linear-gradient(145deg, transparent 0%, rgba(78,204,163,0.04) 38%, transparent 42%, transparent 100%),
+        linear-gradient(to top, rgba(42,106,58,0.5) 0%, rgba(42,106,58,0.2) 35%, transparent 65%);
+      animation: staticPulse 3.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes staticPulse {
+      0%   { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    /* Top sheen */
+    .portrait-fill-cain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(125deg, rgba(255,255,255,0.05) 0%, transparent 50%);
+    }
+
+    /* Anchor glyph */
+    .portrait-glyph {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -55%);
+      font-size: 3.5rem;
+      opacity: 0.14;
+      filter: blur(1px);
+      pointer-events: none;
+      animation: glyphPulse 5s ease-in-out infinite;
+    }
+
+    @keyframes glyphPulse {
+      0%, 100% { opacity: 0.10; transform: translate(-50%, -55%) scale(1); }
+      50%       { opacity: 0.18; transform: translate(-50%, -55%) scale(1.05); }
+    }
+
+    .portrait-border {
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(78,204,163,0.28);
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      pointer-events: none;
+    }
+
+    .portrait-corner {
+      position: absolute;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      color: rgba(78,204,163,0.45);
+    }
+
+    .pc-tl { top: 0.6rem; left: 1rem; }
+    .pc-tr { top: 0.6rem; right: 0.8rem; }
+    .pc-bl { bottom: 0.6rem; left: 1rem; }
+    .pc-br { bottom: 0.6rem; right: 0.8rem; }
+
+    .portrait-label {
+      margin-top: 1.2rem;
+      text-align: center;
+    }
+
+    .portrait-label-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--static-electric);
+    }
+
+    .portrait-label-title {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.4em;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+      opacity: 0.75;
+    }
+
+    /* ── Specs panel ── */
+    .specs-panel {
+      flex: 1;
+      min-width: 280px;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+    }
+
+    .section-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.54rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--static-electric);
+      opacity: 0.7;
+      border-bottom: 1px solid rgba(78,204,163,0.12);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 2rem;
+    }
+
+    .spec-key {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.3rem;
+    }
+
+    .spec-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      color: var(--text-bright);
+      line-height: 1.5;
+    }
+
+    .spec-eyes {
+      color: var(--static-electric);
+      text-shadow: 0 0 14px rgba(78,204,163,0.55);
+    }
+
+    .truth-block {
+      padding: 1.5rem 1.8rem;
+      background: rgba(42,106,58,0.05);
+      border: 1px solid rgba(78,204,163,0.14);
+      position: relative;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+
+    .truth-block p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: rgba(232,245,238,0.72);
+      font-style: italic;
+    }
+
+    /* ── CANON LOCKED badge — from the PDF ── */
+    .canon-locked {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.2rem 1.5rem;
+      background: rgba(42,106,58,0.08);
+      border: 1px solid rgba(78,204,163,0.2);
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+
+    .canon-lock-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .canon-lock-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.4em;
+      color: var(--static-electric);
+      opacity: 0.8;
+      margin-bottom: 0.4rem;
+    }
+
+    .canon-lock-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: rgba(232,245,238,0.7);
+      font-style: italic;
+    }
+
+    /* ── SIGNATURE QUOTE ── */
+    .quote-section {
+      margin: 5rem 0;
+      text-align: center;
+      position: relative;
+      padding: 4rem 2rem;
+    }
+
+    .quote-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 100% at 50% 50%,
+        rgba(42,106,58,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .quote-mark {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 5rem;
+      line-height: 0.5;
+      color: rgba(78,204,163,0.15);
+      display: block;
+      margin-bottom: 1.5rem;
+    }
+
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.4rem, 4vw, 2.5rem);
+      line-height: 1.4;
+      background: linear-gradient(
+        135deg,
+        var(--static-electric)  0%,
+        var(--nebula-gold)       45%,
+        var(--static-electric)   100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 25px rgba(78,204,163,0.2));
+      max-width: 780px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .quote-attribution {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      color: var(--static-electric);
+      opacity: 0.55;
+    }
+
+    /* Void rule — heavier than Monroe's, settles downward */
+    .void-rule {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent,
+        var(--static-bright)   20%,
+        var(--static-electric) 50%,
+        var(--static-bright)   80%,
+        transparent
+      );
+      opacity: 0.28;
+      margin: 0 0 3rem;
+      filter: drop-shadow(0 0 6px rgba(78,204,163,0.35));
+    }
+
+    /* ── ERA ARC TIMELINE ── */
+    .era-arc { margin: 4rem 0; }
+
+    .era-arc-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--static-electric);
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+
+    .era-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .era-card {
+      padding: 1.8rem 1.5rem;
+      background: rgba(3,3,8,0.8);
+      border: 1px solid rgba(78,204,163,0.12);
+      backdrop-filter: blur(8px);
+      position: relative;
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .era-card:hover {
+      border-color: rgba(78,204,163,0.3);
+      box-shadow: 0 0 28px rgba(42,106,58,0.12);
+    }
+
+    .era-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(42,106,58,0.06), rgba(78,204,163,0.02));
+      pointer-events: none;
+    }
+
+    .era-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.5em;
+      color: var(--static-electric);
+      opacity: 0.6;
+      margin-bottom: 0.5rem;
+    }
+
+    .era-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 0.3rem;
+    }
+
+    .era-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: var(--static-electric);
+      opacity: 0.75;
+      margin-bottom: 1rem;
+    }
+
+    .era-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+    }
+
+    /* ── CORE TRUTH ── */
+    .core-truth {
+      margin: 4rem 0;
+      padding: 3rem;
+      background: rgba(3,3,8,0.85);
+      border: 1px solid rgba(78,204,163,0.16);
+      position: relative;
+    }
+
+    .core-truth::before {
+      content: '⬡ CORE TRUTH — CANON LOCKED ⬡';
+      position: absolute;
+      top: -0.6rem;
+      left: 2rem;
+      background: var(--void-core);
+      padding: 0 0.8rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.4em;
+      color: var(--static-electric);
+      opacity: 0.75;
+    }
+
+    .core-truth p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: rgba(232,245,238,0.75);
+      font-style: italic;
+    }
+
+    .core-truth strong {
+      font-style: normal;
+      color: var(--static-electric);
+      font-weight: 600;
+    }
+
+    /* ── THE SCARF PHENOMENON — lore detail ── */
+    .scarf-note {
+      margin: 3rem 0;
+      padding: 1.8rem 2rem;
+      background: rgba(3,3,8,0.75);
+      border-left: 2px solid rgba(78,204,163,0.35);
+      position: relative;
+    }
+
+    .scarf-note::before {
+      content: '⬡ ARCHIVE NOTE';
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.45em;
+      color: var(--static-electric);
+      opacity: 0.65;
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+
+    .scarf-note p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: rgba(232,245,238,0.65);
+    }
+
+    .scarf-note em {
+      color: var(--static-electric);
+      font-style: italic;
+    }
+
+    /* ── BOND THREAD — link back to Monroe ── */
+    .bond-thread {
+      margin: 5rem 0 3rem;
+      text-align: center;
+    }
+
+    .bond-thread-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.55;
+      margin-bottom: 1.5rem;
+    }
+
+    .bond-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      text-decoration: none;
+      padding: 1.2rem 3rem;
+      border: 1px solid rgba(78,204,163,0.22);
+      background: rgba(3,3,8,0.7);
+      backdrop-filter: blur(12px);
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      transition: all 0.3s;
+    }
+
+    .bond-link:hover {
+      border-color: rgba(180,58,8,0.55);
+      box-shadow: 0 0 35px rgba(180,58,8,0.12);
+    }
+
+    .bond-link-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      text-align: left;
+    }
+
+    .bond-link-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #E06010;
+    }
+
+    .bond-link-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.3em;
+      color: var(--text-muted);
+      opacity: 0.65;
+    }
+
+    .bond-link-arrow {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      opacity: 0.45;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .bond-link:hover .bond-link-arrow { opacity: 1; transform: translateX(-4px); }
+
+    .bond-arrow-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(78,204,163,0.06);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.45em;
+      color: rgba(42,106,58,0.4);
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── CLASSIFIED STAT BLOCK ── */
+    .stat-block {
+      margin: 4rem 0;
+      background: rgba(3,10,6,0.85);
+      border: 1px solid rgba(78,204,163,0.14);
+      backdrop-filter: blur(12px);
+      padding: 2.5rem 2.5rem 2rem;
+      position: relative;
+    }
+    .stat-block::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--static-electric) 50%, transparent);
+      opacity: 0.45;
+    }
+    .stat-classify-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--static-electric);
+      opacity: 0.55;
+      letter-spacing: 0.18em;
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+    .stat-block-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1rem;
+      color: var(--text-bright);
+      margin-bottom: 2rem;
+      font-weight: 700;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem 2.5rem;
+    }
+    .stat-item {
+      border-left: 2px solid rgba(78,204,163,0.22);
+      padding-left: 1rem;
+    }
+    .stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--static-electric);
+      opacity: 0.7;
+      margin-bottom: 0.4rem;
+    }
+    .stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .stat-value strong {
+      color: var(--text-bright);
+      font-style: normal;
+    }
+
+    /* ── SECOND QUOTE ── */
+    .quote-secondary {
+      text-align: center;
+      padding: 2.5rem 2rem;
+      margin: 3rem 0;
+      position: relative;
+    }
+    .quote-secondary-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--text-bright);
+      letter-spacing: 0.02em;
+    }
+    .quote-secondary-text em {
+      color: var(--static-electric);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .dossier { flex-direction: column; align-items: center; }
+      .filigree { inset: 1rem; }
+      .core-truth { padding: 2rem 1.5rem; }
+      .specs-grid { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Pulse line SVG — Cain's slow gravitational EKG -->
+  <svg class="pulse-line-svg" viewBox="0 0 1440 60" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="static-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="transparent"/>
+        <stop offset="20%"  stop-color="#2D6A3A"/>
+        <stop offset="45%"  stop-color="#4ECCA3"/>
+        <stop offset="55%"  stop-color="#D4A94B"/>
+        <stop offset="80%"  stop-color="#2D6A3A"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </linearGradient>
+    </defs>
+    <!-- Cain's EKG: the Descent spike goes DEEP before the recovery — gravity pulling down -->
+    <path class="pulse-path" d="M0,30 L200,30 L228,30 L242,24 L256,30 L390,30 L435,30 L462,8 L482,62 L502,26 L518,30 L680,30 L708,30 L722,26 L736,30 L1440,30"/>
+  </svg>
+
+  <!-- Navigation -->
+  <nav>
+    <a class="nav-logo" href="trojan-horse.html">Chaos Covenstead</a>
+    <ul class="nav-links">
+      <li><a href="shadow-archive.html">The Shadow Archive</a></li>
+      <li><a href="mythic-past.html">The Mythic Past</a></li>
+      <li><a href="monroe.html">Monroe</a></li>
+      <li><a href="binary-star.html">Binary-Star Bond</a></li>
+      <li><a href="heartspire.html">The Heartspire</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page content -->
+  <div class="page">
+
+    <!-- ── HERO ── -->
+    <section class="hero">
+      <div class="filigree">
+        <div class="fc fc-tl"></div>
+        <div class="fc fc-tr"></div>
+        <div class="fc fc-bl"></div>
+        <div class="fc fc-br"></div>
+      </div>
+
+      <p class="hero-eyebrow">⬡ Chaos Bible — Character Dossier ⬡</p>
+      <h1 class="hero-title">Cain</h1>
+
+      <div class="hero-divider">
+        <div class="hero-divider-line"></div>
+        <span class="hero-divider-glyph">◆</span>
+        <div class="hero-divider-line"></div>
+      </div>
+
+      <p class="hero-role">The First Descent &nbsp;·&nbsp; The Anchor &nbsp;·&nbsp; Saint of the Static &nbsp;·&nbsp; The Shadow</p>
+    </section>
+
+    <!-- ── DOSSIER ── -->
+    <section class="dossier">
+
+      <!-- Tarot portrait card -->
+      <div class="portrait-card">
+        <div class="portrait-frame">
+          <div class="portrait-fill-cain">
+            <!--
+              ↓ SWAP FOR REAL IMAGE:
+              <img src="cain-portrait.jpg" alt="Cain — The First Descent"
+                   style="width:100%;height:100%;object-fit:cover;opacity:0.85;mix-blend-mode:luminosity;">
+            -->
+            <div class="portrait-glyph">⚓</div>
+          </div>
+          <div class="portrait-border"></div>
+          <span class="portrait-corner pc-tl">☽</span>
+          <span class="portrait-corner pc-tr">✦</span>
+          <span class="portrait-corner pc-bl">✦</span>
+          <span class="portrait-corner pc-br">☾</span>
+        </div>
+        <div class="portrait-label">
+          <p class="portrait-label-name">Cain</p>
+          <p class="portrait-label-title">⬡ The First Descent ⬡</p>
+        </div>
+      </div>
+
+      <!-- Specs panel -->
+      <div class="specs-panel">
+
+        <div>
+          <p class="section-label">⬡ Physical Signature</p>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <p class="spec-key">Hair</p>
+              <p class="spec-val">Medium brown, effortlessly styled. Medium-light skin against dark clothing — stark contrast to the blinding noise. Gravity made visible.</p>
+            </div>
+            <div class="spec-item">
+              <p class="spec-key">Eyes</p>
+              <p class="spec-val spec-eyes">Deep muted forest green — The Static Eyes. Obsidian Green. Carries interference and flicker. Shared Origin mark with Monroe. Where her gaze is laser clarity, his carries shadow and signal.</p>
+            </div>
+            <div class="spec-item">
+              <p class="spec-key">Armor</p>
+              <p class="spec-val">Black leather. Fitted black. Structured silhouettes. The cage and the power, simultaneous.</p>
+            </div>
+            <div class="spec-item">
+              <p class="spec-key">Build</p>
+              <p class="spec-val">Sculpted. Dense. Physical Gravity. The silence that commands a room without speaking.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="section-label">⬡ Role in the Cosmology</p>
+          <div class="truth-block">
+            <p>Cain is not a person. He is the necessary counter-principle — the <strong style="color:var(--static-electric);font-style:normal;">Gravity</strong> that keeps Monroe's Ignition from burning unchecked into nothingness. Where she expands, he focuses. Where she ignites, he anchors. He is what allows the fire to have a shape.</p>
+          </div>
+        </div>
+
+        <div>
+          <p class="section-label">⬡ Canon Locked</p>
+          <div class="canon-locked">
+            <span class="canon-lock-icon">🔒</span>
+            <div>
+              <p class="canon-lock-label">Canon Locked — Non-Negotiable</p>
+              <p class="canon-lock-text">Cain was never an angel. He is the force that provided form to the fire. The First Fall was not a sin. It was recognition — a gravitational collapse into a truth more fundamental than The Lattice's decrees. He turned from the Thrones' offered authority and chose to align with Monroe and the truth of the Pulse. He fell toward her — not from grace, but into it.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── CLASSIFIED STAT BLOCK ── -->
+    <section class="stat-block">
+      <span class="stat-classify-label">⬡ CLASSIFICATION: TOP SECRET · SHADOW ARCHIVE · SA-ID-0002 · STATUS: DOMINANT ⬡</span>
+      <h2 class="stat-block-title">Field Dossier — Cain Saint · Gravity Incarnate</h2>
+      <div class="stat-grid">
+
+        <div class="stat-item">
+          <p class="stat-label">Signature Aura</p>
+          <p class="stat-value"><strong>Ancient Gravitas.</strong> He commands by crushing the noise — turning his soul into a gravity well so dense that light itself bows toward him. Static is just energy without a center. Noise is just sound without gravity. Absolute, heavy silence follows his stride.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Power Type</p>
+          <p class="stat-value"><strong>Primordial Gravity.</strong> The Anchor that gave the Spark a place to land. Where she ignited, he condensed. Where she expanded, he focused. He was not born. He was not shaped. He was drawn — a collapse of gravity, a convergence of will, the first inevitability.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Mythic Trait</p>
+          <p class="stat-value"><strong>The Anchor Eternal.</strong> The cosmos physically refuses to let him die, because without him, reality drifts back into the void. You cannot banish the thing that holds the world down.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Dangerous Trait</p>
+          <p class="stat-value"><strong>Weight of Truth.</strong> His presence forces reality to strip away lies. When The Lattice attempts to overwrite reality, the white mist of the rewrite shatters against his boots. He cannot be overwritten, because his density anchors the truth.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Weakness</p>
+          <p class="stat-value"><strong>Unspoken.</strong> The Split God mechanism — he is a Binary Star system. His profound vulnerability lies entirely in his bond with the First Spark. If the bond breaks, the world breaks. Ending is impossible — only when the bond itself refuses to end.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Alignment</p>
+          <p class="stat-value"><strong>Sovereign Control · Silent Dominion.</strong> The Thrones build cages. Architects build walls. He does not restrict — he anchors. He is the depth of the ocean floor, the absolute mass that gives light a place to land.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Signature Move</p>
+          <p class="stat-value"><strong>Shadowpull.</strong> He does not push — he inverts the point of attraction. By increasing the gravitational constant by a factor of ten thousand, he grabs the concept of "down" and throws it at the sky. He can drag millions of tons of divine architecture — and the High Council Seat itself — crashing into the earth.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Rare Drop</p>
+          <p class="stat-value"><strong>Fragment of the First Weight.</strong> A dense, vantablack stone of pure condensed kinetic energy. Holds the memory of the void's first collapse. To hold it is to hold the gravity of a dead star.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── SIGNATURE QUOTE ── -->
+    <section class="quote-section">
+      <div class="void-rule"></div>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">Light cannot exist without a place to land. I am the Shadow.</p>
+      <p class="quote-attribution">⬡ Cain — The First Descent ⬡</p>
+    </section>
+
+    <!-- ── ERA ARC ── -->
+    <section class="era-arc">
+      <div class="void-rule"></div>
+      <h2 class="era-arc-title">Cain Across the Four Eras</h2>
+      <div class="era-grid">
+
+        <div class="era-card">
+          <p class="era-num">Era I</p>
+          <p class="era-name">The Mythic Past</p>
+          <p class="era-subtitle">The Anchor, Uncontained</p>
+          <p class="era-text">The First Descent — the moment gravity became conscious. He refused the Thrones' offered authority and chose alignment with Monroe and the Pulse. Not a fall from grace. A fall into it. His Gravity gave the First Spark its shape.</p>
+        </div>
+
+        <div class="era-card">
+          <p class="era-num">Era II</p>
+          <p class="era-name">The Chaos Era</p>
+          <p class="era-subtitle">The Wild Days · Mutual Captivity</p>
+          <p class="era-text">Cain and Monroe collide — amnesiac, unrestored — and the Pulse moves through them like a fault line finding itself. What looked like love was two cosmic forces projecting the only power dynamic they could still feel: captor and captive. The Cage was cracking. The Thrones saw. The Second Wipe came like a verdict.</p>
+        </div>
+
+        <div class="era-card">
+          <p class="era-num">Era III</p>
+          <p class="era-name">The Gravity Era</p>
+          <p class="era-subtitle">Saint of the Static</p>
+          <p class="era-text">The Thrones rebranded him Saint of the Static as mockery — patron of their white noise. He reclaimed the title. The chaotic, glitter-glue menace with too much charm. His brash bravado is armor over the Anchor. A Saint has dominion over his domain. The Scarf Phenomenon cannot be explained by their science.</p>
+        </div>
+
+        <div class="era-card">
+          <p class="era-num">Era IV</p>
+          <p class="era-name">The Awakening Era</p>
+          <p class="era-subtitle">The Terror of Return</p>
+          <p class="era-text">Memories arrive not as clarity but as all-consuming fear — the terror that this reunion will cost Monroe forever. Every decision a razor's edge between salvation and a new, more terrible destruction. The Anchor desperate to hold without crushing.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── SECOND QUOTE ── -->
+    <div class="quote-secondary">
+      <p class="quote-secondary-text">Gravity is not a punishment.<br><em>Gravity is an answer.</em></p>
+    </div>
+
+    <!-- ── CORE TRUTH ── -->
+    <section class="core-truth">
+      <p>
+        <strong>He is the Anchor.</strong> The Descent cannot be separated from the Spark any more than shadow can exist without light. He is not the absence of fire — he is the density that gives fire a reason to burn toward something. <strong>An Echo cannot silence the Voice that spoke it.</strong> The Lattice's fatal error was thinking they could weaponize the gravity between Cain and Monroe. Every cage they built was built from the same frequency. Every wall they erected was made of Pulse.
+      </p>
+    </section>
+
+    <!-- ── THE SCARF PHENOMENON ── -->
+    <div class="scarf-note">
+      <p>During the recording of <em>Petty Larceny (Love Is Theft)</em>, Cain's scarf fluttered in a sealed room — no wind, no fans, no AC. A physical Fracture event. His Gravity nature asserting itself against the Stillness. <em>Resonance cannot be fully contained.</em> The Thrones' engineers had no explanation. The Archive logged it as SA-DOM-0017. The scarf is still in the room.</p>
+    </div>
+
+    <!-- ── BOND THREAD — link to Monroe ── -->
+    <div class="bond-thread">
+      <p class="bond-thread-label">⬡ The Unbreakable Thread ⬡</p>
+      <a class="bond-link" href="monroe.html">
+        <span class="bond-link-arrow">←</span>
+        <div class="bond-link-text">
+          <span class="bond-link-name">Monroe — The First Spark</span>
+          <span class="bond-link-sub">The Ignition · The Architect · The Catalyst</span>
+        </div>
+        <span class="bond-arrow-icon">🔥</span>
+      </a>
+    </div>
+
+  </div><!-- /page -->
+
+  <footer>
+    ⬡ chaos bible — monroe reign ⬡ era I through V ⬡ the gravity that gave the fire its shape ⬡
+  </footer>
+
+</body>
+</html>

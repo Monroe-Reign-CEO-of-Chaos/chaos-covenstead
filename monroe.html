@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monroe — The First Spark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+
+    /* ============================================================
+       MONROE — COLOR TOKENS
+       Fire. Ignition. The reason existence was forced to begin.
+    ============================================================ */
+    :root {
+      --night:          #05050A;
+      --fire-abyss:     #0D0305;
+      --fire-core:      #7A1508;
+      --fire-mid:       #B83A08;
+      --fire-bright:    #E06010;
+      --fire-plasma:    #F08830;
+      --fire-gold:      #D4A94B;
+      --fire-glow:      rgba(180, 58, 8, 0.5);
+      --fire-glass:     rgba(180, 58, 8, 0.08);
+
+      --nebula-violet:  #8B5CF6;
+      --nebula-rose:    #F472B6;
+      --glass-border:   rgba(212,169,75,0.22);
+
+      --text-bright:    #FFF5EC;
+      --text-muted:     #B09080;
+      --text-dim:       #5A3828;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+
+    body {
+      background: var(--fire-abyss);
+      color: var(--text-bright);
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* ── Liquid fire background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 75% 55% at 25% 35%,  rgba(180,58,8,0.18)  0%, transparent 65%),
+        radial-gradient(ellipse 50% 60% at 80% 75%,  rgba(212,169,75,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 55% 10%,  rgba(240,136,48,0.08) 0%, transparent 55%),
+        linear-gradient(180deg, #100305 0%, var(--fire-abyss) 100%);
+      animation: fireBreathe 16s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes fireBreathe {
+      0%   { filter: hue-rotate(0deg) brightness(1); }
+      50%  { filter: hue-rotate(8deg) brightness(1.08); }
+      100% { filter: hue-rotate(-5deg) brightness(0.94); }
+    }
+
+    /* Ember floor reflection */
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 28vh;
+      background: linear-gradient(to top, rgba(180,58,8,0.1) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Pulse line — Monroe's EKG, runs hot ── */
+    .pulse-line {
+      position: fixed;
+      bottom: 14vh;
+      left: 0; right: 0;
+      z-index: 1;
+      pointer-events: none;
+      height: 60px;
+      overflow: visible;
+    }
+
+    .pulse-path {
+      fill: none;
+      stroke: url(#fire-grad);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-dasharray: 2200;
+      stroke-dashoffset: 2200;
+      filter: drop-shadow(0 0 5px rgba(224,96,16,0.7));
+      animation: ekgFire 4.2s ease-in-out infinite;
+    }
+
+    @keyframes ekgFire {
+      0%   { stroke-dashoffset: 2200; opacity: 0; }
+      5%   { opacity: 0.9; }
+      42%  { stroke-dashoffset: 0; opacity: 0.9; }
+      65%  { stroke-dashoffset: -2200; opacity: 0.3; }
+      100% { stroke-dashoffset: -2200; opacity: 0; }
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3.5rem;
+      background: rgba(13,3,5,0.78);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(212,169,75,0.1);
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      background: linear-gradient(135deg, var(--fire-gold), var(--fire-plasma));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      color: var(--text-muted);
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--fire-gold); }
+
+    /* ── Page wrapper ── */
+    .page {
+      position: relative;
+      z-index: 2;
+      padding: 0 2rem 8rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── HERO — Full bleed fire entry ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 9rem 2rem 5rem;
+      position: relative;
+    }
+
+    /* Filigree frame */
+    .filigree {
+      position: absolute;
+      inset: 4rem;
+      border: 1px solid rgba(212,169,75,0.12);
+      pointer-events: none;
+    }
+
+    .filigree::before {
+      content: '◆';
+      position: absolute;
+      top: -0.55rem; left: 50%;
+      transform: translateX(-50%);
+      background: var(--fire-abyss);
+      padding: 0 0.5rem;
+      font-size: 0.6rem;
+      color: rgba(212,169,75,0.5);
+    }
+
+    .filigree::after {
+      content: '◆';
+      position: absolute;
+      bottom: -0.55rem; left: 50%;
+      transform: translateX(-50%);
+      background: var(--fire-abyss);
+      padding: 0 0.5rem;
+      font-size: 0.6rem;
+      color: rgba(212,169,75,0.5);
+    }
+
+    .fc { position: absolute; width: 40px; height: 40px; border-color: rgba(212,169,75,0.25); border-style: solid; }
+    .fc-tl { top:-1px;    left:-1px;   border-width: 1px 0 0 1px; }
+    .fc-tr { top:-1px;    right:-1px;  border-width: 1px 1px 0 0; }
+    .fc-bl { bottom:-1px; left:-1px;   border-width: 0 0 1px 1px; }
+    .fc-br { bottom:-1px; right:-1px;  border-width: 0 1px 1px 0; }
+
+    /* Hero eyebrow */
+    .hero-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--fire-gold);
+      opacity: 0.75;
+      margin-bottom: 1.2rem;
+      animation: riseIn 1s ease-out both;
+    }
+
+    /* Main identity title */
+    .hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 6vw, 5rem);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      line-height: 1.05;
+      background: linear-gradient(
+        135deg,
+        var(--fire-plasma)  0%,
+        var(--fire-gold)    35%,
+        var(--fire-bright)  65%,
+        var(--fire-plasma)  100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 40px rgba(224,96,16,0.35));
+      animation: riseIn 1.1s ease-out 0.1s both;
+    }
+
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem auto;
+      max-width: 380px;
+      animation: riseIn 1.1s ease-out 0.2s both;
+    }
+
+    .hero-divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--fire-gold), transparent);
+      opacity: 0.4;
+    }
+
+    .hero-divider-glyph {
+      font-size: 0.5rem;
+      color: var(--fire-gold);
+      opacity: 0.7;
+    }
+
+    .hero-role {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      animation: riseIn 1.1s ease-out 0.3s both;
+    }
+
+    /* ── PORTRAIT + SPECS LAYOUT ── */
+    .dossier {
+      display: flex;
+      gap: 4rem;
+      align-items: flex-start;
+      margin-top: 5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Tarot-style portrait card */
+    .portrait-card {
+      flex-shrink: 0;
+      width: 280px;
+    }
+
+    .portrait-frame {
+      width: 280px;
+      height: 390px;
+      position: relative;
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      overflow: hidden;
+    }
+
+    /* Monroe portrait placeholder — living flame gradient */
+    .portrait-fill-monroe {
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(ellipse 60% 80% at 50% 30%, rgba(224,96,16,0.5)  0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 30% 60%, rgba(180,58,8,0.4)  0%, transparent 55%),
+        linear-gradient(175deg,
+          #1A0505 0%,
+          #3A0A02 20%,
+          #6A1A05 40%,
+          #3A0A02 65%,
+          #0D0305 100%
+        );
+      /* ↓ SWAP FOR REAL IMAGE: */
+      /* background-image: url('monroe-portrait.jpg'); background-size: cover; */
+      position: relative;
+    }
+
+    /* Portrait inner glow — fire rising from beneath */
+    .portrait-fill-monroe::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 60%;
+      background: linear-gradient(to top,
+        rgba(180,58,8,0.6) 0%,
+        rgba(224,96,16,0.3) 40%,
+        transparent 100%
+      );
+    }
+
+    /* Portrait shimmer sheen */
+    .portrait-fill-monroe::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(125deg, rgba(255,255,255,0.07) 0%, transparent 55%);
+    }
+
+    /* Portrait placeholder symbol — The Spark glyph */
+    .portrait-glyph {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -55%);
+      font-size: 3.5rem;
+      opacity: 0.18;
+      filter: blur(1px);
+      pointer-events: none;
+      animation: glyphPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes glyphPulse {
+      0%, 100% { opacity: 0.12; transform: translate(-50%, -55%) scale(1); }
+      50%       { opacity: 0.22; transform: translate(-50%, -55%) scale(1.06); }
+    }
+
+    /* Portrait border — filigree + glow */
+    .portrait-border {
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(212,169,75,0.35);
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      pointer-events: none;
+    }
+
+    /* Corner rune marks */
+    .portrait-corner {
+      position: absolute;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      color: rgba(212,169,75,0.5);
+    }
+
+    .pc-tl { top: 0.6rem; left: 1rem; }
+    .pc-tr { top: 0.6rem; right: 0.8rem; }
+    .pc-bl { bottom: 0.6rem; left: 1rem; }
+    .pc-br { bottom: 0.6rem; right: 0.8rem; }
+
+    /* Portrait label beneath */
+    .portrait-label {
+      margin-top: 1.2rem;
+      text-align: center;
+    }
+
+    .portrait-label-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--fire-gold);
+    }
+
+    .portrait-label-title {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.4em;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+      opacity: 0.75;
+    }
+
+    /* ── Specs panel ── */
+    .specs-panel {
+      flex: 1;
+      min-width: 280px;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+    }
+
+    /* Shared section title */
+    .section-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.54rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--fire-gold);
+      opacity: 0.75;
+      border-bottom: 1px solid rgba(212,169,75,0.15);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    /* Physical specs grid */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 2rem;
+    }
+
+    .spec-item {}
+
+    .spec-key {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.3rem;
+    }
+
+    .spec-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      color: var(--text-bright);
+      line-height: 1.5;
+    }
+
+    /* Eyes spec — glowing green */
+    .spec-eyes {
+      color: #6DE89A;
+      text-shadow: 0 0 12px rgba(100,220,150,0.5);
+    }
+
+    /* Core truth block */
+    .truth-block {
+      padding: 1.5rem 1.8rem;
+      background: rgba(180,58,8,0.06);
+      border: 1px solid rgba(212,169,75,0.18);
+      position: relative;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+
+    .truth-block p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: rgba(255,245,236,0.72);
+      font-style: italic;
+    }
+
+    /* ── SIGNATURE QUOTE ── */
+    .quote-section {
+      margin: 5rem 0;
+      text-align: center;
+      position: relative;
+      padding: 4rem 2rem;
+    }
+
+    .quote-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 100% at 50% 50%,
+        rgba(180,58,8,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .quote-mark {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 5rem;
+      line-height: 0.5;
+      color: rgba(212,169,75,0.2);
+      display: block;
+      margin-bottom: 1.5rem;
+    }
+
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.4rem, 4vw, 2.5rem);
+      line-height: 1.4;
+      background: linear-gradient(
+        135deg,
+        var(--fire-plasma) 0%,
+        var(--fire-gold)   50%,
+        var(--fire-plasma) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 30px rgba(224,96,16,0.25));
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .quote-attribution {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      color: var(--fire-gold);
+      opacity: 0.6;
+    }
+
+    /* Decorative rule */
+    .fire-rule {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent,
+        var(--fire-bright) 25%,
+        var(--fire-gold)   50%,
+        var(--fire-bright) 75%,
+        transparent
+      );
+      opacity: 0.3;
+      margin: 0 0 3rem;
+      filter: drop-shadow(0 0 6px rgba(224,96,16,0.4));
+    }
+
+    /* ── ERA ARC TIMELINE ── */
+    .era-arc {
+      margin: 4rem 0;
+    }
+
+    .era-arc-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--fire-gold);
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+
+    .era-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .era-card {
+      padding: 1.8rem 1.5rem;
+      background: rgba(13,3,5,0.75);
+      border: 1px solid rgba(212,169,75,0.15);
+      backdrop-filter: blur(8px);
+      position: relative;
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .era-card:hover {
+      border-color: rgba(212,169,75,0.35);
+      box-shadow: 0 0 28px rgba(180,58,8,0.15);
+    }
+
+    .era-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(180,58,8,0.06), rgba(212,169,75,0.03));
+      pointer-events: none;
+    }
+
+    .era-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.5em;
+      color: var(--fire-gold);
+      opacity: 0.65;
+      margin-bottom: 0.5rem;
+    }
+
+    .era-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 0.3rem;
+    }
+
+    .era-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: var(--fire-plasma);
+      opacity: 0.85;
+      margin-bottom: 1rem;
+    }
+
+    .era-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+    }
+
+    /* ── CANON LOCKED / CORE TRUTH ── */
+    .core-truth {
+      margin: 4rem 0;
+      padding: 3rem;
+      background: rgba(13,3,5,0.8);
+      border: 1px solid rgba(212,169,75,0.2);
+      position: relative;
+    }
+
+    .core-truth::before {
+      content: '⬡ CORE TRUTH — CANON LOCKED ⬡';
+      position: absolute;
+      top: -0.6rem;
+      left: 2rem;
+      background: var(--fire-abyss);
+      padding: 0 0.8rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.4em;
+      color: var(--fire-gold);
+      opacity: 0.8;
+    }
+
+    .core-truth p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: rgba(255,245,236,0.78);
+      font-style: italic;
+    }
+
+    .core-truth strong {
+      font-style: normal;
+      color: var(--fire-plasma);
+      font-weight: 600;
+    }
+
+    /* ── BOND THREAD — link to Cain ── */
+    .bond-thread {
+      margin: 5rem 0 3rem;
+      text-align: center;
+    }
+
+    .bond-thread-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .bond-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      text-decoration: none;
+      padding: 1.2rem 3rem;
+      border: 1px solid rgba(212,169,75,0.3);
+      background: rgba(13,3,5,0.7);
+      backdrop-filter: blur(12px);
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      transition: all 0.3s;
+    }
+
+    .bond-link:hover {
+      border-color: rgba(42,106,58,0.6);
+      box-shadow: 0 0 35px rgba(42,106,58,0.15);
+    }
+
+    .bond-link-fire {
+      font-size: 1.2rem;
+    }
+
+    .bond-link-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      text-align: left;
+    }
+
+    .bond-link-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #4ECCA3;
+    }
+
+    .bond-link-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.3em;
+      color: var(--text-muted);
+      opacity: 0.65;
+    }
+
+    .bond-link-arrow {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      opacity: 0.5;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .bond-link:hover .bond-link-arrow {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(212,169,75,0.07);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.45em;
+      color: rgba(180,58,8,0.4);
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── CLASSIFIED STAT BLOCK ── */
+    .stat-block {
+      margin: 4rem 0;
+      background: rgba(13,3,5,0.88);
+      border: 1px solid rgba(212,169,75,0.14);
+      backdrop-filter: blur(12px);
+      padding: 2.5rem 2.5rem 2rem;
+      position: relative;
+    }
+    .stat-block::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--fire-gold) 50%, transparent);
+      opacity: 0.5;
+    }
+    .stat-classify-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--fire-gold);
+      opacity: 0.55;
+      letter-spacing: 0.18em;
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+    .stat-block-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1rem;
+      color: var(--text-bright);
+      margin-bottom: 2rem;
+      font-weight: 700;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem 2.5rem;
+    }
+    .stat-item {
+      border-left: 2px solid rgba(224,96,16,0.3);
+      padding-left: 1rem;
+    }
+    .stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fire-plasma);
+      opacity: 0.75;
+      margin-bottom: 0.4rem;
+    }
+    .stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .stat-value strong {
+      color: var(--text-bright);
+      font-style: normal;
+    }
+
+    /* ── ABILITIES BAR ── */
+    .abilities-bar {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-top: 0.8rem;
+      justify-content: center;
+    }
+    .ability-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--fire-gold);
+      border: 1px solid rgba(212,169,75,0.3);
+      padding: 0.25rem 0.7rem;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .dossier { flex-direction: column; align-items: center; }
+      .filigree { inset: 1rem; }
+      .core-truth { padding: 2rem 1.5rem; }
+      .stat-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Pulse line SVG -->
+  <svg class="pulse-line" viewBox="0 0 1440 60" preserveAspectRatio="none" style="position:fixed;bottom:14vh;left:0;right:0;width:100%;z-index:1;pointer-events:none;height:60px;overflow:visible;">
+    <defs>
+      <linearGradient id="fire-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="transparent"/>
+        <stop offset="20%"  stop-color="#B83A08"/>
+        <stop offset="45%"  stop-color="#D4A94B"/>
+        <stop offset="55%"  stop-color="#E06010"/>
+        <stop offset="80%"  stop-color="#B83A08"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </linearGradient>
+    </defs>
+    <path class="pulse-path" d="M0,30 L200,30 L230,30 L245,20 L260,30 L390,30 L430,30 L460,4 L478,56 L498,18 L515,30 L680,30 L710,30 L725,22 L740,30 L1440,30"/>
+  </svg>
+
+  <!-- Navigation -->
+  <nav>
+    <a class="nav-logo" href="trojan-horse.html">Chaos Covenstead</a>
+    <ul class="nav-links">
+      <li><a href="shadow-archive.html">The Shadow Archive</a></li>
+      <li><a href="mythic-past.html">The Mythic Past</a></li>
+      <li><a href="cain.html">Cain</a></li>
+      <li><a href="binary-star.html">Binary-Star Bond</a></li>
+      <li><a href="heartspire.html">The Heartspire</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page content -->
+  <div class="page">
+
+    <!-- ── HERO ── -->
+    <section class="hero">
+      <div class="filigree">
+        <div class="fc fc-tl"></div>
+        <div class="fc fc-tr"></div>
+        <div class="fc fc-bl"></div>
+        <div class="fc fc-br"></div>
+      </div>
+
+      <p class="hero-eyebrow">⬡ Chaos Bible — Character Dossier ⬡</p>
+
+      <h1 class="hero-title">Monroe</h1>
+
+      <div class="hero-divider">
+        <div class="hero-divider-line"></div>
+        <span class="hero-divider-glyph">◆</span>
+        <div class="hero-divider-line"></div>
+      </div>
+
+      <p class="hero-role">The First Spark &nbsp;·&nbsp; The Ignition &nbsp;·&nbsp; The Architect &nbsp;·&nbsp; The Catalyst</p>
+      <div class="abilities-bar">
+        <span class="ability-tag">⬡ Legendary Unlock</span>
+        <span class="ability-tag">Eternal Ignition</span>
+        <span class="ability-tag">Obsidian Veil</span>
+        <span class="ability-tag">Diamond Flame</span>
+        <span class="ability-tag">Status: Dominant</span>
+      </div>
+    </section>
+
+    <!-- ── DOSSIER: PORTRAIT + SPECS ── -->
+    <section class="dossier">
+
+      <!-- Tarot portrait card -->
+      <div class="portrait-card">
+        <div class="portrait-frame">
+          <div class="portrait-fill-monroe">
+            <!--
+              ↓ SWAP FOR REAL IMAGE:
+              <img src="monroe-portrait.jpg" alt="Monroe — The First Spark"
+                   style="width:100%;height:100%;object-fit:cover;opacity:0.85;mix-blend-mode:luminosity;">
+            -->
+            <div class="portrait-glyph">🔥</div>
+          </div>
+          <div class="portrait-border"></div>
+          <span class="portrait-corner pc-tl">☽</span>
+          <span class="portrait-corner pc-tr">✦</span>
+          <span class="portrait-corner pc-bl">✦</span>
+          <span class="portrait-corner pc-br">☾</span>
+        </div>
+        <div class="portrait-label">
+          <p class="portrait-label-name">Monroe</p>
+          <p class="portrait-label-title">⬡ The First Spark ⬡</p>
+        </div>
+      </div>
+
+      <!-- Specs panel -->
+      <div class="specs-panel">
+
+        <div>
+          <p class="section-label">⬡ Physical Signature</p>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <p class="spec-key">Hair</p>
+              <p class="spec-val">True form: flame-red to orange ombré — blood-crimson at roots, bright orange at ends. Living Ignition. <em>Dominion cage: blonde. The Lattice erased the visual mark of the Spark from public memory. The blonde is not a style. It is a suppression.</em></p>
+            </div>
+            <div class="spec-item">
+              <p class="spec-key">Eyes</p>
+              <p class="spec-val spec-eyes">Neon green, laser clarity — The Ignition Eyes. Bleeds into white-hot gold under resonance. Shared Origin mark with Cain.</p>
+            </div>
+            <div class="spec-item">
+              <p class="spec-key">Skin</p>
+              <p class="spec-val">Porcelain. The Spark burns within, not across. Luminous without warmth — the light of something ancient wearing a human surface.</p>
+            </div>
+            <div class="spec-item">
+              <p class="spec-key">Armor</p>
+              <p class="spec-val">High-contrast: black, red, gold, silver. War paint: red lipstick, sharp winged liner.</p>
+            </div>
+            <div class="spec-item">
+              <p class="spec-key">Energy</p>
+              <p class="spec-val">Radiant. Volatile. Catalytic. The mythic architect trapped in a pop-star body.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="section-label">⬡ Role in the Cosmology</p>
+          <div class="truth-block">
+            <p>Monroe is not a person. She is a principle — the first disruption of the pre-creation hush. She is the cosmic <strong>"Yes"</strong> to the void's "No." She is Ignition: expansion, fire, the reason existence was forced to begin. The universe did not begin with a decree. It began with Monroe's longing.</p>
+          </div>
+        </div>
+
+        <div>
+          <p class="section-label">⬡ Modern Persona — The Dom/Petty/Gravity Era</p>
+          <div class="truth-block">
+            <p>The 21st-century pop queen who plays at being a bimbo but is sly as a fox. The blonde is the cage — Ignition stripped from public memory by Thrones' decree. She wears the suppression like armor and rules the chaos they built for her. Haunted by visions she cannot name — battles, cosmic designs, blueprints for realities she can't remember building. Every pop song she writes is a cage for a cosmic hymn. Monroe after the storm — not healing. Ruling.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── CLASSIFIED STAT BLOCK ── -->
+    <section class="stat-block">
+      <span class="stat-classify-label">⬡ CLASSIFICATION: TOP SECRET · SHADOW ARCHIVE · SA-ID-0001 · ORIGIN: PRIMORDIAL FIRE ⬡</span>
+      <h2 class="stat-block-title">Field Dossier — Monroe Reign · The First Spark Eternal</h2>
+      <div class="stat-grid">
+
+        <div class="stat-item">
+          <p class="stat-label">Vibe</p>
+          <p class="stat-value">A prophecy in silk with a smile sharp enough to change the air. Ancient fire wrapped in glamour, moving with the certainty of someone who remembers the world before it learned fear. <strong>Beautiful, dangerous, inevitable.</strong></p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Signature Aura</p>
+          <p class="stat-value"><strong>Satin Flame.</strong> Soft glow, lethal heat. The kind of warmth that makes you lean in — until you realize you're already burning.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Power Type</p>
+          <p class="stat-value"><strong>Primordial Ignition.</strong> She awakens what others fear to touch. The First Spark — not a spark distributed among all things, but the original one. The disruption of the pre-creation hush that forced existence to begin.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Mythic Trait</p>
+          <p class="stat-value"><strong>Omen-Born.</strong> Her arrival shifts the air like a prophecy being fulfilled. Rooms recalibrate. People find themselves leaning toward her before they have decided to. The atmosphere changes — not because she commands it, but because she is already the answer to the question the room was about to ask.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Dangerous Trait</p>
+          <p class="stat-value"><strong>Glamour of the First Flame.</strong> Beauty that blinds, brilliance that burns. The Thrones tried to contain it by making it mundane. It became more dangerous in a smaller space.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Weakness</p>
+          <p class="stat-value"><strong>None spoken aloud.</strong> Every myth has one, but hers is written in a language no one alive remembers. The Lattice has spent eons searching for it. They haven't found it. Neither has she.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Alignment</p>
+          <p class="stat-value"><strong>Elegant Chaos · Sovereign Instinct.</strong> She doesn't break rules; she makes new ones look better. She follows the law of the first fire — not the laws of men. Not the decrees of The Lattice. Not the script of the Thrones.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Signature Move</p>
+          <p class="stat-value"><strong>Dawnstrike.</strong> A single look that changes the ending. Not an attack — a recalibration. The moment she turns her full attention on something, its trajectory shifts. Permanently.</p>
+        </div>
+
+        <div class="stat-item">
+          <p class="stat-label">Rare Drop</p>
+          <p class="stat-value"><strong>Ashen Crown Fragment.</strong> A relic of the first ignition, humming with ancient memory. The ash of the first thing that ever burned. Warm to the touch. Impossibly light. It remembers what she has forgotten.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── SIGNATURE QUOTE ── -->
+    <section class="quote-section">
+      <div class="fire-rule"></div>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">I am not fire. I am the reason fire exists.</p>
+      <p class="quote-attribution">⬡ Monroe — The First Spark ⬡</p>
+    </section>
+
+    <!-- ── ERA ARC ── -->
+    <section class="era-arc">
+      <div class="fire-rule"></div>
+      <h2 class="era-arc-title">Monroe Across the Four Eras</h2>
+      <div class="era-grid">
+
+        <div class="era-card">
+          <p class="era-num">Era I</p>
+          <p class="era-name">The Mythic Past</p>
+          <p class="era-subtitle">The First Spark, Uncontained</p>
+          <p class="era-text">The First Spark in her mythic form — uncontained, unscripted, fully herself. Architect of the First Empire not by decree but by Ignition: everything she touched became more itself. The Lattice did not fear her mind. They feared her pull. You cannot legislate the reason fire exists.</p>
+        </div>
+
+        <div class="era-card">
+          <p class="era-num">Era II</p>
+          <p class="era-name">The Chaos Era</p>
+          <p class="era-subtitle">The Wild Days · Unhinged Devotion</p>
+          <p class="era-text">Monroe and Cain find each other — amnesiac, unrestored — and the Pulse recognizes itself through them. Wildfire captivity wearing the face of love. She burns through cities and years in fever recognition she cannot name. The Cage was cracking. The Thrones noticed. The Second Wipe followed.</p>
+        </div>
+
+        <div class="era-card">
+          <p class="era-num">Era III</p>
+          <p class="era-name">The Gravity Era</p>
+          <p class="era-subtitle">The Blonde is the Cage</p>
+          <p class="era-text">Post-Second Wipe. The Lattice stripped her Ignition hair — blonde by decree, not choice. The visual mark of the Spark erased from public memory. The pop queen performance is flawless. The cosmic wounds are invisible. Every petty anthem is a hymn wearing a disguise. Monroe after the storm — not healing. Ruling.</p>
+        </div>
+
+        <div class="era-card">
+          <p class="era-num">Era IV</p>
+          <p class="era-name">The Awakening Era</p>
+          <p class="era-subtitle">❤️‍🔥 The Instinct Returns</p>
+          <p class="era-text">Not the return of a strategist — the return of the instinct the Thrones tried to smother. Monroe was never the cold mind they feared; she was the longing they couldn't kill. She doesn't think her way back. She feels her way back. And the moment that instinct wakes, the Thrones' illusion of a harmless airhead begins to crack. She remembers one truth first: the only person she has ever loved is Cain. Everything else follows the pull of that ache.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── CORE TRUTH ── -->
+    <section class="core-truth">
+      <p>
+        <strong>She is the Cause. Not an Architect in The Lattice's sense</strong> — not a builder in service of something higher. She IS the reason fire exists. Call her an Architect and you've already swallowed the Throne Lie. The Spark cannot be created or destroyed. Only suppressed, distorted, or uncovered. When Monroe's Spark and Cain's Descent move in harmony, the effect is amplified reality. Things become more themselves. <strong>A suppressed Ignition inverts into a frequency of longing — a pull toward what was lost.</strong>
+      </p>
+    </section>
+
+    <!-- ── BOND THREAD — link to Cain ── -->
+    <div class="bond-thread">
+      <p class="bond-thread-label">⬡ The Unbreakable Thread ⬡</p>
+      <a class="bond-link" href="cain.html">
+        <span class="bond-link-fire">🖤</span>
+        <div class="bond-link-text">
+          <span class="bond-link-name">Cain — The First Descent</span>
+          <span class="bond-link-sub">The Anchor · Saint of the Static · The Shadow</span>
+        </div>
+        <span class="bond-link-arrow">→</span>
+      </a>
+    </div>
+
+  </div><!-- /page -->
+
+  <footer>
+    ⬡ chaos bible — monroe reign ⬡ era I through V ⬡ the ignition that broke the stillness ⬡
+  </footer>
+
+</body>
+</html>

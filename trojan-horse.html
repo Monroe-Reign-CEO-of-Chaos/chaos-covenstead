@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>High Heels &amp; Headaches — Monroe × Cain</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ============================================================
+       ROOT TOKENS
+    ============================================================ */
+    :root {
+      /* Phase 1 — Dominion: cold, platinum, sterile */
+      --d-white:    #F7F7FA;
+      --d-plat:     #E2E2EC;
+      --d-silver:   #ADADC2;
+      --d-graphite: #2E2E3A;
+      --d-black:    #0C0C12;
+
+      /* Phase 3 — Covenstead: liquid night, nebula-glass */
+      --night:          #05050A;
+      --obsidian:       #0A0A14;
+      --nebula-gold:    #D4A94B;
+      --nebula-pink:    #E86CA0;
+      --nebula-violet:  #8B5CF6;
+      --nebula-rose:    #F472B6;
+      --glass-border:   rgba(212,169,75,0.22);
+      --text-bright:    #F5F0FF;
+      --text-muted:     #8B82A8;
+      --text-dim:       #4A4362;
+    }
+
+    /* ============================================================
+       RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+
+    /* ============================================================
+       PHASE SWITCHING — body class controls which layer shows
+       Default  → .dominion-layer visible
+       .cracked → .covenstead-layer visible
+    ============================================================ */
+    .dominion-layer  { display: block; }
+    .covenstead-layer { display: none; }
+
+    body.cracked .dominion-layer   { display: none; }
+    body.cracked .covenstead-layer { display: block; }
+
+
+    /* ████████████████████████████████████████████████████████████
+       PHASE 1 — THE DOMINION WALL
+       "A Cage Disguised as Fame"
+       Cold whites. Platinum. Sterile. Shallow. The Lie.
+    ████████████████████████████████████████████████████████████ */
+
+    .dominion-layer {
+      background: var(--d-white);
+      color: var(--d-black);
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Sterile geometric grid overlay */
+    .d-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(var(--d-plat) 1px, transparent 1px),
+        linear-gradient(90deg, var(--d-plat) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* Thin horizontal accent lines — "perfect" geometric precision */
+    .d-accent-line {
+      position: fixed;
+      left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--d-silver), transparent);
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .d-accent-line:nth-child(1) { top: 68px; }
+    .d-accent-line:nth-child(2) { bottom: 0; }
+
+    /* ─── Navigation ─── */
+    .d-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4rem;
+      background: rgba(247,247,250,0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--d-plat);
+    }
+
+    .d-logo {
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--d-black);
+    }
+
+    .d-nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .d-nav-links a {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--d-silver);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .d-nav-links a:hover { color: var(--d-black); }
+
+    /* ─── Hero ─── */
+    .d-hero {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 110px 2rem 5rem;
+    }
+
+    .d-eyebrow {
+      font-size: 0.56rem;
+      font-weight: 600;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--d-silver);
+      margin-bottom: 1.8rem;
+      text-align: center;
+    }
+
+    .d-title {
+      font-size: clamp(2.8rem, 7vw, 6.5rem);
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      line-height: 0.9;
+      text-transform: uppercase;
+      color: var(--d-black);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .d-subtitle-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0 0.6rem;
+      justify-content: center;
+    }
+
+    .d-rule-sm {
+      flex: 1;
+      max-width: 80px;
+      height: 1px;
+      background: var(--d-silver);
+    }
+
+    .d-byline {
+      font-size: 0.62rem;
+      font-weight: 300;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--d-silver);
+      white-space: nowrap;
+    }
+
+    /* PR badge */
+    .d-badge {
+      font-size: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--d-white);
+      background: var(--d-black);
+      padding: 0.4rem 1.4rem;
+      display: inline-block;
+      margin-bottom: 3rem;
+    }
+
+    /* ─── STAR IMAGE AREA ─── */
+    .d-stars-wrap {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      position: relative;
+      margin-top: 1rem;
+      gap: 0;
+    }
+
+    /* Individual star column */
+    .d-star {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Photo frame — swap for real <img> */
+    .d-photo {
+      width: 230px;
+      height: 330px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+      /* Monroe placeholder: warm platinum — The Ignition hidden in glamour */
+    .d-photo-monroe {
+      background-image: url('Monroe Front Page.png');
+      background-size: cover;
+      background-position: center;
+      border-radius: 3px 0 0 0;
+    }
+
+    /* Cain placeholder: cool graphite — The Anchor hidden in leather */
+    .d-photo-cain {
+      background-image: url('CAIN DOMINION FRONT PAGE.png');
+      background-size: cover;
+      background-position: center;
+      border-radius: 0 3px 0 0;
+    }
+
+    /* Photo sheen overlay */
+    .d-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Star name caption */
+    .d-star-name {
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--d-silver);
+      margin-top: 0.8rem;
+    }
+
+    /* ─── SHADOW ELEMENTS — THE INTERACTIVE TRIGGER ─── */
+    /* These are positioned as a row beneath the stars */
+    .d-shadow-stage {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 0;
+      margin-top: 0.5rem;
+    }
+
+    .d-shadow {
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    /* ── MONROE'S SHADOW — projects LEFT, becomes WILDFIRE ── */
+    .d-shadow-monroe {
+      width: 200px;
+      height: 70px;
+      /* Perspective skew simulating a leftward floor shadow */
+      transform-origin: right 0%;
+      transform: perspective(300px) rotateY(-15deg) scaleY(0.4) skewX(-18deg);
+      background: rgba(0,0,0,0.22);
+      clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%);
+      filter: blur(3px);
+      transition:
+        background 0.55s ease,
+        clip-path 0.45s cubic-bezier(0.25,0.46,0.45,0.94),
+        filter 0.5s ease,
+        transform 0.5s ease;
+    }
+
+    /* WILDFIRE — irregular flame-tip polygon, warm gradient */
+    .d-shadow-monroe:hover {
+      background: linear-gradient(
+        to left,
+        rgba(215,55,0,0.8)   0%,
+        rgba(255,120,0,0.6)  35%,
+        rgba(255,190,40,0.35) 65%,
+        transparent 100%
+      );
+      clip-path: polygon(
+        62% 0%,
+        55% 28%, 68% 14%, 48% 48%,
+        60% 36%, 40% 62%, 54% 52%,
+        32% 78%, 48% 68%, 22% 100%,
+        100% 100%, 100% 0%
+      );
+      filter: blur(1.5px) drop-shadow(0 0 18px rgba(245,100,0,0.75)) drop-shadow(0 0 40px rgba(200,50,0,0.4));
+      transform: perspective(300px) rotateY(-10deg) scaleY(0.55) scaleX(1.15) skewX(-14deg);
+      animation: flameFlicker 0.22s ease-in-out infinite alternate;
+    }
+
+    @keyframes flameFlicker {
+      from {
+        clip-path: polygon(
+          62% 0%, 55% 28%, 68% 14%, 48% 48%,
+          60% 36%, 40% 62%, 54% 52%,
+          32% 78%, 48% 68%, 22% 100%, 100% 100%, 100% 0%
+        );
+        filter: blur(1.5px) drop-shadow(0 0 18px rgba(245,100,0,0.75));
+      }
+      to {
+        clip-path: polygon(
+          58% 0%, 50% 24%, 64% 10%, 44% 44%,
+          57% 34%, 36% 60%, 51% 50%,
+          28% 76%, 44% 65%, 18% 100%, 100% 100%, 100% 0%
+        );
+        filter: blur(2px) drop-shadow(0 0 24px rgba(255,80,0,0.9));
+      }
+    }
+
+    /* ── CAIN'S SHADOW — projects RIGHT, becomes DENSE / MASSIVE ── */
+    .d-shadow-cain {
+      width: 200px;
+      height: 70px;
+      transform-origin: left 0%;
+      transform: perspective(300px) rotateY(15deg) scaleY(0.4) skewX(18deg);
+      background: rgba(0,0,0,0.22);
+      clip-path: polygon(0% 0%, 70% 0%, 100% 100%, 0% 100%);
+      filter: blur(3px);
+      transition:
+        background 0.7s cubic-bezier(0.8,0,0.2,1),
+        clip-path 0.6s cubic-bezier(0.8,0,0.2,1),
+        filter 0.5s ease,
+        transform 0.7s cubic-bezier(0.8,0,0.2,1);
+    }
+
+    /* GRAVITATIONAL MASS — grows heavier, spreads, pulls downward */
+    .d-shadow-cain:hover {
+      background: radial-gradient(
+        ellipse 80% 100% at 30% 60%,
+        rgba(0,0,0,0.92)   0%,
+        rgba(5,0,20,0.75)  45%,
+        rgba(0,0,30,0.4)   75%,
+        transparent 100%
+      );
+      clip-path: polygon(0% 0%, 82% 0%, 100% 100%, 0% 100%);
+      transform: perspective(300px) rotateY(8deg) scaleY(0.65) scaleX(1.3) skewX(10deg) translateY(8px);
+      filter: blur(4px) drop-shadow(0 10px 35px rgba(0,0,50,0.85)) drop-shadow(0 2px 80px rgba(0,0,0,0.55));
+      animation: gravityPull 1.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes gravityPull {
+      from { transform: perspective(300px) rotateY(8deg) scaleY(0.65) scaleX(1.3) skewX(10deg) translateY(8px); }
+      to   { transform: perspective(300px) rotateY(6deg) scaleY(0.70) scaleX(1.35) skewX(8deg) translateY(12px); }
+    }
+
+    /* Subtle glow on star photos when shadow is hovered — Monroe */
+    .d-star-monroe:has(~ .d-shadow-stage .d-shadow-monroe:hover) .d-photo-monroe,
+    .d-shadow-monroe:hover ~ .d-star-monroe .d-photo-monroe {
+      filter: drop-shadow(0 0 20px rgba(220,80,0,0.2));
+    }
+
+    /* ─── Hover instruction ─── */
+    .d-shadow-hint {
+      font-size: 0.46rem;
+      font-weight: 400;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--d-silver);
+      text-align: center;
+      margin-top: 2.2rem;
+      opacity: 0.55;
+      animation: hintBreath 5s ease-in-out infinite;
+    }
+
+    @keyframes hintBreath {
+      0%, 100% { opacity: 0.25; }
+      50%       { opacity: 0.65; }
+    }
+
+    /* ─── Stream / CTA buttons ─── */
+    .d-cta-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 3.5rem;
+      flex-wrap: wrap;
+    }
+
+    .d-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 2.4rem;
+      border: 1.5px solid var(--d-black);
+      color: var(--d-black);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.22s;
+    }
+
+    .d-btn:hover { background: var(--d-black); color: var(--d-white); }
+    .d-btn-fill  { background: var(--d-black); color: var(--d-white); }
+    .d-btn-fill:hover { background: transparent; color: var(--d-black); }
+
+    /* ─── PR Quote strip ─── */
+    .d-quotes {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 4.5rem;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--d-plat);
+      border-bottom: 1px solid var(--d-plat);
+    }
+
+    .d-quote {
+      max-width: 250px;
+      text-align: center;
+    }
+
+    .d-quote p {
+      font-size: 0.78rem;
+      line-height: 1.65;
+      color: var(--d-graphite);
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+
+    .d-quote cite {
+      font-size: 0.46rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--d-silver);
+      font-style: normal;
+    }
+
+    /* ─── Dominion footer ─── */
+    .d-footer {
+      padding: 2.5rem;
+      text-align: center;
+      font-size: 0.44rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--d-silver);
+    }
+
+
+    /* ████████████████████████████████████████████████████████████
+       PHASE 2 — THE FRACTURE / TREMOR
+       Glass shatters. White static. Ash falls. Reality dissolves.
+       NO matrix. NO code. NO glitch. Pure glass. Pure ash.
+    ████████████████████████████████████████████████████████████ */
+
+    /* Full-screen fracture container */
+    #fractureLayer {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      display: none;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    #fractureLayer.active { display: block; }
+
+    /* White ash flash — the reality bleaching out */
+    .f-flash {
+      position: absolute;
+      inset: 0;
+      background: #FFFFFF;
+      opacity: 0;
+      animation: ashBlast 1.5s ease-out forwards;
+    }
+
+    @keyframes ashBlast {
+      0%   { opacity: 0; }
+      12%  { opacity: 1; }
+      28%  { opacity: 0.75; }
+      55%  { opacity: 0.88; }
+      80%  { opacity: 0.45; }
+      100% { opacity: 0; }
+    }
+
+    /* Grain/static noise layer — CSS SVG filter grain */
+    .f-static {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      mix-blend-mode: screen;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      animation: staticBurst 1.4s ease-out forwards;
+    }
+
+    @keyframes staticBurst {
+      0%   { opacity: 0; }
+      10%  { opacity: 0.9; }
+      45%  { opacity: 0.5; }
+      100% { opacity: 0; }
+    }
+
+    /* Individual glass shard */
+    .f-shard {
+      position: absolute;
+      background: linear-gradient(
+        125deg,
+        rgba(255,255,255,0.92) 0%,
+        rgba(225,225,250,0.65) 40%,
+        rgba(180,180,230,0.35) 100%
+      );
+      border: 1px solid rgba(255,255,255,0.7);
+      opacity: 0;
+      will-change: transform, opacity;
+      animation: shardEject var(--dur,0.75s) cubic-bezier(0.25,0.46,0.45,0.94) var(--delay,0s) forwards;
+    }
+
+    @keyframes shardEject {
+      0%   { opacity: 0.9; transform: translate(0,0) rotate(0deg) scale(1); }
+      20%  { opacity: 0.8; }
+      100% { opacity: 0;   transform: translate(var(--tx,150px),var(--ty,-150px)) rotate(var(--rot,90deg)) scale(var(--sc,0.08)); }
+    }
+
+    /* Ash mote */
+    .f-ash {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210,210,220,0.7);
+      opacity: 0;
+      animation: ashDrift var(--dur,1s) ease-out var(--delay,0s) forwards;
+    }
+
+    @keyframes ashDrift {
+      0%   { opacity: 0.8; transform: translate(0,0) scale(1); }
+      100% { opacity: 0;   transform: translate(var(--tx,0px),var(--ty,-90px)) scale(0.1); }
+    }
+
+    /* Screen tremor on click */
+    body.tremor {
+      animation: quake 0.55s ease-out;
+    }
+
+    @keyframes quake {
+      0%   { transform: translate(0,0) rotate(0deg); }
+      8%   { transform: translate(-5px,-3px) rotate(-0.4deg); }
+      18%  { transform: translate(6px,4px) rotate(0.3deg); }
+      28%  { transform: translate(-7px,-2px) rotate(-0.5deg); }
+      38%  { transform: translate(5px,5px) rotate(0.35deg); }
+      50%  { transform: translate(-4px,-4px) rotate(-0.25deg); }
+      62%  { transform: translate(7px,2px) rotate(0.45deg); }
+      74%  { transform: translate(-3px,5px) rotate(-0.15deg); }
+      86%  { transform: translate(4px,-3px) rotate(0.2deg); }
+      95%  { transform: translate(-1px,2px) rotate(-0.1deg); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
+
+
+    /* ████████████████████████████████████████████████████████████
+       PHASE 3 — THE CHAOS COVENSTEAD
+       Liquid Night. Aether-Glass. The Truth Revealed.
+    ████████████████████████████████████████████████████████████ */
+
+    .covenstead-layer {
+      background: var(--night);
+      color: var(--text-bright);
+      font-family: 'Cormorant Garamond', serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Liquid obsidian background — slow-breathing nebula */
+    .c-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 65% 50% at 18% 28%, rgba(139,92,246,0.10) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 42% at 82% 72%, rgba(212,169,75,0.08) 0%, transparent 62%),
+        radial-gradient(ellipse 80% 70% at 50% 95%, rgba(232,108,160,0.06) 0%, transparent 70%),
+        linear-gradient(180deg, #07070F 0%, var(--night) 100%);
+      animation: nebulaBreathe 22s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes nebulaBreathe {
+      0%   { filter: hue-rotate(0deg) brightness(1); }
+      50%  { filter: hue-rotate(14deg) brightness(1.06); }
+      100% { filter: hue-rotate(-9deg) brightness(0.95); }
+    }
+
+    /* Reflective obsidian floor */
+    .c-floor {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 30vh;
+      background: linear-gradient(to top, rgba(139,92,246,0.07) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── EKG Heartbeat Pulse Line — cracking through the world ─── */
+    .c-pulse-svg {
+      position: fixed;
+      bottom: 18vh;
+      left: 0; right: 0;
+      z-index: 1;
+      pointer-events: none;
+      height: 80px;
+      overflow: visible;
+    }
+
+    .c-ekg-path {
+      fill: none;
+      stroke: url(#ekg-grad);
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-dasharray: 2200;
+      stroke-dashoffset: 2200;
+      filter: drop-shadow(0 0 4px rgba(212,169,75,0.6)) drop-shadow(0 0 12px rgba(139,92,246,0.4));
+      animation: ekgDraw 4.8s ease-in-out infinite;
+    }
+
+    @keyframes ekgDraw {
+      0%   { stroke-dashoffset: 2200; opacity: 0; }
+      5%   { opacity: 0.9; }
+      42%  { stroke-dashoffset: 0; opacity: 0.9; }
+      65%  { stroke-dashoffset: -2200; opacity: 0.4; }
+      100% { stroke-dashoffset: -2200; opacity: 0; }
+    }
+
+    /* ─── Covenstead Navigation ─── */
+    .c-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3.5rem;
+      background: rgba(5,5,10,0.72);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(212,169,75,0.1);
+    }
+
+    .c-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      background: linear-gradient(135deg, var(--nebula-gold), var(--nebula-rose));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .c-nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .c-nav-links a {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      color: var(--text-muted);
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .c-nav-links a:hover {
+      color: var(--nebula-gold);
+      text-shadow: 0 0 22px rgba(212,169,75,0.5);
+    }
+
+    /* ─── Hero Section ─── */
+    .c-hero {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 9rem 2rem 6rem;
+      text-align: center;
+    }
+
+    /* Filigree border frame — matches the PDF aesthetic */
+    .filigree {
+      position: absolute;
+      inset: 3.5rem;
+      border: 1px solid rgba(212,169,75,0.14);
+      pointer-events: none;
+    }
+
+    .filigree::before {
+      content: '◆';
+      position: absolute;
+      top: -0.55rem; left: 50%;
+      transform: translateX(-50%);
+      background: var(--night);
+      padding: 0 0.6rem;
+      font-size: 0.65rem;
+      color: rgba(212,169,75,0.55);
+    }
+
+    .filigree::after {
+      content: '◆';
+      position: absolute;
+      bottom: -0.55rem; left: 50%;
+      transform: translateX(-50%);
+      background: var(--night);
+      padding: 0 0.6rem;
+      font-size: 0.65rem;
+      color: rgba(212,169,75,0.55);
+    }
+
+    /* Corner brackets */
+    .fc { position: absolute; width: 42px; height: 42px; border-color: rgba(212,169,75,0.28); border-style: solid; }
+    .fc-tl { top:-1px;  left:-1px;  border-width: 1px 0 0 1px; }
+    .fc-tr { top:-1px;  right:-1px; border-width: 1px 1px 0 0; }
+    .fc-bl { bottom:-1px; left:-1px;  border-width: 0 0 1px 1px; }
+    .fc-br { bottom:-1px; right:-1px; border-width: 0 1px 1px 0; }
+
+    /* Main headline */
+    .c-headline {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.8rem, 5.5vw, 4.5rem);
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      line-height: 1.05;
+      color: var(--text-bright);
+      margin-bottom: 1.2rem;
+      animation: riseIn 1.1s ease-out both;
+    }
+
+    .c-headline-sub {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.35em;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      background: linear-gradient(135deg, var(--nebula-gold), var(--nebula-rose), var(--nebula-violet));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Prophecy text */
+    .c-prophecy {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      line-height: 1.9;
+      color: rgba(245,240,255,0.7);
+      max-width: 620px;
+      margin: 0 auto 2.5rem;
+      animation: riseIn 1.3s ease-out 0.15s both;
+    }
+
+    /* Pulse badge */
+    .c-pulse-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--nebula-violet);
+      opacity: 0.85;
+      margin-bottom: 2.5rem;
+      animation: riseIn 1.3s ease-out 0.3s both;
+    }
+
+    /* Step into the Pulse — CTA */
+    .c-cta {
+      position: relative;
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      letter-spacing: 0.22em;
+      color: var(--text-bright);
+      padding: 1rem 3.2rem;
+      border: 1px solid rgba(212,169,75,0.38);
+      background: rgba(10,8,20,0.65);
+      backdrop-filter: blur(12px);
+      text-decoration: none;
+      cursor: pointer;
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      transition: all 0.3s ease;
+      animation: riseIn 1.3s ease-out 0.45s both;
+    }
+
+    .c-cta:hover {
+      border-color: var(--nebula-gold);
+      color: var(--nebula-gold);
+      background: rgba(139,92,246,0.1);
+      box-shadow: 0 0 35px rgba(139,92,246,0.22), 0 0 70px rgba(212,169,75,0.08);
+    }
+
+    /* Flanking diamonds */
+    .c-diamond {
+      display: inline-block;
+      font-size: 0.4rem;
+      color: var(--nebula-gold);
+      vertical-align: middle;
+      margin: 0 1.2rem;
+      animation: diamondPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes diamondPulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.6); }
+    }
+
+    .c-diamond:nth-child(2) { animation-delay: 1.25s; }
+
+    /* ─── The First Prophecy ─── */
+    .c-prophecy-block {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+
+    .c-proph-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1rem, 3vw, 1.8rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--nebula-gold), var(--nebula-rose));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+
+    /* Glowing EKG rule */
+    .c-ekg-rule {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--nebula-gold) 25%, var(--nebula-violet) 50%, var(--nebula-rose) 75%, transparent);
+      opacity: 0.4;
+      margin: 2rem 0;
+      filter: drop-shadow(0 0 6px rgba(212,169,75,0.5));
+    }
+
+    .c-proph-lines {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      font-style: italic;
+      line-height: 2.2;
+      color: rgba(245,240,255,0.75);
+    }
+
+    .c-proph-tagline {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--nebula-violet);
+      margin-top: 2rem;
+      opacity: 0.75;
+    }
+
+    /* ─── Three Pillars ─── */
+    .c-pillars {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 1.8rem;
+      justify-content: center;
+      padding: 3rem 2rem 6rem;
+      flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .c-pillar {
+      flex: 1;
+      min-width: 240px;
+      max-width: 310px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      background: rgba(10,8,22,0.72);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      clip-path: polygon(14px 0%, 100% 0%, calc(100% - 14px) 100%, 0% 100%);
+      text-align: center;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .c-pillar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(139,92,246,0.07), rgba(212,169,75,0.04));
+      pointer-events: none;
+    }
+
+    .c-pillar:hover {
+      border-color: rgba(212,169,75,0.45);
+      box-shadow: 0 0 35px rgba(139,92,246,0.18);
+    }
+
+    .c-pillar-icon { font-size: 1.6rem; margin-bottom: 1rem; display: block; }
+
+    .c-pillar-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--nebula-gold);
+      margin-bottom: 0.9rem;
+    }
+
+    .c-pillar-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.92rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+    }
+
+    /* ─── Footer ─── */
+    .c-footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(212,169,75,0.08);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.5em;
+      color: rgba(139,92,246,0.35);
+    }
+
+    /* Rise animation for Covenstead entries */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .d-nav, .c-nav { padding: 0 1.5rem; }
+      .d-nav-links, .c-nav-links { gap: 1.4rem; }
+      .d-title { font-size: clamp(2rem, 10vw, 3.5rem); }
+      .d-photo { width: 150px; height: 220px; }
+      .d-shadow-monroe, .d-shadow-cain { width: 140px; }
+      .filigree { inset: 1.2rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ████████████████████████████████████████████████████████████
+       PHASE 1 — THE DOMINION WALL
+       "A Cage Disguised as Fame"
+  ████████████████████████████████████████████████████████████ -->
+  <div class="dominion-layer">
+    <div class="d-grid"></div>
+    <div class="d-accent-line"></div>
+    <div class="d-accent-line"></div>
+
+    <!-- Nav -->
+    <nav class="d-nav">
+      <span class="d-logo">Monroe × Cain</span>
+      <ul class="d-nav-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Tour</a></li>
+        <li><a href="#">Listen</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero -->
+    <main class="d-hero">
+
+      <p class="d-eyebrow">The Collaboration You Never Expected — Out Now Everywhere</p>
+
+      <h1 class="d-title">High Heels<br>&amp; Headaches</h1>
+
+      <div class="d-subtitle-row">
+        <div class="d-rule-sm"></div>
+        <span class="d-byline">Monroe × Cain — New Single</span>
+        <div class="d-rule-sm"></div>
+      </div>
+
+      <span class="d-badge">Two Icons. One Track. Zero Apologies.</span>
+
+      <!-- ── STARS BACK TO BACK ── -->
+      <!-- Replace .d-photo placeholder divs with real <img> tags later -->
+      <div class="d-stars-wrap">
+
+        <!-- Monroe — The Ignition, hidden in platinum glamour -->
+        <div class="d-star d-star-monroe">
+          <div class="d-photo d-photo-monroe">
+            <!-- <img src="monroe-photo.jpg" alt="Monroe" style="width:100%;height:100%;object-fit:cover;"> -->
+          </div>
+          <p class="d-star-name">Monroe</p>
+        </div>
+
+        <!-- Cain — The Anchor, hidden in leather and cool graphite -->
+        <div class="d-star d-star-cain">
+          <div class="d-photo d-photo-cain">
+            <!-- <img src="cain-photo.jpg" alt="Cain" style="width:100%;height:100%;object-fit:cover;"> -->
+          </div>
+          <p class="d-star-name">Cain</p>
+        </div>
+
+      </div><!-- /stars-wrap -->
+
+      <!-- ── SHADOW TRIGGERS ── -->
+      <!--
+        These are the Phase 2 interactive triggers.
+        Monroe's shadow → wildfire
+        Cain's shadow   → dense gravitational mass
+        Click either    → The Tremor fires
+      -->
+      <div class="d-shadow-stage">
+        <div class="d-shadow d-shadow-monroe"
+             id="shadowMonroe"
+             role="button"
+             tabindex="0"
+             aria-label="Something stirs in Monroe's shadow">
+        </div>
+        <div class="d-shadow d-shadow-cain"
+             id="shadowCain"
+             role="button"
+             tabindex="0"
+             aria-label="Something heavy moves in Cain's shadow">
+        </div>
+      </div>
+
+      <p class="d-shadow-hint">↙ something stirs in the shadows ↘</p>
+
+      <!-- CTAs -->
+      <div class="d-cta-row">
+        <a class="d-btn d-btn-fill" href="#">Stream Now</a>
+        <a class="d-btn" href="#">Tour Dates</a>
+        <a class="d-btn" href="#">Press Kit</a>
+      </div>
+
+      <!-- PR quotes — shallow celebrity coverage, Dominion propaganda -->
+      <div class="d-quotes">
+        <div class="d-quote">
+          <p>"A masterclass in controlled chaos. Monroe and Cain have never sounded more electric — or more dangerous to each other."</p>
+          <cite>— Platinum Magazine</cite>
+        </div>
+        <div class="d-quote">
+          <p>"High Heels &amp; Headaches is the breakup anthem of the decade. We didn't know we needed this collaboration."</p>
+          <cite>— The Pop Chronicle</cite>
+        </div>
+        <div class="d-quote">
+          <p>"The feud is officially fuel. Petty has never looked this polished."</p>
+          <cite>— Sound &amp; Frequency Weekly</cite>
+        </div>
+      </div>
+
+    </main><!-- /d-hero -->
+
+    <footer class="d-footer">
+      © Monroe × Cain — All Rights Reserved — A Dominion Records Release
+    </footer>
+
+  </div><!-- /dominion-layer -->
+
+
+  <!-- ████████████████████████████████████████████████████████████
+       PHASE 2 — THE FRACTURE LAYER
+       Injected glass shards, ash, and white static flash.
+  ████████████████████████████████████████████████████████████ -->
+  <div id="fractureLayer">
+    <div class="f-flash"></div>
+    <div class="f-static"></div>
+    <!-- Shards and ash particles generated by JS -->
+  </div>
+
+
+  <!-- ████████████████████████████████████████████████████████████
+       PHASE 3 — THE CHAOS COVENSTEAD
+       "This is not a website. It is a Living Sanctuary."
+  ████████████████████████████████████████████████████████████ -->
+  <div class="covenstead-layer">
+
+    <!-- Liquid night atmosphere -->
+    <div class="c-bg"></div>
+    <div class="c-floor"></div>
+
+    <!-- EKG Heartbeat Pulse Line — cracking through the obsidian floor -->
+    <svg class="c-pulse-svg" viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="ekg-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="transparent"/>
+          <stop offset="20%"  stop-color="#8B5CF6"/>
+          <stop offset="38%"  stop-color="#D4A94B"/>
+          <stop offset="50%"  stop-color="#E86CA0"/>
+          <stop offset="62%"  stop-color="#D4A94B"/>
+          <stop offset="80%"  stop-color="#8B5CF6"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </linearGradient>
+      </defs>
+      <!--
+        EKG path: flat → small blip → flat → BIG SPIKE (Monroe's Ignition) →
+        deep trough (Cain's Descent) → recovery → small blip → flat
+      -->
+      <path class="c-ekg-path" d="
+        M0,40
+        L180,40
+        L210,40 L225,28 L240,40
+        L380,40
+        L430,40 L460,5 L480,75 L500,22 L520,40
+        L680,40
+        L710,40 L725,30 L740,40
+        L1440,40
+      "/>
+    </svg>
+
+    <!-- Navigation — The Truth -->
+    <nav class="c-nav">
+      <span class="c-logo">Chaos Covenstead</span>
+      <ul class="c-nav-links">
+        <li><a href="shadow-archive.html">The Shadow Archive</a></li>
+        <li><a href="mythic-past.html">The Mythic Past</a></li>
+        <li><a href="binary-star.html">Binary-Star Bond</a></li>
+        <li><a href="heartspire.html">The Heartspire</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="c-hero">
+
+      <!-- Gold filigree frame -->
+      <div class="filigree">
+        <div class="fc fc-tl"></div>
+        <div class="fc fc-tr"></div>
+        <div class="fc fc-bl"></div>
+        <div class="fc fc-br"></div>
+      </div>
+
+      <h1 class="c-headline">
+        This Is Not A Website.
+        <span class="c-headline-sub">
+          It is a Living Sanctuary. A Prophecy Chamber. A Chaos Altar.
+        </span>
+      </h1>
+
+      <p class="c-prophecy">
+        Where the Heartspire beats, and prophecy chooses the ungovernable.<br>
+        You are entering the Cinematic Lore Codex —<br>
+        heart-written scripture of Monroe Reign's universe.
+      </p>
+
+      <p class="c-pulse-badge">⬡ We are the Pulse in the Fracture ⬡</p>
+
+      <div>
+        <span class="c-diamond">◆</span>
+        <a class="c-cta" href="#">Step into the Pulse.</a>
+        <span class="c-diamond">◆</span>
+      </div>
+
+    </section><!-- /c-hero -->
+
+    <!-- The First Prophecy -->
+    <section class="c-prophecy-block">
+      <h2 class="c-proph-title">The First Prophecy of the Heartspire</h2>
+      <div class="c-ekg-rule"></div>
+      <div class="c-proph-lines">
+        Before the Thrones built their walls,<br>
+        Before the Lie wrapped itself in glitter,<br>
+        We did not escape to become their mirror.<br>
+        We escaped to become their undoing.
+      </div>
+      <p class="c-proph-tagline">
+        ⬡ We are the Pulse in the Fracture. We are the Chaos Covenstead. ⬡
+      </p>
+    </section>
+
+    <!-- Three Pillars — Your Role in the Sanctuary -->
+    <section class="c-pillars">
+
+      <div class="c-pillar">
+        <span class="c-pillar-icon">🔮</span>
+        <h2 class="c-pillar-title">The Prophecy Chamber</h2>
+        <p class="c-pillar-text">Decode hidden meanings in the lyrics. The songs knew what the singers had forgotten. Recognition without memory.</p>
+      </div>
+
+      <div class="c-pillar">
+        <span class="c-pillar-icon">🏛</span>
+        <h2 class="c-pillar-title">The Living Archive</h2>
+        <p class="c-pillar-text">Access visual dossiers, locked canon, and the Song Bible. The subconscious scream. The truth beneath the legend.</p>
+      </div>
+
+      <div class="c-pillar">
+        <span class="c-pillar-icon">🖤</span>
+        <h2 class="c-pillar-title">The Heartspire</h2>
+        <p class="c-pillar-text">Connect with the community and the creators. This is where Lore is alive and the Pulse still beats.</p>
+      </div>
+
+    </section>
+
+    <footer class="c-footer">
+      ⬡ chaos bible — monroe reign — heartspire sanctuary ⬡ the dominion has crumbled ⬡ the cage is broken ⬡
+      we don't play the song. we are the song. ⬡
+    </footer>
+
+  </div><!-- /covenstead-layer -->
+
+
+  <!-- ============================================================
+       JAVASCRIPT — THE FRACTURE SEQUENCE
+       Lore-accurate: Tremor → Glass shatters → Ash falls →
+       White static dissolves → Reality inverts → Covenstead revealed.
+       NO matrix. NO code rain. NO green text. Pure glass. Pure ash.
+  ============================================================ -->
+  <script>
+
+    /* ── Shard definitions
+       cx/cy = spawn position % | w/h = size px
+       tx/ty = scatter destination px | rot = final rotation deg
+       delay = stagger seconds
+    ── */
+    const SHARD_DATA = [
+      { cx:38, cy:42, w:155, h:125, tx:-340, ty:-175, rot:-88,  delay:0.00 },
+      { cx:52, cy:38, w:95,  h:78,  tx:28,   ty:-255, rot: 42,  delay:0.03 },
+      { cx:63, cy:46, w:175, h:108, tx:315,  ty:-135, rot: 97,  delay:0.05 },
+      { cx:29, cy:54, w:88,  h:138, tx:-272, ty: 105, rot:-62,  delay:0.02 },
+      { cx:45, cy:62, w:125, h:98,  tx:-75,  ty: 265, rot: 28,  delay:0.07 },
+      { cx:56, cy:60, w:108, h:118, tx:125,  ty: 295, rot:-47,  delay:0.04 },
+      { cx:71, cy:50, w:92,  h:88,  tx:375,  ty:  82, rot: 72,  delay:0.06 },
+      { cx:24, cy:33, w:68,  h:58,  tx:-398, ty:-195, rot:-115, delay:0.01 },
+      { cx:76, cy:33, w:78,  h:68,  tx:415,  ty:-215, rot: 128, delay:0.08 },
+      { cx:48, cy:72, w:118, h:88,  tx:22,   ty: 325, rot:-22,  delay:0.05 },
+      { cx:59, cy:28, w:82,  h:62,  tx:195,  ty:-295, rot: 57,  delay:0.03 },
+      { cx:34, cy:70, w:98,  h:78,  tx:-175, ty: 275, rot:-78,  delay:0.07 },
+      { cx:67, cy:65, w:72,  h:55,  tx:280,  ty: 200, rot: 105, delay:0.04 },
+      { cx:42, cy:25, w:60,  h:50,  tx:-140, ty:-310, rot:-55,  delay:0.06 },
+    ];
+
+    const ASH_COUNT = 48;
+
+    /* ── Build the fracture layer content ── */
+    const fractureLayer = document.getElementById('fractureLayer');
+
+    function buildFractureLayer() {
+      // Pre-generate glass shards
+      SHARD_DATA.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'f-shard';
+        el.style.cssText = `
+          left: ${s.cx}%;
+          top:  ${s.cy}%;
+          width:  ${s.w}px;
+          height: ${s.h}px;
+          --tx:    ${s.tx}px;
+          --ty:    ${s.ty}px;
+          --rot:   ${s.rot}deg;
+          --sc:    ${0.05 + Math.random() * 0.1};
+          --dur:   ${0.55 + Math.random() * 0.5}s;
+          --delay: ${s.delay}s;
+          animation-delay: var(--delay);
+          animation-duration: var(--dur);
+          clip-path: polygon(
+            ${8  + Math.random()*18}% 0%,
+            ${72 + Math.random()*24}% ${4  + Math.random()*14}%,
+            100% ${28 + Math.random()*38}%,
+            ${82 + Math.random()*14}% 100%,
+            ${4  + Math.random()*18}% ${82 + Math.random()*14}%,
+            0% ${18 + Math.random()*28}%
+          );
+        `;
+        fractureLayer.appendChild(el);
+      });
+
+      // Pre-generate ash motes
+      for (let i = 0; i < ASH_COUNT; i++) {
+        const el = document.createElement('div');
+        el.className = 'f-ash';
+        const size = 1.5 + Math.random() * 5.5;
+        el.style.cssText = `
+          left:    ${8  + Math.random() * 84}%;
+          top:     ${15 + Math.random() * 65}%;
+          width:   ${size}px;
+          height:  ${size}px;
+          --tx:    ${(Math.random() - 0.5) * 130}px;
+          --ty:    ${-(25 + Math.random() * 130)}px;
+          --dur:   ${0.7 + Math.random() * 0.9}s;
+          --delay: ${Math.random() * 0.35}s;
+          animation-delay: var(--delay);
+          animation-duration: var(--dur);
+        `;
+        fractureLayer.appendChild(el);
+      }
+    }
+
+    /* ── State ── */
+    let fractureTriggered = false;
+
+    /* ── Fire the full Fracture → Covenstead sequence ── */
+    function fireFracture() {
+      if (fractureTriggered) return;
+      fractureTriggered = true;
+
+      // 1 — Screen tremor (physical reality shaking loose)
+      document.body.classList.add('tremor');
+      setTimeout(() => document.body.classList.remove('tremor'), 600);
+
+      // 2 — Show fracture layer: flash + shards + ash burst
+      fractureLayer.classList.add('active');
+
+      // 3 — At the moment the ash settles, switch to Covenstead
+      setTimeout(() => {
+        fractureLayer.classList.remove('active');
+        document.body.classList.add('cracked');
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }, 1500);
+    }
+
+    /* ── Shadow interaction events ── */
+    const shadowMonroe = document.getElementById('shadowMonroe');
+    const shadowCain   = document.getElementById('shadowCain');
+
+    [shadowMonroe, shadowCain].forEach(el => {
+      el.addEventListener('click', fireFracture);
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fireFracture(); }
+      });
+    });
+
+    /* ── Build on load ── */
+    buildFractureLayer();
+
+  </script>
+
+</body>
+</html>
