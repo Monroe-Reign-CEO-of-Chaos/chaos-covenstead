@@ -1,0 +1,47 @@
+<!-- @dsCard group="Components" viewport="700x420" name="Feedback — Dialog, Toast, Tooltip" subtitle="Filigree-framed modal, glass toasts with nebula seams, mono tooltip" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  body { margin: 0; background: var(--night); color: var(--text-bright); padding: 26px 30px; min-height: 380px; }
+  .lbl { font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); margin: 0 0 12px; }
+  .toasts { display: flex; flex-direction: column; gap: 12px; margin-bottom: 26px; }
+  .row { display: flex; gap: 16px; align-items: center; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+  const { Dialog, Toast, Tooltip, Button, Badge } = window.ChaosCovensteadDesignSystem_4ee2b6;
+  function Demo() {
+    const [open, setOpen] = React.useState(false);
+    return (
+      <div>
+        <p className="lbl">Toasts</p>
+        <div className="toasts">
+          <Toast tone="nebula" onDismiss={() => {}}>The Index was recorded.</Toast>
+          <Toast tone="gold">Echo Vessel sealed — Chamber III.</Toast>
+          <Toast tone="danger">The seam rejected the pattern.</Toast>
+        </div>
+        <p className="lbl">Dialog &amp; Tooltip</p>
+        <div className="row">
+          <Button variant="primary" onClick={() => setOpen(true)}>Open the Seal</Button>
+          <Tooltip label="Sealed in Echo Chamber I" placement="top"><Badge tone="nebula">Entombed</Badge></Tooltip>
+        </div>
+        <Dialog open={open} onClose={() => setOpen(false)} eyebrow="The Hollow Threshold" title="Open the Seam?"
+          footer={<><Button variant="ghost" size="sm" onClick={() => setOpen(false)}>Not Yet</Button><Button variant="solid" size="sm" onClick={() => setOpen(false)}>Open It</Button></>}>
+          Once the seam is opened, the Index cannot be un-sung. A chorus makes it safe.
+        </Dialog>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

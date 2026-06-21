@@ -1,0 +1,131 @@
+/* ============================================================
+   CHAOS COVENSTEAD — COLOR TOKENS
+   Two worlds, one universe.
+
+   THE LIE (Dominion)  — cold platinum, sterile white, the cage of fame.
+   THE TRUTH (Covenstead / Heartspire) — liquid obsidian night lit by
+   nebula gold, nebula-glass blue, violet seams, rose, and pulse amber.
+
+   Base values first, then semantic aliases. Default theme = Covenstead.
+============================================================ */
+
+:root {
+  /* ---------------------------------------------------------
+     BASE — Covenstead / Heartspire (the night the brand lives in)
+  --------------------------------------------------------- */
+  --night:            #05050A;   /* deepest void — page floor */
+  --obsidian:         #0A0A14;   /* raised obsidian surface */
+  --obsidian-mid:     #0F0F1E;   /* card / panel fill */
+  --marble:           #0C0C10;   /* warm-leaning black (Heartspire stone) */
+
+  /* Nebula Gold — the sovereign metal, filigree, headings */
+  --gold:             #D4A94B;
+  --gold-bright:      #E8B84B;
+  --gold-deep:        #C49A3A;
+
+  /* Nebula-Glass — living crystal, cold blue-white shimmer */
+  --nebula:           #A8DCEE;
+  --nebula-bright:    #C8EEFF;
+
+  /* Pulse — the heartbeat, fire amber */
+  --pulse-amber:      #F59E0B;
+  --pulse-fire:       #E8630A;
+
+  /* Nebula accents — violet seams & rose collision */
+  --violet:           #8B5CF6;
+  --rose:             #F472B6;
+  --nebula-pink:      #E86CA0;
+
+  /* Wildfire — Monroe's ignition (the Spark) */
+  --fire-red:         #D73700;
+  --fire-orange:      #FF7800;
+  --fire-gold:        #FFBE28;
+
+  /* ---------------------------------------------------------
+     BASE — Dominion (the Lie: cold, platinum, sterile)
+  --------------------------------------------------------- */
+  --dom-white:        #F7F7FA;
+  --dom-plat:         #E2E2EC;
+  --dom-silver:       #ADADC2;
+  --dom-graphite:     #2E2E3A;
+  --dom-black:        #0C0C12;
+
+  /* ---------------------------------------------------------
+     TEXT
+  --------------------------------------------------------- */
+  --text-bright:      #F5F0FF;   /* primary text on night */
+  --text-warm:        #F5F0EE;   /* primary text on Heartspire stone */
+  --text-muted:       #9A8E7A;   /* secondary, muted gold-grey */
+  --text-cool-muted:  #8B82A8;   /* secondary, muted violet-grey */
+  --text-dim:         #4A4362;   /* tertiary / dim */
+
+  /* ---------------------------------------------------------
+     GLASS — translucent fills & borders (nebula-glass)
+  --------------------------------------------------------- */
+  --glass-fill:       rgba(168,220,238,0.05);
+  --glass-fill-gold:  rgba(212,169,75,0.05);
+  --glass-dark:       rgba(5,5,10,0.78);
+  --glass-border:     rgba(212,169,75,0.22);
+  --glass-border-nebula: rgba(168,220,238,0.22);
+
+  /* ---------------------------------------------------------
+     GLOW — drop-shadow / box-shadow tints (used as rgba)
+  --------------------------------------------------------- */
+  --glow-gold:        rgba(212,169,75,0.38);
+  --glow-nebula:      rgba(168,220,238,0.28);
+  --glow-violet:      rgba(139,92,246,0.30);
+  --glow-pulse:       rgba(245,158,11,0.32);
+
+  /* ---------------------------------------------------------
+     SEMANTIC ALIASES — reach for these in components
+  --------------------------------------------------------- */
+  --bg-page:          var(--night);
+  --bg-raised:        var(--obsidian);
+  --surface-card:     var(--obsidian-mid);
+  --surface-glass:    var(--glass-dark);
+
+  --text-primary:     var(--text-bright);
+  --text-secondary:   var(--text-muted);
+  --text-tertiary:    var(--text-dim);
+  --text-accent:      var(--gold-bright);
+  --text-on-gold:     var(--night);
+
+  --border-default:   var(--glass-border);
+  --border-nebula:    var(--glass-border-nebula);
+  --border-strong:    rgba(212,169,75,0.45);
+
+  --accent-primary:   var(--gold);
+  --accent-secondary: var(--nebula);
+  --accent-tertiary:  var(--violet);
+  --accent-danger:    var(--pulse-fire);
+
+  /* Signature gradients */
+  --grad-sovereign:   linear-gradient(135deg, var(--gold), var(--nebula-pink), var(--violet));
+  --grad-gold-rose:   linear-gradient(135deg, var(--gold), var(--rose));
+  --grad-heartspire:  linear-gradient(135deg, var(--gold-bright) 0%, var(--nebula-bright) 30%, var(--gold) 55%, var(--pulse-amber) 75%, var(--gold-bright) 100%);
+  --grad-wildfire:    linear-gradient(to top, var(--fire-red) 0%, var(--fire-orange) 45%, var(--fire-gold) 100%);
+  --grad-pulse-rule:  linear-gradient(90deg, transparent, var(--gold) 25%, var(--violet) 50%, var(--rose) 75%, transparent);
+}
+
+/* ============================================================
+   DOMINION THEME SCOPE
+   Apply class="theme-dominion" to a container to flip into the
+   cold, sterile "Lie" palette (white-on-platinum, Montserrat world).
+============================================================ */
+.theme-dominion {
+  --bg-page:          var(--dom-white);
+  --bg-raised:        var(--dom-plat);
+  --surface-card:     #FFFFFF;
+  --surface-glass:    rgba(247,247,250,0.95);
+
+  --text-primary:     var(--dom-black);
+  --text-secondary:   var(--dom-silver);
+  --text-tertiary:    var(--dom-silver);
+  --text-accent:      var(--dom-black);
+  --text-on-gold:     var(--dom-white);
+
+  --border-default:   var(--dom-plat);
+  --border-strong:    var(--dom-black);
+
+  --accent-primary:   var(--dom-black);
+}

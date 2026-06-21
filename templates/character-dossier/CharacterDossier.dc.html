@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Character Dossier" description="Interactive tabbed dossier — Monroe, Cain & Nyx Ravenna — each a premium Glass Card profile with canon bio, stats & portrait" -->
+<helmet>
+<script src="./ds-base.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #05050A; }
+  @keyframes ccd-breathe { 0%{filter:hue-rotate(0) brightness(1)} 50%{filter:hue-rotate(12deg) brightness(1.05)} 100%{filter:hue-rotate(-8deg) brightness(.96)} }
+  @keyframes ccd-lockglow { 0%,100%{box-shadow:0 0 9px rgba(168,220,238,0.22)} 50%{box-shadow:0 0 18px rgba(168,220,238,0.5)} }
+  @keyframes ccd-rise { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
+</style>
+</helmet>
+
+<div style="position:relative; min-height:100vh; color:var(--text-bright); font-family:'Cormorant Garamond',serif; overflow-x:hidden;">
+  <div style="position:fixed; inset:0; z-index:0; pointer-events:none; animation:ccd-breathe 22s ease-in-out infinite alternate; background:radial-gradient(ellipse 65% 50% at 15% 22%, rgba(139,92,246,0.10), transparent 65%), radial-gradient(ellipse 55% 42% at 85% 78%, rgba(212,169,75,0.08), transparent 62%), linear-gradient(180deg,#07070F,#05050A);"></div>
+
+  <div style="position:relative; z-index:1; max-width:1040px; margin:0 auto; padding:3.4rem 2rem 4.5rem;">
+
+    <!-- HEADER -->
+    <span style="font-family:'Share Tech Mono',monospace; font-size:0.62rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--nebula); display:block; margin-bottom:0.9rem;">The Living Archive — Dossiers</span>
+    <h1 style="font-family:'Cinzel Decorative',serif; font-weight:900; font-size:clamp(1.9rem,4.2vw,2.9rem); letter-spacing:0.05em; text-transform:uppercase; line-height:1.05; margin:0 0 0.6rem; background:linear-gradient(135deg,var(--gold-bright),var(--rose)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">The True Cast</h1>
+    <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.12rem; color:var(--text-cool-muted); margin:0 0 2.2rem; max-width:560px;">Three sovereign voices of the First Empire. Choose a name to open their dossier.</p>
+
+    <!-- TAB RAIL (design-system Tabs, controlled) -->
+    <div style="margin-bottom:2.4rem;">
+      <x-import component-from-global-scope="ChaosCovensteadDesignSystem_4ee2b6.Tabs" tabs="{{ tabs }}" value="{{ active }}" on-change="{{ setActive }}" hint-size="100%,48px"></x-import>
+    </div>
+
+    <!-- PROFILE (design-system GlassCard, accent per character) -->
+    <x-import component-from-global-scope="ChaosCovensteadDesignSystem_4ee2b6.GlassCard" accent="{{ activeChar.accent }}" hint-size="100%,460px">
+      <div style="display:grid; grid-template-columns:300px 1fr; gap:2.6rem; align-items:start;">
+
+        <!-- PORTRAIT -->
+        <div>
+          <div style="position:relative; aspect-ratio:3/4; border:1px solid var(--glass-border); overflow:hidden; background:rgba(10,8,20,0.6);">
+            <sc-if value="{{ activeChar.image }}" hint-placeholder-val="{{ true }}">
+              <img src="{{ activeChar.image }}" alt="" style="width:100%; height:100%; object-fit:cover; display:block;" />
+              <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 45%, rgba(5,5,10,0.78) 100%);"></div>
+            </sc-if>
+            <sc-if value="{{ activeChar.noImage }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem; text-align:center; padding:1.4rem;">
+                <span style="font-size:1.4rem; color:rgba(168,220,238,0.5);">◈</span>
+                <span style="font-family:'Share Tech Mono',monospace; font-size:0.54rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--text-muted); line-height:1.8;">Awaiting Portrait<br>Drop Nyx's Image</span>
+              </div>
+            </sc-if>
+            <!-- filigree corners -->
+            <span style="position:absolute; top:6px; left:6px; width:24px; height:24px; border-top:1px solid rgba(212,169,75,0.5); border-left:1px solid rgba(212,169,75,0.5);"></span>
+            <span style="position:absolute; top:6px; right:6px; width:24px; height:24px; border-top:1px solid rgba(212,169,75,0.5); border-right:1px solid rgba(212,169,75,0.5);"></span>
+            <span style="position:absolute; bottom:6px; left:6px; width:24px; height:24px; border-bottom:1px solid rgba(212,169,75,0.5); border-left:1px solid rgba(212,169,75,0.5);"></span>
+            <span style="position:absolute; bottom:6px; right:6px; width:24px; height:24px; border-bottom:1px solid rgba(212,169,75,0.5); border-right:1px solid rgba(212,169,75,0.5);"></span>
+          </div>
+          <div style="font-family:'Share Tech Mono',monospace; font-size:0.58rem; letter-spacing:0.34em; text-transform:uppercase; color:var(--nebula); text-align:center; margin-top:1rem;">{{ activeChar.epithet }}</div>
+        </div>
+
+        <!-- DETAILS -->
+        <div>
+          <sc-if value="{{ activeChar.draft }}" hint-placeholder-val="{{ false }}">
+            <span style="display:inline-block; font-family:'Share Tech Mono',monospace; font-size:0.5rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--pulse-amber); border:1px solid rgba(245,158,11,0.4); border-radius:2px; padding:0.3em 0.8em; margin-bottom:1rem;">Draft — Confirm Canon</span>
+          </sc-if>
+          <h2 style="font-family:'Cinzel Decorative',serif; font-weight:900; font-size:clamp(1.6rem,3.4vw,2.4rem); letter-spacing:0.04em; text-transform:uppercase; line-height:1.05; margin:0; background:linear-gradient(135deg,var(--gold-bright),var(--rose)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">{{ activeChar.name }}</h2>
+          <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; color:var(--text-cool-muted); margin:0.5rem 0 1.1rem;">{{ activeChar.role }}</p>
+
+          <div style="height:2px; width:100%; background:linear-gradient(90deg, var(--gold) 8%, var(--violet) 50%, var(--rose) 80%, transparent); opacity:0.45; margin-bottom:1.4rem;"></div>
+
+          <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300; font-size:1.35rem; line-height:1.6; color:var(--gold-bright); margin:0 0 1.1rem;">{{ activeChar.bioLead }}</p>
+          <p style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:1.08rem; line-height:1.85; color:rgba(245,240,238,0.84); margin:0 0 1.6rem;">{{ activeChar.bio }}</p>
+
+          <!-- Echo vessel chip -->
+          <div style="display:inline-flex; align-items:center; gap:0.55em; font-family:'Share Tech Mono',monospace; font-size:0.58rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--gold); border:1px solid rgba(212,169,75,0.3); background:rgba(5,5,10,0.4); border-radius:2px; padding:0.45em 0.9em; margin-bottom:1.8rem;"><span style="color:var(--gold-bright);">◆</span>{{ activeChar.echo }}</div>
+
+          <!-- Stats -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(212,169,75,0.12); border:1px solid rgba(212,169,75,0.12);">
+            <sc-for list="{{ activeChar.stats }}" as="stat" hint-placeholder-count="5">
+              <div style="background:rgba(10,8,20,0.7); padding:0.9rem 1rem;">
+                <span style="display:block; font-family:'Share Tech Mono',monospace; font-size:0.5rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.35rem;">{{ stat.label }}</span>
+                <span style="display:block; font-family:'Cormorant Garamond',serif; font-size:1.02rem; color:var(--text-bright);">{{ stat.value }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </x-import>
+
+    <!-- THE SHADOW ARCHIVE -->
+    <div style="margin-top:4.8rem;">
+      <span style="font-family:'Share Tech Mono',monospace; font-size:0.62rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--nebula); display:block; margin-bottom:0.9rem;">Beneath the Spire — Classified</span>
+      <h2 style="font-family:'Cinzel Decorative',serif; font-weight:900; font-size:clamp(1.6rem,3.6vw,2.5rem); letter-spacing:0.05em; text-transform:uppercase; line-height:1.05; margin:0 0 0.6rem; background:linear-gradient(135deg,var(--gold-bright),var(--rose)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">The Shadow Archive</h2>
+      <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.12rem; color:var(--text-cool-muted); margin:0 0 1.8rem; max-width:600px;">Sealed lore, redacted by the Covenstead. Clearance is earned — never requested.</p>
+
+      <div style="border-top:1px solid rgba(212,169,75,0.12);">
+        <sc-for list="{{ rows }}" as="row" hint-placeholder-count="5">
+          <div style="border-bottom:1px solid rgba(212,169,75,0.12); position:relative;">
+            <button onClick="{{ row.toggle }}" style="width:100%; display:flex; align-items:center; justify-content:space-between; gap:1rem; border:none; background:transparent; cursor:pointer; text-align:left; padding:1.3rem 0.5rem;">
+              <span style="display:flex; align-items:baseline; gap:1.1rem; min-width:0;">
+                <span style="font-family:'Share Tech Mono',monospace; font-size:0.56rem; letter-spacing:0.2em; color:var(--text-dim); flex-shrink:0;">{{ row.code }}</span>
+                <span style="font-family:'Cinzel Decorative',serif; font-weight:700; font-size:0.92rem; letter-spacing:0.04em; color:var(--text-bright);">{{ row.title }}</span>
+              </span>
+              <span style="display:flex; align-items:center; gap:1rem; flex-shrink:0;">
+                <span style="font-family:'Share Tech Mono',monospace; font-size:0.5rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--nebula-bright); border:1px solid rgba(168,220,238,0.4); background:rgba(168,220,238,0.06); border-radius:2px; padding:0.34em 0.72em; animation:ccd-lockglow 3.2s ease-in-out infinite;">◈ Locked</span>
+                <sc-if value="{{ row.open }}" hint-placeholder-val="{{ false }}"><span style="color:var(--pulse-amber); font-size:0.62rem;">✕</span></sc-if>
+                <sc-if value="{{ row.closed }}" hint-placeholder-val="{{ true }}"><span style="color:var(--gold); font-size:0.6rem;">◆</span></sc-if>
+              </span>
+            </button>
+            <sc-if value="{{ row.open }}" hint-placeholder-val="{{ false }}">
+              <div style="position:relative; margin:0 0.5rem 1.5rem; padding:2.4rem 2rem; background:linear-gradient(135deg, rgba(168,220,238,0.045), rgba(5,5,10,0.88)); border:1px solid var(--glass-border); overflow:hidden; text-align:center; animation:ccd-rise 0.4s ease both;">
+                <span style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, var(--nebula), var(--gold), transparent); opacity:0.6;"></span>
+                <div style="width:54px; height:54px; margin:0 auto 1.1rem; border-radius:999px; border:1px solid rgba(168,220,238,0.4); display:flex; align-items:center; justify-content:center; color:var(--nebula-bright); font-size:1.5rem; box-shadow:0 0 26px rgba(168,220,238,0.3);">⊘</div>
+                <h4 style="font-family:'Cinzel Decorative',serif; font-weight:700; font-size:1rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--nebula-bright); margin:0 0 0.6rem;">Access Denied</h4>
+                <span style="font-family:'Share Tech Mono',monospace; font-size:0.54rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--text-muted); display:block;">Restricted Clearance · Tier {{ row.tier }}</span>
+                <div style="display:flex; gap:6px; justify-content:center; margin:1.4rem 0;">
+                  <span style="height:9px; width:64px; background:rgba(168,220,238,0.16); border-radius:1px;"></span>
+                  <span style="height:9px; width:38px; background:rgba(168,220,238,0.12); border-radius:1px;"></span>
+                  <span style="height:9px; width:88px; background:rgba(168,220,238,0.16); border-radius:1px;"></span>
+                  <span style="height:9px; width:26px; background:rgba(168,220,238,0.1); border-radius:1px;"></span>
+                  <span style="height:9px; width:52px; background:rgba(168,220,238,0.14); border-radius:1px;"></span>
+                </div>
+                <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300; font-size:1.08rem; line-height:1.7; color:var(--text-cool-muted); max-width:440px; margin:0 auto 1.6rem;">The Index does not open for the curious — only for the sworn. Escalate your clearance through the Heartspire to unseal this record.</p>
+                <span style="display:inline-flex; align-items:center; gap:0.5em; font-family:'Share Tech Mono',monospace; font-size:0.56rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--nebula); border:1px solid rgba(168,220,238,0.35); padding:0.7em 1.6em; clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%); cursor:pointer;">Request Clearance ◆</span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="font-family:'Share Tech Mono',monospace; font-size:0.5rem; letter-spacing:0.4em; text-transform:uppercase; color:rgba(139,92,246,0.4); text-align:center; margin-top:3.2rem;">⬡ The Living Archive — One Vessel, One Voice ⬡</div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240,&quot;height&quot;:900},&quot;start&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;monroe&quot;,&quot;options&quot;:[&quot;monroe&quot;,&quot;cain&quot;,&quot;nyx&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { active: null, openId: null };
+
+  setActive = (id) => this.setState({ active: id });
+
+  renderVals() {
+    const characters = {
+      monroe: {
+        name: 'Monroe Reign',
+        epithet: 'The Spark',
+        role: 'Co-Sovereign of the First Empire',
+        accent: 'gold',
+        echo: 'Echo I — The Resonance Prism',
+        image: '../../assets/imagery/monroe-fire-empire.jpeg',
+        bioLead: 'She was never the match. She was the reason fire remembers how to want.',
+        bio: 'Born the Girl Made of Fire, Monroe is the creative sovereign of the First Empire — the living Spark whose ignition struck the first verse of the Pulse. The Dominion crowned her a product and called it love; she walked out of the cage and turned the key into a blade. Where she burns, the Lie cannot hold its shape.',
+        stats: [
+          { label: 'Origin', value: 'Book I — Girl Made of Fire' },
+          { label: 'Domain', value: 'The Spark · Creation' },
+          { label: 'Element', value: 'Wildfire · Ignition' },
+          { label: 'Allegiance', value: 'The Chaos Covenstead' },
+          { label: 'Status', value: 'Sovereign — Ascendant' },
+        ],
+      },
+      cain: {
+        name: 'Cain Saint',
+        epithet: 'The Anchor',
+        role: 'Co-Sovereign of the First Empire',
+        accent: 'violet',
+        echo: 'Echo II — The Harmonic Cipher',
+        image: '../../assets/imagery/cain-green-eyes.jpg',
+        bioLead: 'He does not raise his voice. The world simply leans toward where he stands.',
+        bio: 'Cain is the Anchor — the reality-holding sovereign whose gravity kept the First Empire from tearing free of its own myth. The Gravity Era is his descent and his proof: that some weights are not burdens but vows. Calm where Monroe is wildfire, he is the still point the Pulse beats around.',
+        stats: [
+          { label: 'Origin', value: 'Book III — The Gravity Era' },
+          { label: 'Domain', value: 'The Anchor · Reality' },
+          { label: 'Element', value: 'Gravity · Weight' },
+          { label: 'Allegiance', value: 'The Chaos Covenstead' },
+          { label: 'Status', value: 'Sovereign — Constant' },
+        ],
+      },
+      nyx: {
+        name: 'Nyx Ravenna',
+        epithet: 'The Keeper of the Index',
+        role: 'The Third Voice — Keeper of the Index',
+        accent: 'nebula',
+        echo: 'Echo V — The Mnemonic Crown',
+        image: null,
+        draft: true,
+        bioLead: 'Every age the Dominion erased, she kept — not as record, but as refusal.',
+        bio: 'Nyx walks the Hollow Threshold as Keeper of the Index — the one who remembers what the Thrones spent ages trying to unmake. Where Monroe ignites and Cain holds, Nyx records: binding breath and vow into the pattern that opens the seam cleanly. (Draft dossier — confirm Nyx\u2019s true canon and we will inscribe it.)',
+        stats: [
+          { label: 'Origin', value: 'The Hollow Threshold — Draft' },
+          { label: 'Domain', value: 'The Memory · The Index' },
+          { label: 'Element', value: 'Aether · Remembrance' },
+          { label: 'Allegiance', value: 'The Chaos Covenstead' },
+          { label: 'Status', value: 'Draft — Confirm Canon' },
+        ],
+      },
+    };
+
+    const active = this.state.active ?? this.props.start ?? 'monroe';
+    const c = characters[active] || characters.monroe;
+
+    const archive = [
+      { id: 'fracture', code: 'CC-0\u2588-001', title: 'The Fracture Protocol', tier: 'Obsidian' },
+      { id: 'threshold', code: 'CC-1\u2588-004', title: 'The Hollow Threshold', tier: 'Violet' },
+      { id: 'bond', code: 'CC-2\u2588-009', title: 'The Binary-Star Bond', tier: 'Sovereign' },
+      { id: 'hound', code: 'CC-4\u2588-012', title: 'The Sovereign Hound', tier: 'Guardian' },
+      { id: 'stillness', code: 'CC-5\u2588-021', title: 'The Stillness War', tier: 'Sealed' },
+    ];
+    const rows = archive.map((r) => ({
+      id: r.id, code: r.code, title: r.title, tier: r.tier,
+      open: this.state.openId === r.id,
+      closed: this.state.openId !== r.id,
+      toggle: () => this.setState((s) => ({ openId: s.openId === r.id ? null : r.id })),
+    }));
+
+    return {
+      rows,
+      tabs: [
+        { id: 'monroe', label: 'Monroe' },
+        { id: 'cain', label: 'Cain' },
+        { id: 'nyx', label: 'Nyx Ravenna' },
+      ],
+      active,
+      setActive: this.setActive,
+      activeChar: Object.assign({ noImage: !c.image, draft: false }, c),
+    };
+  }
+}
+</script>
+</body>
+</html>

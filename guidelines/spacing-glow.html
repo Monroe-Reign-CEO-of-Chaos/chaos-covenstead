@@ -1,0 +1,23 @@
+<!-- @dsCard group="Spacing" viewport="700x180" name="Glow & Depth" subtitle="Depth comes from glow, not dark shadow — gold, nebula, violet" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; background: var(--night); color: var(--text-bright); padding: 28px; font-family: var(--font-mono); }
+  .row { display: flex; gap: 26px; align-items: center; justify-content: flex-start; }
+  .box { width: 110px; height: 64px; border-radius: 2px; background: var(--obsidian-mid); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); }
+  .g1 { box-shadow: 0 0 18px rgba(212,169,75,0.30); border-color: var(--border-strong); }
+  .g2 { box-shadow: 0 16px 40px rgba(168,220,238,0.10); border-color: rgba(168,220,238,0.38); }
+  .g3 { box-shadow: 0 0 35px rgba(139,92,246,0.22), 0 0 70px rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.42); }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="box g1">glow gold</div>
+  <div class="box g2">glow nebula</div>
+  <div class="box g3">glow violet</div>
+</div>
+</body>
+</html>

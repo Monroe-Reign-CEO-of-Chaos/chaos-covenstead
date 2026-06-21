@@ -1,0 +1,16 @@
+/* ============================================================
+   CHAOS COVENSTEAD — WEBFONTS
+   The brand's four faces, pulled from Google Fonts.
+
+   - Cinzel Decorative  → Display / titles / logos (the carved-in-stone voice)
+   - Cormorant Garamond → Body & prophecy (the heart-written scripture voice)
+   - Share Tech Mono    → Eyebrows, labels, system tags (the Pulse / machine voice)
+   - Montserrat         → The Dominion voice (sterile, corporate, "the Lie")
+
+   NOTE: These are Google-hosted webfonts loaded over @import. If you need a
+   fully self-hosted (offline) build, download the .ttf/.woff2 files and replace
+   this @import with local @font-face rules — the design system is otherwise
+   unchanged.
+============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@100;200;300;400;600;700;900&family=Share+Tech+Mono&display=swap');

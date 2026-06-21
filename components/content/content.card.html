@@ -1,0 +1,37 @@
+<!-- @dsCard group="Components" viewport="700x320" name="Content — SectionHeading & Prophecy" subtitle="Section openers and the canon scripture block" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  body { margin: 0; background: var(--night); color: var(--text-bright); padding: 30px 32px; }
+  .split { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 36px; align-items: center; }
+  .pbody { font-family: var(--font-serif); font-size: 1rem; line-height: 1.8; color: rgba(245,240,238,0.82); margin-top: 1.2rem; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+  const { SectionHeading, Prophecy } = window.ChaosCovensteadDesignSystem_4ee2b6;
+  function Demo() {
+    return (
+      <div className="split">
+        <div>
+          <SectionHeading eyebrow="The Living Crystal" title="Nebula-Glass" accent="nebula" />
+          <p className="pbody">It does not shatter. It fractures into record. Each break becomes an archive.</p>
+        </div>
+        <Prophecy cite="The Heartspire — Site of the First Collision">
+          "They did not fall in love. Love fell out of them — and the universe caught it before it hit the ground."
+        </Prophecy>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

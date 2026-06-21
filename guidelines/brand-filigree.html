@@ -1,0 +1,26 @@
+<!-- @dsCard group="Brand" viewport="700x260" name="Gold Filigree Frame" subtitle="The hero motif — corner brackets + diamond markers on a thin gold border" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; background: var(--night); padding: 24px; }
+  .stage { position: relative; height: 200px; display: flex; align-items: center; justify-content: center; }
+  .filigree { position: absolute; inset: 0; border: 1px solid rgba(212,169,75,0.18); }
+  .filigree::before, .filigree::after { content: '◆'; position: absolute; left: 50%; transform: translateX(-50%); background: var(--night); padding: 0 0.6rem; font-size: 0.7rem; color: rgba(212,169,75,0.6); }
+  .filigree::before { top: -0.55rem; } .filigree::after { bottom: -0.55rem; }
+  .fc { position: absolute; width: 42px; height: 42px; border-color: rgba(212,169,75,0.3); border-style: solid; }
+  .tl{top:-1px;left:-1px;border-width:1px 0 0 1px} .tr{top:-1px;right:-1px;border-width:1px 1px 0 0}
+  .bl{bottom:-1px;left:-1px;border-width:0 0 1px 1px} .br{bottom:-1px;right:-1px;border-width:0 1px 1px 0}
+  .label { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-size: 0.8rem; text-align: center; }
+  .label small { display:block; font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.35em; color: var(--violet); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="filigree"><span class="fc tl"></span><span class="fc tr"></span><span class="fc bl"></span><span class="fc br"></span></div>
+  <div class="label">The Prophecy Chamber<small>⬡ ENTER THE PULSE ⬡</small></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Dominion Palette" subtitle="The Lie — cold platinum, sterile white, graphite" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; background: var(--dom-white); color: var(--dom-black); padding: 24px; font-family: var(--font-dominion); }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .sw { border-radius: 2px; border: 1px solid var(--dom-plat); padding: 10px; height: 70px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .nm { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+  .hx { font-size: 0.48rem; opacity: 0.6; letter-spacing: 0.1em; }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="sw" style="background:var(--dom-white)"><span class="nm">White</span><span class="hx">#F7F7FA</span></div>
+  <div class="sw" style="background:var(--dom-plat)"><span class="nm">Platinum</span><span class="hx">#E2E2EC</span></div>
+  <div class="sw" style="background:var(--dom-silver);color:#fff"><span class="nm">Silver</span><span class="hx">#ADADC2</span></div>
+  <div class="sw" style="background:var(--dom-graphite);color:#fff"><span class="nm">Graphite</span><span class="hx">#2E2E3A</span></div>
+  <div class="sw" style="background:var(--dom-black);color:#fff"><span class="nm">Black</span><span class="hx">#0C0C12</span></div>
+</div>
+</body>
+</html>

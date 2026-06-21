@@ -1,0 +1,13 @@
+/* ============================================================
+   CHAOS COVENSTEAD — DESIGN SYSTEM
+   Global entry point. Consumers link THIS file only.
+   Keep this file a list of @imports — never inline rules here.
+
+   Universe: Monroe Reign's "Chaos Covenstead" cinematic lore codex.
+   Source site: github.com/Monroe-Reign-CEO-of-Chaos/chaos-covenstead
+============================================================ */
+
+@import url('./tokens/fonts.css');
+@import url('./tokens/colors.css');
+@import url('./tokens/typography.css');
+@import url('./tokens/spacing.css');

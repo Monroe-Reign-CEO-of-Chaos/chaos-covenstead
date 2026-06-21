@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Lore Page" description="A Chaos Covenstead lore/codex page — obsidian hero, prophecy, glass-card grid, canon quote" -->
+<helmet>
+<script src="./ds-base.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #05050A; }
+</style>
+</helmet>
+
+<div style="position:relative; min-height:100vh; background:radial-gradient(ellipse 65% 50% at 18% 28%, rgba(139,92,246,0.10), transparent 65%), radial-gradient(ellipse 55% 42% at 82% 72%, rgba(212,169,75,0.08), transparent 62%), linear-gradient(180deg,#07070F,#05050A); color:#F5F0FF; font-family:'Cormorant Garamond',serif; overflow-x:hidden;">
+
+  <x-import component-from-global-scope="ChaosCovensteadDesignSystem_4ee2b6.NavBar" logo="Chaos Covenstead" links="{{ navLinks }}" hint-size="100%,72px"></x-import>
+
+  <!-- HERO -->
+  <section style="position:relative; min-height:78vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:7rem 2rem 5rem;">
+    <div style="position:absolute; inset:3.5rem; border:1px solid rgba(212,169,75,0.14); pointer-events:none;"></div>
+    <span style="font-family:'Share Tech Mono',monospace; font-size:0.62rem; letter-spacing:0.35em; text-transform:uppercase; color:#A8DCEE; margin-bottom:1.6rem;">The First Empire — Mythic Past</span>
+    <h1 style="font-family:'Cinzel Decorative',serif; font-weight:900; font-size:clamp(2.2rem,6vw,4.5rem); letter-spacing:0.05em; line-height:1.05; margin:0; background:linear-gradient(135deg,#E8B84B 0%,#C8EEFF 30%,#D4A94B 55%,#F59E0B 75%,#E8B84B 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 36px rgba(212,169,75,0.4));">{{ heroTitle }}</h1>
+    <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(1rem,2.4vw,1.35rem); line-height:1.9; color:rgba(245,240,255,0.72); max-width:600px; margin:1.6rem auto 2.4rem;">{{ heroBody }}</p>
+    <x-import component-from-global-scope="ChaosCovensteadDesignSystem_4ee2b6.Button" variant="primary" size="lg" hint-size="220px,52px">Step into the Pulse</x-import>
+  </section>
+
+  <!-- BODY SECTION -->
+  <section style="position:relative; max-width:1100px; margin:0 auto; padding:4rem 2rem;">
+    <x-import component-from-global-scope="ChaosCovensteadDesignSystem_4ee2b6.SectionHeading" eyebrow="{{ sectionEyebrow }}" title="{{ sectionTitle }}" accent="nebula" hint-size="100%,120px"></x-import>
+    <p style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:1.12rem; line-height:1.9; color:rgba(245,240,238,0.84); max-width:720px; margin:1.4rem 0 0;">{{ sectionBody }}</p>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; margin-top:2.6rem;">
+      <sc-for list="{{ cards }}" as="card" hint-placeholder-count="3">
+        <x-import component-from-global-scope="ChaosCovensteadDesignSystem_4ee2b6.GlassCard" accent="nebula" hint-size="100%,200px">
+          <span style="font-family:'Share Tech Mono',monospace; font-size:0.58rem; letter-spacing:0.3em; text-transform:uppercase; color:#A8DCEE; display:block; margin-bottom:0.5rem;">{{ card.echo }}</span>
+          <span style="font-family:'Cinzel Decorative',serif; font-size:0.95rem; font-weight:700; color:#E8B84B; letter-spacing:0.06em; display:block; margin-bottom:0.6rem;">{{ card.name }}</span>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.92rem; font-weight:300; line-height:1.7; color:#9A8E7A; margin:0;">{{ card.desc }}</p>
+        </x-import>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- CANON QUOTE -->
+  <section style="position:relative; padding:5rem 2rem 6rem; text-align:center;">
+    <x-import component-from-global-scope="ChaosCovensteadDesignSystem_4ee2b6.Prophecy" cite="{{ quoteCite }}" hint-size="100%,200px">{{ quoteText }}</x-import>
+  </section>
+
+  <footer style="position:relative; text-align:center; padding:2.5rem 2rem; border-top:1px solid rgba(212,169,75,0.08); font-family:'Share Tech Mono',monospace; font-size:0.5rem; letter-spacing:0.4em; color:rgba(139,92,246,0.4); text-transform:uppercase;">{{ footer }}</footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;heroTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The Heartspire&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;heroBody&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Before the Thrones. Before the Dominion…&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      navLinks: [
+        { label: 'The Heartspire', active: true },
+        { label: 'The Shadow Archive' },
+        { label: 'The Mythic Past' },
+        { label: 'Binary-Star Bond' },
+      ],
+      heroTitle: this.props.heroTitle ?? 'The Heartspire',
+      heroBody: this.props.heroBody ?? 'Before the Thrones. Before the Dominion. Before the cage of fame and forgetting was even dreamed of — there was the Heartspire. The axis of the First Empire.',
+      sectionEyebrow: 'Beneath the Spire — The Hollow Threshold',
+      sectionTitle: 'The Five Echo Vessels',
+      sectionBody: 'Five Echo Chambers were sealed at the close of the First Empire — each holding one vessel, whole and untouched. The full sovereign ability of Monroe and Cain, their bond, their Guardian, and their Memory.',
+      cards: [
+        { echo: 'Echo 1 — The Spark', name: 'The Resonance Prism', desc: 'The raw power of the First Spark made solid — not light passed through glass, but light that chose to stay.' },
+        { echo: 'Echo 3 — The Power', name: 'The Axiom Crucible', desc: 'What happens when both forces meet — the Pulse in its full unified state. The Thrones did not even name it.' },
+        { echo: 'Echo 5 — The Memory', name: 'The Mnemonic Crown', desc: 'Every age the Dominion erases, the Crown holds. A crown not of power, but of refusal.' },
+      ],
+      quoteText: '"They did not fall in love. Love fell out of them — and the universe caught it before it hit the ground."',
+      quoteCite: 'The Heartspire — Site of the First Collision',
+      footer: '⬡ chaos bible — monroe reign — heartspire sanctuary ⬡ we are the song ⬡',
+    };
+  }
+}
+</script>
+</body>
+</html>

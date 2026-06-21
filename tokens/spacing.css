@@ -1,0 +1,74 @@
+/* ============================================================
+   CHAOS COVENSTEAD — SPACE, RADIUS, BORDER, SHADOW
+   The brand is sharp, not soft. Corners are near-square (2px).
+   Surfaces are glass: thin gold/nebula borders + a top accent seam.
+   Depth comes from GLOW, not drop-shadow blur.
+============================================================ */
+
+:root {
+  /* ---------------------------------------------------------
+     SPACING — 4px base rhythm
+  --------------------------------------------------------- */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   24px;
+  --space-6:   32px;
+  --space-7:   48px;
+  --space-8:   64px;
+  --space-9:   96px;
+  --space-10:  128px;
+
+  /* Section / page gutters */
+  --gutter:        2rem;     /* @kind spacing */
+  --section-pad:   6rem;     /* @kind spacing */
+  --content-max:   1100px;   /* @kind spacing */
+  --reading-max:   720px;    /* @kind spacing */
+
+  /* ---------------------------------------------------------
+     RADIUS — the Covenstead is carved, not rounded.
+     2px is the house default; pills/circles only for avatars/dots.
+  --------------------------------------------------------- */
+  --radius-none:  0;
+  --radius-sm:    2px;       /* DEFAULT — cards, inputs, badges */
+  --radius-md:    3px;       /* photos, larger panels */
+  --radius-pill:  999px;     /* avatars, status dots, toggles */
+
+  /* Angled-corner clip-path (the signature CTA / pillar shape) */
+  --clip-bevel:   polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%); /* @kind other */
+  --clip-bevel-lg: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%); /* @kind other */
+
+  /* ---------------------------------------------------------
+     BORDERS — thin, luminous, low-opacity metal
+  --------------------------------------------------------- */
+  --bw-hair:   1px;
+  --bw-rule:   2px;          /* accent seams atop cards */
+  --bw-stamp:  1.5px;        /* buttons */
+
+  /* ---------------------------------------------------------
+     SHADOWS & GLOWS — light, not dark. Glow is the brand's depth.
+  --------------------------------------------------------- */
+  --shadow-card:    0 16px 40px rgba(0,0,0,0.45);
+  --shadow-raised:  0 12px 32px rgba(0,0,0,0.55);
+
+  --glow-sm-gold:   0 0 18px rgba(212,169,75,0.30);
+  --glow-md-gold:   0 0 35px rgba(212,169,75,0.22), 0 0 70px rgba(212,169,75,0.08);
+  --glow-sm-nebula: 0 16px 40px rgba(168,220,238,0.10);
+  --glow-md-violet: 0 0 35px rgba(139,92,246,0.22), 0 0 70px rgba(139,92,246,0.08);
+  --glow-text-gold: 0 0 22px rgba(212,169,75,0.5);
+
+  /* ---------------------------------------------------------
+     MOTION — slow, breathing, deliberate. Never bouncy.
+  --------------------------------------------------------- */
+  --ease-out:    cubic-bezier(0.25, 0.46, 0.45, 0.94); /* @kind other */
+  --ease-heavy:  cubic-bezier(0.8, 0, 0.2, 1);    /* @kind other */
+  --dur-fast:    0.22s; /* @kind other */
+  --dur-base:    0.3s;  /* @kind other */
+  --dur-slow:    0.55s; /* @kind other */
+  --dur-breathe: 8s;     /* @kind other */
+
+  /* Backdrop blur for glass surfaces */
+  --blur-glass:  blur(12px); /* @kind other */
+  --blur-nav:    blur(18px); /* @kind other */
+}

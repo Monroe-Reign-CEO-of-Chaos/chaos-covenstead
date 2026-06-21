@@ -1,0 +1,49 @@
+<!-- @dsCard group="Components" viewport="700x400" name="Cards — GlassCard & Pillar" subtitle="Nebula-Glass artifact surfaces and beveled role pillars" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  body { margin: 0; background: var(--night); color: var(--text-bright); padding: 28px 32px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
+  .pillars { display: flex; gap: 18px; }
+  h3 { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; color: var(--gold-bright); letter-spacing: 0.05em; margin: 0 0 0.5rem; }
+  p { font-family: var(--font-serif); font-style: italic; font-size: 0.92rem; line-height: 1.6; color: var(--text-muted); margin: 0.4rem 0 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+  const { GlassCard, Pillar, Badge } = window.ChaosCovensteadDesignSystem_4ee2b6;
+  function Demo() {
+    return (
+      <div>
+        <div className="grid">
+          <GlassCard accent="nebula">
+            <Badge tone="nebula">Echo 1 — The Spark</Badge>
+            <h3 style={{ marginTop: '0.7rem' }}>The Resonance Prism</h3>
+            <p>The raw power of the First Spark made solid — light that chose to stay.</p>
+          </GlassCard>
+          <GlassCard accent="gold">
+            <Badge tone="gold">Echo 5 — The Memory</Badge>
+            <h3 style={{ marginTop: '0.7rem' }}>The Mnemonic Crown</h3>
+            <p>A crown not of power but of refusal — the insistence that what happened, happened.</p>
+          </GlassCard>
+        </div>
+        <div className="pillars">
+          <Pillar icon="◈" title="The Prophecy Chamber">Decode the lyrics. The songs knew what the singers forgot.</Pillar>
+          <Pillar icon="⬡" title="The Living Archive">Visual dossiers, locked canon, the Song Bible.</Pillar>
+          <Pillar icon="◆" title="The Heartspire">Where the Lore is alive and the Pulse still beats.</Pillar>
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>
