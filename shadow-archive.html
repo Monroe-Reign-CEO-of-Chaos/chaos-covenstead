@@ -981,6 +981,116 @@
     }
     .page-wrapper { padding-top: 68px; }
 
+    /* ============================================================
+       MBRU PRODUCTION CARD — Chess Room Incident
+    ============================================================ */
+    .mbru-section {
+      max-width: 680px;
+      margin: 5rem auto 3rem;
+      padding: 0 2rem;
+    }
+
+    .mbru-section-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: rgba(192,24,42,0.6);
+      margin-bottom: 1.8rem;
+      text-align: center;
+    }
+
+    .mbru-card {
+      border: 1px solid rgba(192,24,42,0.28);
+      background:
+        linear-gradient(135deg, rgba(192,24,42,0.07) 0%, rgba(10,8,20,0.85) 60%),
+        rgba(10,8,20,0.9);
+      padding: 2.4rem 2.8rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle chessboard grid on card */
+    .mbru-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(192,24,42,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(192,24,42,0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    /* Crimson corner accent */
+    .mbru-card::after {
+      content: '♟';
+      position: absolute;
+      top: 1.2rem;
+      right: 1.4rem;
+      font-size: 1.4rem;
+      color: rgba(192,24,42,0.2);
+      pointer-events: none;
+    }
+
+    .mbru-card-eyebrow {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.1rem, 3.5vw, 1.7rem);
+      font-weight: 700;
+      color: #F5F0FF;
+      text-shadow: 0 0 25px rgba(192,24,42,0.4), 0 0 50px rgba(212,169,75,0.1);
+      margin-bottom: 1.6rem;
+      position: relative;
+    }
+
+    .mbru-meta {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      line-height: 2;
+      color: #8B82A8;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .mbru-meta .ml { color: rgba(192,24,42,0.8); }
+    .mbru-meta .mv { color: #F5F0FF; }
+
+    .mbru-cta-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.7rem;
+    }
+
+    .mbru-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      color: #F5F0FF;
+      background: rgba(192,24,42,0.15);
+      border: 1px solid rgba(192,24,42,0.5);
+      padding: 0.75rem 1.6rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, color 0.25s;
+      position: relative;
+    }
+    .mbru-btn:hover {
+      background: rgba(192,24,42,0.28);
+      border-color: rgba(192,24,42,0.85);
+      box-shadow: 0 0 18px rgba(192,24,42,0.35);
+      color: #fff;
+    }
+
+    .mbru-btn-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: #4A4362;
+      font-style: italic;
+    }
+
   </style>
 </head>
 <body>
@@ -1322,6 +1432,25 @@
       </article>
 
     </section><!-- /shard-field -->
+
+    <!-- MBRU Production Card -->
+    <div class="mbru-section">
+      <p class="mbru-section-label">// MBRU PRODUCTION ARCHIVE // CLASSIFIED FILING //</p>
+      <div class="mbru-card">
+        <div class="mbru-card-eyebrow">The Chess Room Incident</div>
+        <div class="mbru-meta">
+          <div><span class="ml">CLASSIFICATION </span><span class="mv">Official Production Document</span></div>
+          <div><span class="ml">STATUS </span><span class="mv">Unusable footage retained in full</span></div>
+          <div><span class="ml">ENVIRONMENTAL DAMAGE </span><span class="mv">Cathedral fire, gravity reversal, architectural duplication</span></div>
+          <div><span class="ml">WARDROBE LOSSES </span><span class="mv">Ongoing</span></div>
+          <div><span class="ml">RESPONSIBLE PARTY </span><span class="mv">Under dispute</span></div>
+        </div>
+        <div class="mbru-cta-wrap">
+          <a href="chess-room-incident.html" class="mbru-btn">VIEW THE "UNUSABLE" FOOTAGE</a>
+          <span class="mbru-btn-sub">J.T. has confirmed that every second is going in.</span>
+        </div>
+      </div>
+    </div>
 
   </div><!-- /page-wrapper -->
 
