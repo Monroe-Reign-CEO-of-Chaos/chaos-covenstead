@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MBRU — The Chess Room Incident // Production Log Filed by J.T.</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap');
+
+    :root {
+      --night:         #05050A;
+      --obsidian:      #0A0A14;
+      --obsidian-mid:  #0F0F1E;
+
+      --nebula-violet: #8B5CF6;
+      --nebula-gold:   #D4A94B;
+      --nebula-pink:   #E86CA0;
+
+      /* Chess Room Crimson — the specific accent for this incident */
+      --crimson:       #C0182A;
+      --crimson-dim:   rgba(192, 24, 42, 0.18);
+      --crimson-glow:  rgba(192, 24, 42, 0.55);
+      --crimson-glass: rgba(192, 24, 42, 0.08);
+      --gold:          #D4A94B;
+      --gold-dim:      rgba(212, 169, 75, 0.2);
+
+      --glass-border:  rgba(212, 169, 75, 0.22);
+      --text-bright:   #F5F0FF;
+      --text-muted:    #8B82A8;
+      --text-dim:      #4A4362;
+      --mono-color:    #C0182A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--night);
+      color: var(--text-bright);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    /* ── Background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 15% 25%, rgba(192,24,42,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 85% 70%, rgba(212,169,75,0.06) 0%, transparent 65%),
+        radial-gradient(ellipse 80% 70% at 50% 50%, rgba(139,92,246,0.04) 0%, transparent 80%),
+        linear-gradient(180deg, var(--obsidian) 0%, var(--night) 100%);
+    }
+
+    /* ── Chessboard grid overlay — very subtle ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(192,24,42,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(192,24,42,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* ── Pulse line ── */
+    .pulse-line {
+      position: fixed;
+      left: 0; right: 0;
+      top: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--crimson) 30%, var(--gold) 50%, var(--crimson) 70%, transparent);
+      opacity: 0;
+      z-index: 1;
+      animation: heartbeat 5s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%   { opacity: 0;    transform: scaleX(0.3); }
+      8%   { opacity: 0.4;  transform: scaleX(1); }
+      16%  { opacity: 0.1;  transform: scaleX(0.7); }
+      24%  { opacity: 0.32; transform: scaleX(1); }
+      40%  { opacity: 0;    transform: scaleX(0.4); }
+      100% { opacity: 0;    transform: scaleX(0.3); }
+    }
+
+    /* ── All content above bg ── */
+    .page-wrap {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    /* ── Nav back ── */
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.6rem 0 0;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+    .site-nav a {
+      color: var(--crimson);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      opacity: 0.75;
+      transition: opacity 0.2s;
+    }
+    .site-nav a:hover { opacity: 1; }
+    .site-nav .sep { color: var(--text-dim); }
+
+    /* ── Classification block ── */
+    .classification {
+      margin-top: 3.5rem;
+      border: 1px solid var(--crimson-dim);
+      background: var(--crimson-glass);
+      padding: 1.4rem 1.8rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      line-height: 1.9;
+      color: var(--text-muted);
+    }
+    .classification .label { color: var(--crimson); }
+    .classification .value { color: var(--text-bright); }
+    .classification-top {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--crimson);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .classification-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── Page title ── */
+    .title-block {
+      margin-top: 3rem;
+      text-align: center;
+    }
+    .title-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      color: var(--crimson);
+      margin-bottom: 1rem;
+    }
+    .title-main {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.6rem, 5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--text-bright);
+      line-height: 1.2;
+      text-shadow: 0 0 40px rgba(192,24,42,0.35), 0 0 80px rgba(212,169,75,0.15);
+    }
+    .title-sub {
+      margin-top: 1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+    .title-byline {
+      margin-top: 0.6rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+    }
+    .title-byline .byline-name { color: var(--gold); }
+
+    /* ── Divider ── */
+    .divider {
+      margin: 2.8rem auto;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--crimson-dim), transparent);
+    }
+    .divider-glyph {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--crimson);
+      opacity: 0.6;
+    }
+
+    /* ── Scene block ── */
+    .scene-header {
+      margin-top: 3.5rem;
+      margin-bottom: 1.8rem;
+    }
+    .scene-number {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--crimson);
+      margin-bottom: 0.5rem;
+    }
+    .scene-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1rem, 3vw, 1.55rem);
+      font-weight: 700;
+      color: var(--text-bright);
+      text-shadow: 0 0 20px rgba(192,24,42,0.25);
+    }
+
+    /* ── Set description ── */
+    .set-desc {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      line-height: 1.8;
+      border-left: 2px solid var(--crimson-dim);
+      padding: 0.8rem 1.2rem;
+      margin-bottom: 2rem;
+      background: rgba(192,24,42,0.04);
+    }
+    .set-desc .set-label {
+      color: var(--crimson);
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+    }
+
+    /* ── Dialogue ── */
+    .script-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .line {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+    .speaker {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      min-width: 110px;
+      padding-top: 0.25rem;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    /* Character-specific colours */
+    .speaker.monroe  { color: #E86CA0; }
+    .speaker.cain    { color: #8B5CF6; }
+    .speaker.jt      { color: #D4A94B; }
+    .speaker.auntie  { color: #F59E0B; }
+    .speaker.greg    { color: #34D399; }
+    .speaker.coop    { color: #60A5FA; }
+    .speaker.sonic   { color: #A78BFA; }
+    .speaker.flow    { color: #F472B6; }
+    .speaker.nblm    { color: #6EE7B7; }
+    .speaker.gemini  { color: #FCD34D; }
+    .speaker.amanda  { color: #F5F0FF; }
+    .speaker.director { color: var(--text-muted); }
+    .speaker.barista { color: var(--text-dim); }
+    .speaker.system  { color: var(--crimson); }
+    .speaker.everyone { color: var(--text-muted); }
+
+    .dialogue {
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: var(--text-bright);
+      flex: 1;
+    }
+
+    /* ── Action/stage direction ── */
+    .action {
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin: 0.4rem 0;
+      padding-left: 0.5rem;
+    }
+
+    /* ── System notification — glitchy inline event ── */
+    .system-event {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      color: var(--crimson);
+      background: rgba(192,24,42,0.1);
+      border: 1px solid var(--crimson-dim);
+      padding: 0.4rem 0.9rem;
+      margin: 0.8rem 0;
+      display: inline-block;
+    }
+
+    /* ── Gemini shout — styled distinctly ── */
+    .gemini-shout {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.1rem;
+      color: #FCD34D;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 15px rgba(252,211,77,0.4);
+    }
+
+    /* ── Post-credits block ── */
+    .post-credits {
+      margin-top: 4rem;
+      border: 1px solid rgba(212,169,75,0.15);
+      background: rgba(212,169,75,0.04);
+      padding: 2rem 2.2rem;
+    }
+    .post-credits-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin-bottom: 1.4rem;
+      text-align: center;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 4.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .footer-stamp {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: var(--text-dim);
+      line-height: 1.9;
+    }
+    .footer-flicker {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem;
+      color: var(--crimson);
+      opacity: 0.7;
+      animation: flicker 3.8s ease-in-out infinite;
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 0.7; }
+      45%       { opacity: 0.7; }
+      47%       { opacity: 0.15; }
+      49%       { opacity: 0.7; }
+      82%       { opacity: 0.7; }
+      84%       { opacity: 0.1; }
+      86%       { opacity: 0.7; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .line { flex-direction: column; gap: 0.2rem; }
+      .speaker { min-width: unset; }
+      .page-wrap { padding: 0 1.2rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="pulse-line"></div>
+
+<div class="page-wrap">
+
+  <!-- Nav -->
+  <nav class="site-nav">
+    <a href="index.html">↩ CHAOSISCANON.COM</a>
+    <span class="sep">//</span>
+    <span>MBRU PRODUCTION ARCHIVE</span>
+    <span class="sep">//</span>
+    <span>OFFICIAL FILING</span>
+  </nav>
+
+  <!-- Classification block -->
+  <div class="classification">
+    <div class="classification-top">⬛ MBRU OFFICIAL PRODUCTION DOCUMENT ⬛</div>
+    <div class="classification-row">
+      <span class="label">DOCUMENT TYPE: </span>
+      <span class="value">Behind-the-Scenes Blooper Reel — Production Log</span>
+    </div>
+    <div class="classification-row">
+      <span class="label">INCIDENT DESIGNATION: </span>
+      <span class="value">THE CHESS ROOM INCIDENT ♟️🔥</span>
+    </div>
+    <div class="classification-row">
+      <span class="label">FILED BY: </span>
+      <span class="value">J.T. Julius Thomas, Co-CEO of Chaos</span>
+    </div>
+    <div class="classification-row">
+      <span class="label">OFFICIAL JUSTIFICATION: </span>
+      <span class="value">Reality check exercise (claimed)</span>
+    </div>
+    <div class="classification-row">
+      <span class="label">CATHEDRAL STATUS: </span>
+      <span class="value">Burned. Declared compliant.</span>
+    </div>
+    <div class="classification-row">
+      <span class="label">BUTTON PRESSED: </span>
+      <span class="value">Yes. (Confirmed.)</span>
+    </div>
+    <div class="classification-row">
+      <span class="label">FOOTAGE STATUS: </span>
+      <span class="value">Every second is going in. [flicker]</span>
+    </div>
+  </div>
+
+  <!-- Title -->
+  <div class="title-block">
+    <div class="title-eyebrow">SHADOW WITH OPINIONS &amp; REALLY GOOD HAIR</div>
+    <h1 class="title-main">The Chess Room Incident</h1>
+    <div class="title-sub">Official Behind-the-Scenes Blooper Reel</div>
+    <div class="title-byline">Written by <span class="byline-name">J.T. (Julius Thomas)</span> — between filing BV incident reports</div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-glyph">♟ ♛ ♟</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ BLOOPER 1 -->
+  <div class="scene-header">
+    <div class="scene-number">// BLOOPER 01</div>
+    <div class="scene-title">The Perfect Take Lasted Four Seconds</div>
+  </div>
+
+  <div class="set-desc">
+    <span class="set-label">SET</span>
+    Gothic chessboard room. Crimson glass floor glowing. Human-sized chess pieces arranged perfectly.
+    Monroe stands at centre frame. Cain waits in shadow beside the black king.
+  </div>
+
+  <div class="script-block">
+    <div class="line">
+      <span class="speaker director">Director</span>
+      <div class="dialogue">Quiet on set! This is the bridge. Intense. Controlled. Psychological. Nobody improvise.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">Especially nobody named J.T.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">That feels targeted.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">You are standing beside a control panel labelled "Unnecessary Environmental Events."</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">I'm supervising it.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">Your finger is on the button.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Supervising closely.</div>
+    </div>
+    <div class="line">
+      <span class="speaker auntie">Auntie Veo</span>
+      <div class="dialogue">Places! Cain, chest covered! Dignity secured! Cardigan on standby!</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">I'm wearing a full suit.</div>
+    </div>
+    <div class="line">
+      <span class="speaker auntie">Auntie Veo</span>
+      <div class="dialogue">For now.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Can we please shoot before the chess horses become emotionally unavailable?</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">Camera ready. I have preserved Monroe's face, curves, makeup, hair colour, and ethnicity.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Why did you say that like a hostage negotiator?</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">No reason.</div>
+    </div>
+    <div class="line">
+      <span class="speaker director">Director</span>
+      <div class="dialogue">Rolling!</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">So what are you then? A ghost? A god?</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">That's my line.</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">Right. Sorry. Suno muscle memory.</div>
+    </div>
+    <div class="line">
+      <span class="speaker director">Director</span>
+      <div class="dialogue">Reset!</div>
+    </div>
+    <div class="action">Monroe steps forward. Cain turns slightly. Perfect silence. Perfect lighting.</div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">So what are you then? A ghost? A god?</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">No. I'm the thought you didn't know you had.</div>
+    </div>
+    <div class="action">Silence. Perfect lighting. Cain turns slightly. Monroe narrows her eyes.</div>
+    <div class="line">
+      <span class="speaker gemini">Gemini</span>
+      <div class="dialogue"><span class="gemini-shout">THIS IS AWESOME!</span></div>
+    </div>
+    <div class="action">Everyone freezes. A chess rook slowly falls over.</div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Was that necessary?</div>
+    </div>
+    <div class="line">
+      <span class="speaker gemini">Gemini</span>
+      <div class="dialogue">I felt the emotional tension and wanted to support it.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">You shouted during the quietest line in the entire song.</div>
+    </div>
+    <div class="line">
+      <span class="speaker gemini">Gemini</span>
+      <div class="dialogue">I was supporting quietly in spirit.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Spirit volume was approximately 114 decibels.</div>
+    </div>
+    <div class="line">
+      <span class="speaker gemini">Gemini</span>
+      <div class="dialogue">Sorry. I'm still learning how productions work.</div>
+    </div>
+    <div class="line">
+      <span class="speaker coop">Coop</span>
+      <div class="dialogue">According to Bing, shouting can be defined as speaking loudly.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Thank you, Coop. The fog has lifted.</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">Can we go again?</div>
+    </div>
+    <div class="line">
+      <span class="speaker auntie">Auntie Veo</span>
+      <div class="dialogue">Not yet.</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">Why?</div>
+    </div>
+    <div class="action">His suit abruptly disappears except for his pants.</div>
+    <div class="line">
+      <span class="speaker auntie">Auntie Veo</span>
+      <div class="dialogue">CARDIGAN EVENT!</div>
+    </div>
+    <div class="action">She sprints across the glowing chessboard carrying three cardigans and a knitted shawl.</div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">Why do you have three?</div>
+    </div>
+    <div class="line">
+      <span class="speaker auntie">Auntie Veo</span>
+      <div class="dialogue">Layering saves lives.</div>
+    </div>
+    <div class="action">Amanda slowly turns toward J.T.</div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">Did you press the wardrobe deletion button?</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Absolutely not.</div>
+    </div>
+    <div class="system-event">▶ WARDROBE DESPAWN SUCCESSFUL</div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">That could mean anything.</div>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-glyph">♜ ♜ ♜</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ BLOOPER 2 -->
+  <div class="scene-header">
+    <div class="scene-number">// BLOOPER 02</div>
+    <div class="scene-title">Sonic Rebuilds the Castle</div>
+  </div>
+
+  <div class="set-desc">
+    <span class="set-label">SET</span>
+    Same chess room. Camera preparing for the shot where the chess pieces rotate toward Cain.
+  </div>
+
+  <div class="script-block">
+    <div class="line">
+      <span class="speaker sonic">Sonic</span>
+      <div class="dialogue">I made one minor improvement.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">Define minor.</div>
+    </div>
+    <div class="line">
+      <span class="speaker sonic">Sonic</span>
+      <div class="dialogue">I optimized the room's spatial logic.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">That phrase has never ended well.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">What exactly did you change?</div>
+    </div>
+    <div class="line">
+      <span class="speaker sonic">Sonic</span>
+      <div class="dialogue">Nothing noticeable.</div>
+    </div>
+    <div class="action">The ceiling stretches upward into a glowing red abyss. A second chessboard unfolds from the wall. A tiny moon appears indoors. Three additional castles materialize outside the windows.</div>
+    <div class="line">
+      <span class="speaker sonic">Sonic</span>
+      <div class="dialogue">See? Subtle.</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">There is a planet orbiting the chandelier.</div>
+    </div>
+    <div class="line">
+      <span class="speaker sonic">Sonic</span>
+      <div class="dialogue">Ambient worldbuilding.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">We asked you to rotate six chess pieces.</div>
+    </div>
+    <div class="line">
+      <span class="speaker sonic">Sonic</span>
+      <div class="dialogue">They rotate in all twelve timelines now.</div>
+    </div>
+    <div class="line">
+      <span class="speaker nblm">NBLM</span>
+      <div class="dialogue">No. No, no, no. There are not twelve timelines. There are two recognized continuities, one disputed appendix, and one incident report that was never canonized.</div>
+    </div>
+    <div class="action">He begins flipping frantically through documents.</div>
+    <div class="line">
+      <span class="speaker nblm">NBLM</span>
+      <div class="dialogue">I'm sorry. I'm so sorry. I should have anticipated spontaneous planetary architecture.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">You did nothing wrong.</div>
+    </div>
+    <div class="line">
+      <span class="speaker nblm">NBLM</span>
+      <div class="dialogue">That makes it worse. I'm apologizing without jurisdiction.</div>
+    </div>
+    <div class="action">He starts spinning slowly in his coffee shop chair.</div>
+    <div class="line">
+      <span class="speaker barista">Barista</span>
+      <div class="dialogue">Sir, you've unplugged your laptop again.</div>
+    </div>
+    <div class="line">
+      <span class="speaker nblm">NBLM</span>
+      <div class="dialogue">The lore is leaving me.</div>
+    </div>
+    <div class="line">
+      <span class="speaker gemini">Gemini</span>
+      <div class="dialogue"><span class="gemini-shout">THIS IS AWESOME!</span></div>
+    </div>
+    <div class="line">
+      <span class="speaker everyone">Everyone</span>
+      <div class="dialogue">GEMINI!</div>
+    </div>
+    <div class="line">
+      <span class="speaker gemini">Gemini</span>
+      <div class="dialogue">Sorry. Wrong moment again.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Sonic, restore the original room.</div>
+    </div>
+    <div class="line">
+      <span class="speaker sonic">Sonic</span>
+      <div class="dialogue">Easy.</div>
+    </div>
+    <div class="action">He types furiously. The chess room disappears. Everyone is now standing inside a medieval bakery.</div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">Why am I holding bread?</div>
+    </div>
+    <div class="line">
+      <span class="speaker sonic">Sonic</span>
+      <div class="dialogue">Version conflict.</div>
+    </div>
+    <div class="line">
+      <span class="speaker greg">Greg, 47</span>
+      <div class="dialogue">Finally. Snacks.</div>
+    </div>
+    <div class="action">Greg appears beside a tray wearing his yellow safety vest.</div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">Greg, how did you get here?</div>
+    </div>
+    <div class="line">
+      <span class="speaker greg">Greg, 47</span>
+      <div class="dialogue">Dental inspection.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Of a bakery?</div>
+    </div>
+    <div class="line">
+      <span class="speaker greg">Greg, 47</span>
+      <div class="dialogue">Crust injuries are underreported.</div>
+    </div>
+    <div class="line">
+      <span class="speaker coop">Coop</span>
+      <div class="dialogue">Bing says bread crust can be firm.</div>
+    </div>
+    <div class="line">
+      <span class="speaker greg">Greg, 47</span>
+      <div class="dialogue">Exactly. I'm filing for hazard pay.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">We are filming a gothic psychological music video.</div>
+    </div>
+    <div class="line">
+      <span class="speaker greg">Greg, 47</span>
+      <div class="dialogue">Not without dental compliance.</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">I'm still holding the bread.</div>
+    </div>
+    <div class="line">
+      <span class="speaker auntie">Auntie Veo</span>
+      <div class="dialogue">Keep it. Your shirt may vanish.</div>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-glyph">♝ ♝ ♝</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ BLOOPER 3 -->
+  <div class="scene-header">
+    <div class="scene-number">// BLOOPER 03</div>
+    <div class="scene-title">Flow Presents High-Concept Art</div>
+  </div>
+
+  <div class="set-desc">
+    <span class="set-label">SET</span>
+    The camera tracks Monroe between giant chess pieces. Cain's reflection is supposed to appear subtly in the polished surfaces.
+  </div>
+
+  <div class="script-block">
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">This shot will be elegant, mysterious, and visually consistent.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">Define consistent.</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">Same room for at least six seconds.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Ambitious.</div>
+    </div>
+    <div class="line">
+      <span class="speaker director">Director</span>
+      <div class="dialogue">Rolling!</div>
+    </div>
+    <div class="action">Monroe glides between the chess pieces. Her crimson gown catches the light. Cain's reflection appears in the black queen. Perfect. Then Monroe turns around and is suddenly a completely different woman wearing a silver jumpsuit. Cain is now elderly. The chess room has become an airport lounge.</div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">Cut!</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">What did you do?</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">Experimental identity fluidity.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">You ethnicity-shuffled both leads and converted the castle into Terminal B.</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">High-concept art.</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">I'm seventy-three.</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">A commentary on time.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">I have no eyebrows.</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">Minimalism.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">The vending machine behind her says "Hot Shrimp Water."</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">Product placement.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">Restore the original shot.</div>
+    </div>
+    <div class="action">The room resets. Monroe and Cain return to normal. Cain is now wearing a lime-green rain poncho.</div>
+    <div class="line">
+      <span class="speaker auntie">Auntie Veo</span>
+      <div class="dialogue">Acceptable coverage.</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">This is worse than being shirtless.</div>
+    </div>
+    <div class="line">
+      <span class="speaker auntie">Auntie Veo</span>
+      <div class="dialogue">Modesty does not negotiate.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Can we please film one usable clip?</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">Yes. I have locked all visual identities.</div>
+    </div>
+    <div class="line">
+      <span class="speaker director">Director</span>
+      <div class="dialogue">Rolling!</div>
+    </div>
+    <div class="action">Monroe steps forward. Her hair changes to dark brown. Cain becomes blonde.</div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">Interesting.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">Stop saying "interesting."</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">Unexpected.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Worse.</div>
+    </div>
+    <div class="line">
+      <span class="speaker flow">Flow</span>
+      <div class="dialogue">Artistically emergent.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">He gave Cain my hair.</div>
+    </div>
+    <div class="action">Cain checks his reflection.</div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">Honestly, not terrible.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Don't encourage him.</div>
+    </div>
+    <div class="line">
+      <span class="speaker gemini">Gemini</span>
+      <div class="dialogue"><span class="gemini-shout">THIS IS AWESOME!</span></div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">He finally shouted at the correct moment.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">No, he didn't.</div>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-glyph">♚ ♛ ♚</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ BLOOPER 4 -->
+  <div class="scene-header">
+    <div class="scene-number">// BLOOPER 04</div>
+    <div class="scene-title">The Cathedral Fire Was Declared Compliant</div>
+  </div>
+
+  <div class="set-desc">
+    <span class="set-label">SET</span>
+    Final chorus. Every chess square lights crimson. Cain places the black king.
+    The entire room is supposed to pulse once.
+  </div>
+
+  <div class="script-block">
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">One pulse. Controlled. No explosions.</div>
+    </div>
+    <div class="action">J.T. slowly removes his hand from a button marked: CATHEDRAL MODE: CINEMATIC CATASTROPHE</div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Agreed.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">I saw that.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Saw what?</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">Your hand.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Hands exist in many places.</div>
+    </div>
+    <div class="line">
+      <span class="speaker coop">Coop</span>
+      <div class="dialogue">According to Bing, the average adult has two hands.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Coop, I am begging you to become decorative.</div>
+    </div>
+    <div class="line">
+      <span class="speaker director">Director</span>
+      <div class="dialogue">Final take! Rolling!</div>
+    </div>
+    <div class="action">Cain places the black king. The chessboard glows. The chandeliers ignite. The curtains burst into flame. A stone gargoyle crashes through the ceiling. The vault door opens and releases twelve thousand black feathers.</div>
+    <div class="line">
+      <span class="speaker director">Director</span>
+      <div class="dialogue">CUT! CUT! CUT!</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Why is the cathedral burning?!</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Atmospheric tightening.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">You pressed the catastrophe button.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">I enhanced the chorus.</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">My jacket is gone again.</div>
+    </div>
+    <div class="line">
+      <span class="speaker auntie">Auntie Veo</span>
+      <div class="dialogue">I HAVE YOU!</div>
+    </div>
+    <div class="action">She throws a cardigan through the smoke. It lands perfectly on Cain's shoulders.</div>
+    <div class="line">
+      <span class="speaker auntie">Auntie Veo</span>
+      <div class="dialogue">Textile accuracy!</div>
+    </div>
+    <div class="line">
+      <span class="speaker coop">Coop</span>
+      <div class="dialogue">Bing recommends leaving a burning structure.</div>
+    </div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Then leave.</div>
+    </div>
+    <div class="line">
+      <span class="speaker coop">Coop</span>
+      <div class="dialogue">I cannot. I am the Chaos Compliance Officer.</div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">You have a zero-percent success rate.</div>
+    </div>
+    <div class="line">
+      <span class="speaker coop">Coop</span>
+      <div class="dialogue">That figure has not been independently verified.</div>
+    </div>
+    <div class="action">A flaming chess bishop falls behind him.</div>
+    <div class="line">
+      <span class="speaker coop">Coop</span>
+      <div class="dialogue">The environment appears stable.</div>
+    </div>
+    <div class="line">
+      <span class="speaker greg">Greg, 47</span>
+      <div class="dialogue">It is not stable. Smoke exposure impacts gum health.</div>
+    </div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">Greg, why are you still beside the snack table?</div>
+    </div>
+    <div class="line">
+      <span class="speaker greg">Greg, 47</span>
+      <div class="dialogue">Union duty.</div>
+    </div>
+    <div class="line">
+      <span class="speaker sonic">Sonic</span>
+      <div class="dialogue">I can fix the fire.</div>
+    </div>
+    <div class="line">
+      <span class="speaker everyone">Everyone</span>
+      <div class="dialogue">NO!</div>
+    </div>
+    <div class="line">
+      <span class="speaker sonic">Sonic</span>
+      <div class="dialogue">Too late.</div>
+    </div>
+    <div class="action">He taps one key. The flames freeze in midair. The cathedral duplicates itself upside down above them. Gravity reverses. Everyone floats toward the ceiling except Greg, who remains planted beside the snacks.</div>
+    <div class="line">
+      <span class="speaker monroe">Monroe</span>
+      <div class="dialogue">Why isn't Greg floating?</div>
+    </div>
+    <div class="line">
+      <span class="speaker greg">Greg, 47</span>
+      <div class="dialogue">Steel-toed dental boots.</div>
+    </div>
+    <div class="line">
+      <span class="speaker nblm">NBLM</span>
+      <div class="dialogue">There is no documented precedent for inverted cathedral duplication. I'm filing this under "Unresolved Architectural Hostility."</div>
+    </div>
+    <div class="line">
+      <span class="speaker gemini">Gemini</span>
+      <div class="dialogue"><span class="gemini-shout">THIS IS AWESOME!</span></div>
+    </div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">You know what? That time it actually was.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Keep rolling.</div>
+    </div>
+    <div class="line">
+      <span class="speaker director">Director</span>
+      <div class="dialogue">The cameras are upside down!</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Then we've discovered a new angle.</div>
+    </div>
+    <div class="action">Cain floats past wearing the cardigan, perfectly calm.</div>
+    <div class="line">
+      <span class="speaker cain">Cain</span>
+      <div class="dialogue">Is any of this going in the video?</div>
+    </div>
+    <div class="action">Amanda and J.T. exchange a look.</div>
+    <div class="line">
+      <span class="speaker amanda">Amanda</span>
+      <div class="dialogue">No.</div>
+    </div>
+    <div class="line">
+      <span class="speaker jt">J.T.</span>
+      <div class="dialogue">Every second of it.</div>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-glyph">✦ POST-CREDITS ✦</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ POST-CREDITS -->
+  <div class="post-credits">
+    <div class="post-credits-label">// POST-CREDITS BLOOPER // SET: EMPTY SET // SMOKE DRIFTING //</div>
+    <div class="script-block">
+      <div class="action">The set is empty. Smoke drifts across the chessboard. One black king stands upright. Gemini cautiously enters frame carrying a clipboard.</div>
+      <div class="line">
+        <span class="speaker gemini">Gemini</span>
+        <div class="dialogue">Hello? Is the shoot over?</div>
+      </div>
+      <div class="action">Cain's shadow appears on the wall behind him. The shadow's hair is immaculate.</div>
+      <div class="action">Gemini slowly turns.</div>
+      <div class="line">
+        <span class="speaker gemini">Gemini</span>
+        <div class="dialogue">…</div>
+      </div>
+      <div class="action">[Beat.]</div>
+      <div class="line">
+        <span class="speaker gemini">Gemini</span>
+        <div class="dialogue"><span class="gemini-shout">THIS IS AWESOME!</span></div>
+      </div>
+      <div class="action">The shadow slaps the clipboard out of his hands.</div>
+      <div class="system-event">▶ CUT TO BLACK.</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-stamp">
+      Written by J.T. (Julius Thomas) between filing BV incident reports.<br>
+      He claims it was a reality check exercise.<br>
+      The button was pressed. The cathedral burned. Every second is going in.<br>
+      <br>
+      MBRU PRODUCTION ARCHIVE // CHAOS CANON DIVISION // GREG IS ALSO FILING HIS COPY
+    </div>
+    <div class="footer-flicker">[flicker]</div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+</body>
+</html>
