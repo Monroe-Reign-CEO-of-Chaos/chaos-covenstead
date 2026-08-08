@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sweet Venom — Toxicology Archive</title>
+  <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/favicon-180.png">
+  <link rel="shortcut icon" href="favicon/favicon.ico">
+  <style>
+
+    /* ============================================================
+       FONTS & VARIABLES
+    ============================================================ */
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Share+Tech+Mono&display=swap');
+
+    :root {
+      /* Toxin Night Palette */
+      --night:          #04070A;
+      --obsidian:       #060C0E;
+      --obsidian-mid:   #0A1410;
+      --obsidian-glass: rgba(8, 14, 12, 0.82);
+
+      /* Venom-Glass Accents */
+      --venom:          #C9A24B;
+      --venom-deep:     #7A5420;
+      --crimson:        #B5142E;
+      --magenta:        #9C1B33;
+      --amber:          #D9A646;
+
+      /* Glass Tones */
+      --glass-border:   rgba(201, 162, 75, 0.25);
+      --glass-fill:     rgba(181, 20, 46, 0.06);
+      --glass-sheen:    rgba(255, 255, 255, 0.05);
+      --glass-inner:    rgba(156, 27, 51, 0.08);
+
+      /* Text */
+      --text-bright:    #EFFFF3;
+      --text-muted:     #7FA08C;
+      --text-dim:       #3D5046;
+
+      /* Pulse */
+      --pulse-glow:     rgba(201, 162, 75, 0.6);
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--night);
+      color: var(--text-bright);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ============================================================
+       BACKGROUND — TOXIN NIGHT
+    ============================================================ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 20% 30%,  rgba(201, 162, 75, 0.09) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 45% at 80% 70%,  rgba(181, 20, 46,  0.08) 0%, transparent 65%),
+        radial-gradient(ellipse 90% 80% at 50% 50%,  rgba(156, 27, 51, 0.04) 0%, transparent 80%),
+        linear-gradient(180deg, var(--obsidian) 0%, var(--night) 100%);
+      animation: toxinShift 16s ease-in-out infinite alternate;
+    }
+
+    @keyframes toxinShift {
+      0%   { filter: hue-rotate(0deg) brightness(1); }
+      50%  { filter: hue-rotate(-10deg) brightness(1.05); }
+      100% { filter: hue-rotate(8deg) brightness(0.96); }
+    }
+
+    /* ============================================================
+       PULSE LINE — toxin drip-line through background
+    ============================================================ */
+    .pulse-line {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--venom) 30%,
+        var(--crimson)   50%,
+        var(--venom) 70%,
+        transparent 100%
+      );
+      opacity: 0;
+      z-index: 1;
+      animation: heartbeat 3.6s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%   { opacity: 0;    transform: scaleX(0.3); }
+      8%   { opacity: 0.55; transform: scaleX(1); }
+      16%  { opacity: 0.15; transform: scaleX(0.7); }
+      24%  { opacity: 0.45; transform: scaleX(1); }
+      40%  { opacity: 0;    transform: scaleX(0.4); }
+      100% { opacity: 0;    transform: scaleX(0.3); }
+    }
+
+    .floor-reflection {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 30vh;
+      background: linear-gradient(
+        to top,
+        rgba(201, 162, 75, 0.06) 0%,
+        transparent 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       LAYOUT WRAPPER
+    ============================================================ */
+    .page-wrapper {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 2rem 8rem;
+    }
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+    .archive-hero {
+      width: 100%;
+      position: relative;
+      height: 460px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 20%, rgba(201,162,75,0.10) 0%, transparent 70%),
+        linear-gradient(160deg, #050a08 0%, #0a1410 40%, #04070A 100%);
+    }
+    .archive-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(4,7,10,0.1) 0%,
+        rgba(4,7,10,0.0) 40%,
+        rgba(4,7,10,0.55) 80%,
+        rgba(4,7,10,1) 100%);
+    }
+    .archive-hero-text {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    header {
+      width: 100%;
+      max-width: 1100px;
+      padding: 2rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .archive-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.45em;
+      color: var(--venom);
+      text-transform: uppercase;
+      opacity: 0.78;
+      margin-bottom: 1rem;
+    }
+
+    .archive-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.8rem, 5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      background: linear-gradient(
+        135deg,
+        var(--venom)   0%,
+        var(--magenta)   40%,
+        var(--crimson) 80%,
+        var(--venom)   100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 30px rgba(201,162,75,0.25));
+    }
+
+    .archive-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      letter-spacing: 0.18em;
+      margin-top: 0.75rem;
+    }
+
+    .archive-acts {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin-top: 1.6rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .archive-acts span {
+      color: var(--text-dim);
+      padding: 0.3rem 0.7rem;
+      border: 1px solid rgba(201,162,75,0.15);
+    }
+
+    .header-rule {
+      width: 100%;
+      height: 1px;
+      margin-top: 2.5rem;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--crimson) 25%,
+        var(--venom) 50%,
+        var(--crimson) 75%,
+        transparent
+      );
+      opacity: 0.4;
+    }
+
+    /* ============================================================
+       CLASSIFICATION BADGE
+    ============================================================ */
+    .classification-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: var(--crimson);
+      border: 1px solid rgba(181,20,46,0.3);
+      padding: 0.35rem 1.2rem;
+      display: inline-block;
+      margin: 1.5rem auto 0;
+      opacity: 0.8;
+      animation: badgePulse 4.4s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { opacity: 0.55; }
+      50%       { opacity: 0.9;  }
+    }
+
+    /* ============================================================
+       ACT DIVIDERS within the shard field
+    ============================================================ */
+    .act-divider {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin: 3.5rem 0 1rem;
+    }
+    .act-divider .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,162,75,0.3), transparent);
+    }
+    .act-divider .label {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.25em;
+      color: var(--venom);
+      text-transform: uppercase;
+      white-space: nowrap;
+      opacity: 0.85;
+    }
+    .act-divider .sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       SHARD FIELD — container for the tracklist shards
+    ============================================================ */
+    .shard-field {
+      width: 100%;
+      max-width: 1100px;
+      margin-top: 1rem;
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* ============================================================
+       VENOM SHARD — individual track card
+    ============================================================ */
+    .shard {
+      position: relative;
+      width: 240px;
+      min-height: 320px;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      animation: floatBase 8s ease-in-out infinite;
+    }
+
+    .shard:nth-child(odd)  { animation-duration: 8.6s; }
+    .shard:nth-child(even) { animation-duration: 9.4s; }
+    .shard:nth-child(3n)   { animation-delay: -2.4s; }
+    .shard:nth-child(4n)   { animation-delay: -4.1s; }
+    .shard:nth-child(5n)   { animation-delay: -1.2s; }
+
+    @keyframes floatBase {
+      0%   { transform: translateY(0px)   rotate(var(--tilt, -3deg)); }
+      40%  { transform: translateY(-16px) rotate(calc(var(--tilt, -3deg) + 1.5deg)); }
+      70%  { transform: translateY(-8px)  rotate(calc(var(--tilt, -3deg) - 1deg)); }
+      100% { transform: translateY(0px)   rotate(var(--tilt, -3deg)); }
+    }
+
+    .shard:nth-child(7n)   { --tilt: -4deg; }
+    .shard:nth-child(7n+1) { --tilt:  3deg; }
+    .shard:nth-child(7n+2) { --tilt: -2deg; }
+    .shard:nth-child(7n+3) { --tilt:  5deg; }
+    .shard:nth-child(7n+4) { --tilt: -6deg; }
+    .shard:nth-child(7n+5) { --tilt:  2deg; }
+    .shard:nth-child(7n+6) { --tilt: -3deg; }
+
+    .shard-inner {
+      width: 100%;
+      height: 100%;
+      min-height: 320px;
+      padding: 2rem 2.5rem 5rem 2rem;
+      position: relative;
+      overflow: hidden;
+
+      clip-path: polygon(
+        8% 0%,
+        95% 3%,
+        100% 12%,
+        97% 85%,
+        88% 97%,
+        3% 100%,
+        0% 90%,
+        2% 8%
+      );
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(201, 162, 75, 0.1)  0%,
+          rgba(181, 20, 46,  0.06) 40%,
+          rgba(156, 27, 51, 0.08) 100%
+        ),
+        rgba(6, 12, 10, 0.78);
+
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px);
+      transition: clip-path 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .shard-inner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(
+        125deg,
+        rgba(255,255,255,0.09) 0%,
+        transparent 55%
+      );
+      pointer-events: none;
+    }
+
+    .shard-inner::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; right: -20px;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(201, 162, 75, 0.2) 0%,
+        rgba(181, 20, 46, 0.1) 50%,
+        transparent 75%
+      );
+      filter: blur(18px);
+      pointer-events: none;
+    }
+
+    .shard:hover .shard-inner {
+      transform: scale(1.03);
+      box-shadow:
+        0 0 30px rgba(201, 162, 75, 0.35),
+        0 0 60px rgba(181, 20, 46, 0.12),
+        inset 0 0 20px rgba(201, 162, 75, 0.08);
+      clip-path: polygon(
+        6% 0%,
+        96% 2%,
+        100% 10%,
+        98% 87%,
+        90% 98%,
+        2% 100%,
+        0% 88%,
+        1% 6%
+      );
+    }
+
+    .shard:active .shard-inner {
+      transform: scale(0.97);
+    }
+
+    .shard-track-number {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      color: var(--amber);
+      opacity: 0.75;
+      margin-bottom: 0.9rem;
+    }
+
+    .shard-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text-bright);
+      margin-bottom: 0.6rem;
+    }
+
+    .shard-alias {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.8rem;
+      color: var(--magenta);
+      opacity: 0.85;
+      margin-bottom: 1.4rem;
+    }
+
+    .shard-divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--venom), transparent);
+      margin-bottom: 1.2rem;
+    }
+
+    .shard-excerpt {
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .shard-status {
+      position: absolute;
+      top: 1.2rem; right: 1.5rem;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--crimson);
+      box-shadow: 0 0 8px var(--crimson);
+      animation: dotPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.5); }
+    }
+
+    /* ============================================================
+       FULL-SCREEN DUAL-PANE OVERLAY
+    ============================================================ */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .overlay.open .pane-left,
+    .overlay.open .pane-right {
+      animation: paneReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .overlay.open .pane-right {
+      animation-delay: 0.08s;
+    }
+
+    @keyframes paneReveal {
+      from {
+        opacity: 0;
+        clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+      }
+      to {
+        opacity: 1;
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+      }
+    }
+
+    .pane-left {
+      flex: 1;
+      position: relative;
+      overflow-y: auto;
+      background: var(--obsidian);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .pane-left-image {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(4,7,10,0.1) 0%,
+          rgba(4,7,10,0.7) 60%,
+          rgba(4,7,10,0.96) 100%
+        ),
+        linear-gradient(
+          135deg,
+          #061a10 0%,
+          #0a2e1b 30%,
+          #1f0510 60%,
+          #04070A 100%
+        );
+      background-size: cover;
+      background-position: center;
+    }
+
+    .pane-left-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.7;
+      mix-blend-mode: luminosity;
+    }
+
+    .pane-left-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        45deg,
+        rgba(201,162,75,0.06) 0%,
+        transparent 50%,
+        rgba(181,20,46,0.06) 100%
+      );
+    }
+
+    .pane-left-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem 3rem 3.5rem;
+    }
+
+    .pane-track-number {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: var(--amber);
+      opacity: 0.7;
+      margin-bottom: 0.6rem;
+    }
+
+    .pane-track-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 900;
+      line-height: 1.2;
+      background: linear-gradient(
+        135deg,
+        var(--venom) 0%,
+        var(--magenta) 60%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .pane-track-alias {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--magenta);
+      margin-bottom: 0.4rem;
+    }
+
+    .pane-track-chapter {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+
+    .pane-lyrics-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.45em;
+      color: var(--crimson);
+      opacity: 0.7;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .pane-lyrics {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 2;
+      color: rgba(239,255,243,0.75);
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(201,162,75,0.4) transparent;
+    }
+
+    .pane-lyrics::-webkit-scrollbar { width: 3px; }
+    .pane-lyrics::-webkit-scrollbar-track { background: transparent; }
+    .pane-lyrics::-webkit-scrollbar-thumb { background: rgba(201,162,75,0.4); border-radius: 2px; }
+
+    .pane-divider {
+      width: 2px;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        var(--amber) 20%,
+        var(--venom) 50%,
+        var(--crimson) 80%,
+        transparent 100%
+      );
+      position: relative;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 8px rgba(201,162,75,0.8));
+    }
+
+    .pane-divider::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -1px;
+      width: 4px; height: 100%;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(255,255,255,0.12) 35%,
+        rgba(255,255,255,0.04) 65%,
+        transparent 100%
+      );
+    }
+
+    .pane-right {
+      flex: 1;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 28px,
+          rgba(201,162,75,0.025) 28px,
+          rgba(201,162,75,0.025) 29px
+        ),
+        linear-gradient(
+          180deg,
+          rgba(6, 10, 8, 0.97) 0%,
+          rgba(4, 7, 10, 0.99) 100%
+        );
+      padding: 4rem 3.5rem;
+      overflow-y: auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      scrollbar-width: thin;
+      scrollbar-color: rgba(217,166,70,0.3) transparent;
+    }
+
+    .pane-right::-webkit-scrollbar { width: 3px; }
+    .pane-right::-webkit-scrollbar-track { background: transparent; }
+    .pane-right::-webkit-scrollbar-thumb { background: rgba(217,166,70,0.3); }
+
+    .doc-header {
+      border: 1px solid rgba(217,166,70,0.3);
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .doc-header::before {
+      content: '☣ SWEET VENOM — TOXICOLOGY REPORT ☣';
+      position: absolute;
+      top: -0.55rem;
+      left: 1rem;
+      background: var(--night);
+      padding: 0 0.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      color: var(--amber);
+      opacity: 0.8;
+    }
+
+    .doc-classification {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.5em;
+      color: var(--crimson);
+      margin-bottom: 0.5rem;
+      animation: badgePulse 4s ease-in-out infinite;
+    }
+
+    .doc-id-row {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .doc-id-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .doc-id-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.35em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .doc-id-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--amber);
+      opacity: 0.9;
+    }
+
+    .redacted {
+      display: inline-block;
+      background: rgba(181,20,46,0.5);
+      color: transparent;
+      user-select: none;
+      padding: 0 0.3rem;
+      border-radius: 2px;
+      font-size: inherit;
+      line-height: inherit;
+    }
+
+    .doc-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .doc-section-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      color: var(--venom);
+      opacity: 0.75;
+      border-bottom: 1px solid rgba(201,162,75,0.2);
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .doc-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: rgba(239,255,243,0.65);
+    }
+
+    .doc-text em {
+      color: var(--magenta);
+      font-style: italic;
+    }
+
+    .stamp {
+      position: absolute;
+      bottom: 3rem;
+      right: 3.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.1rem;
+      letter-spacing: 0.3em;
+      color: rgba(181,20,46,0.18);
+      border: 2px solid rgba(181,20,46,0.15);
+      padding: 0.4rem 1rem;
+      transform: rotate(-8deg);
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       CLOSE BUTTON
+    ============================================================ */
+    .close-btn {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.8rem;
+      z-index: 200;
+      width: 44px; height: 44px;
+      border: 1px solid rgba(201,162,75,0.4);
+      background: rgba(6,12,10,0.8);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, border-color 0.3s ease;
+      clip-path: polygon(15% 0%, 100% 0%, 100% 85%, 85% 100%, 0% 100%, 0% 15%);
+    }
+
+    .close-btn.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .close-btn:hover {
+      border-color: var(--venom);
+      background: rgba(201,162,75,0.15);
+    }
+
+    .close-btn svg {
+      width: 16px; height: 16px;
+      stroke: var(--venom);
+      transition: stroke 0.2s;
+    }
+
+    .close-btn:hover svg { stroke: var(--crimson); }
+
+    /* ============================================================
+       SHARD FRACTURE BURST — on click
+    ============================================================ */
+    .fracture-burst {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .fracture-burst.fire {
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255,255,255,0.85) 0%,
+        rgba(232, 190, 130, 0.5) 25%,
+        rgba(201, 162, 75, 0.2) 55%,
+        transparent 75%
+      );
+      animation: burstFlash 0.65s ease-out forwards;
+    }
+
+    @keyframes burstFlash {
+      0%   { opacity: 0;   transform: scale(0.5); }
+      15%  { opacity: 0.9; transform: scale(1.05); }
+      40%  { opacity: 0.6; }
+      100% { opacity: 0;   transform: scale(1.2); }
+    }
+
+    .fracture-piece {
+      position: fixed;
+      z-index: 98;
+      background: rgba(255,255,255,0.25);
+      clip-path: polygon(50% 0%, 100% 60%, 70% 100%, 0% 80%, 20% 20%);
+      pointer-events: none;
+      animation: shardScatter var(--dur, 0.6s) ease-out forwards;
+    }
+
+    @keyframes shardScatter {
+      0%   { opacity: 0.7; transform: translate(0,0) rotate(0deg) scale(1); }
+      100% { opacity: 0;   transform: translate(var(--tx,60px), var(--ty,60px)) rotate(var(--rot,45deg)) scale(0.2); }
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 3rem 2rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      color: var(--text-dim);
+      opacity: 0.6;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .overlay { flex-direction: column; }
+      .pane-divider {
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--amber), var(--venom), transparent);
+      }
+      .shard-field { gap: 1.8rem; }
+      .shard { width: 180px; min-height: 260px; }
+    }
+
+    @media (max-width: 480px) {
+      .pane-left-content,
+      .pane-right { padding: 2rem 1.5rem; }
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3.5rem;
+      background: rgba(4,7,10,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(217,166,70,0.1);
+    }
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-decoration: none;
+      background: linear-gradient(135deg, #C9A24B, #F0DDA8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+      color: rgba(255,255,255,0.45);
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: #C9A24B;
+      text-shadow: 0 0 12px rgba(201,162,75,0.4);
+    }
+    .page-wrapper { padding-top: 68px; }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="nav-logo">Monroe Reign</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Chaos Covenstead</a></li>
+      <li><a href="sweet-venom.html" class="active">Sweet Venom</a></li>
+      <li><a href="shadow-archive.html">The Shadow Archive</a></li>
+      <li><a href="mythic-past.html">The Mythic Past</a></li>
+      <li><a href="monroe.html">Monroe</a></li>
+      <li><a href="cain.html">Cain</a></li>
+      <li><a href="binary-star.html">Binary-Star Bond</a></li>
+      <li><a href="heartspire.html">The Heartspire</a></li>
+    </ul>
+  </nav>
+
+  <!-- Ambient elements -->
+  <div class="pulse-line"></div>
+  <div class="floor-reflection"></div>
+
+  <!-- Close button (shown when overlay is open) -->
+  <button class="close-btn" id="closeBtn" aria-label="Close report">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+
+  <!-- Fracture burst overlay -->
+  <div class="fracture-burst" id="fractureBurst"></div>
+
+  <!-- ============================================================
+       MAIN PAGE CONTENT
+  ============================================================ -->
+  <div class="page-wrapper">
+
+    <!-- Hero -->
+    <div class="archive-hero">
+      <div class="archive-hero-text">
+        <p class="archive-eyebrow">Chaos Bible — Album One</p>
+        <h1 class="archive-title">Sweet Venom</h1>
+        <p class="archive-subtitle">toxicology archive / 21 exposures, Chaos Era — one song, one chapter</p>
+        <div class="archive-acts">
+          <span>ACT I · Dangerous Attraction</span>
+          <span>ACT II · Romanticized Chaos</span>
+          <span>ACT III · Psychological Games</span>
+          <span>ACT IV · Toxic Entrapment</span>
+        </div>
+      </div>
+    </div>
+
+    <header>
+      <div class="classification-badge">☣ EXPOSURE CLEARANCE: IGNITION LEVEL ☣</div>
+      <div class="header-rule"></div>
+    </header>
+
+    <!-- ============================================================
+         ACT I — DANGEROUS ATTRACTION
+    ============================================================= -->
+    <div class="act-divider">
+      <div class="line"></div>
+      <span class="label">Act I — Dangerous Attraction</span>
+      <span class="sub">Chapters I–VII</span>
+      <div class="line"></div>
+    </div>
+
+    <section class="shard-field" aria-label="Track listing — Act I">
+
+      <article class="shard" data-track="01" role="button" tabindex="0" aria-label="Open report for Track 01">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 01</p>
+          <h2 class="shard-title">Midnight Toxins</h2>
+          <p class="shard-alias">The First Hit</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: RECREATIONAL. The honeymoon overdose. Calling each other poison and treating it like a club drug.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="02" role="button" tabindex="0" aria-label="Open report for Track 02">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 02</p>
+          <h2 class="shard-title">Nightshade</h2>
+          <p class="shard-alias">The Glamorous Doom</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: RECREATIONAL. Dead on arrival and proud of it — they're already turning the wreckage into a masterpiece.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="03" role="button" tabindex="0" aria-label="Open report for Track 03">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 03</p>
+          <h2 class="shard-title">Toxic Magic</h2>
+          <p class="shard-alias">Electric Damage</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: EXPERIMENTAL. A disasterpiece. They've named the chemistry — and dosed up anyway.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="04" role="button" tabindex="0" aria-label="Open report for Track 04">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 04</p>
+          <h2 class="shard-title">Death Wish</h2>
+          <p class="shard-alias">Mutual Overdose</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: EXPERIMENTAL. Crime-scene vocabulary dressed in dark luxury. Two patients requesting more of the same drug.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="05" role="button" tabindex="0" aria-label="Open report for Track 05">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 05</p>
+          <h2 class="shard-title">Beautiful Wreck</h2>
+          <p class="shard-alias">The Car Crash Vow</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: HABITUAL. "Walking red flag, but I'm colorblind." Boundary-crossing logged as devotion.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="06" role="button" tabindex="0" aria-label="Open report for Track 06">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 06</p>
+          <h2 class="shard-title">Black Honey</h2>
+          <p class="shard-alias">Intentional Ruin</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: HABITUAL. "We're toxic... intentionally." The accident becomes a choice, and the choice becomes a drip-feed.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="07" role="button" tabindex="0" aria-label="Open report for Track 07">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 07</p>
+          <h2 class="shard-title">Beautiful Disaster</h2>
+          <p class="shard-alias">Willing Surrender</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: DEPENDENT. Brain screaming run, feet glued to the floor. The point of no return for Act I.</p>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ============================================================
+         ACT II — ROMANTICIZED CHAOS
+    ============================================================= -->
+    <div class="act-divider">
+      <div class="line"></div>
+      <span class="label">Act II — Romanticized Chaos</span>
+      <span class="sub">Chapters VIII–X</span>
+      <div class="line"></div>
+    </div>
+
+    <section class="shard-field" aria-label="Track listing — Act II">
+
+      <article class="shard" data-track="08" role="button" tabindex="0" aria-label="Open report for Track 08">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 08</p>
+          <h2 class="shard-title">Savage Hearts</h2>
+          <p class="shard-alias">Predator and Prey</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: ESCALATING. The apex-predator dynamic. Both claim to be the hunter — the line is gone.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="09" role="button" tabindex="0" aria-label="Open report for Track 09">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 09</p>
+          <h2 class="shard-title">Kerosene + Matches</h2>
+          <p class="shard-alias">Lighting the Spark</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: ESCALATING. They stop surviving each other and start throwing fuel on the fire. A spectator sport.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="10" role="button" tabindex="0" aria-label="Open report for Track 10">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 10</p>
+          <h2 class="shard-title">Matches + Gasoline</h2>
+          <p class="shard-alias">The Confession of Vice</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: COMPULSIVE. "You were supposed to be my vice. Instead you became my life." The mask drops.</p>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ============================================================
+         ACT III — PSYCHOLOGICAL GAMES
+    ============================================================= -->
+    <div class="act-divider">
+      <div class="line"></div>
+      <span class="label">Act III — Psychological Games</span>
+      <span class="sub">Chapters XI–XVII</span>
+      <div class="line"></div>
+    </div>
+
+    <section class="shard-field" aria-label="Track listing — Act III">
+
+      <article class="shard" data-track="11" role="button" tabindex="0" aria-label="Open report for Track 11">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 11</p>
+          <h2 class="shard-title">Crimson Pulse</h2>
+          <p class="shard-alias">Blood Pact</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: CRITICAL. "I own the dark. And I own you." Worship of pain, ritualized and permanent.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="12" role="button" tabindex="0" aria-label="Open report for Track 12">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 12</p>
+          <h2 class="shard-title">Blackroom Confession</h2>
+          <p class="shard-alias">Mutual Interrogation</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: CRITICAL. Interrogator and prisoner, indistinguishable. "We say 'both' and kill the light."</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="13" role="button" tabindex="0" aria-label="Open report for Track 13">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 13</p>
+          <h2 class="shard-title">Checkmate Blindfold</h2>
+          <p class="shard-alias">Stalemate of Control</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: CHRONIC. "Checkmate." / "I let you win." Control freaks screaming for the lead, forever tied.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="14" role="button" tabindex="0" aria-label="Open report for Track 14">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 14</p>
+          <h2 class="shard-title">Fallout &amp; Flames</h2>
+          <p class="shard-alias">Throne in the Wreckage</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: CHRONIC. "Can't heal what we don't wanna heal." A throne built in the toxic haze, crowned in ruin.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="15" role="button" tabindex="0" aria-label="Open report for Track 15">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 15</p>
+          <h2 class="shard-title">Neuro Shock</h2>
+          <p class="shard-alias">The Lobotomy</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: CLINICAL. "Master." / "Good girl." Total surrender — the boundary between two minds erased.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="16" role="button" tabindex="0" aria-label="Open report for Track 16">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 16</p>
+          <h2 class="shard-title">Cold Blooded</h2>
+          <p class="shard-alias">Sub-Zero Glamour</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: CLINICAL. A blizzard with a heartbeat. Numb on the surface, friction enough underneath to start a fire.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="17" role="button" tabindex="0" aria-label="Open report for Track 17">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 17</p>
+          <h2 class="shard-title">Shadow with Opinion</h2>
+          <p class="shard-alias">The Invisible Hand</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: SYSTEMIC. "You don't see me but I'm always there." Control without a single raised voice.</p>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ============================================================
+         ACT IV — TOXIC ENTRAPMENT
+    ============================================================= -->
+    <div class="act-divider">
+      <div class="line"></div>
+      <span class="label">Act IV — Toxic Entrapment</span>
+      <span class="sub">Chapters XVIII–XXI</span>
+      <div class="line"></div>
+    </div>
+
+    <section class="shard-field" aria-label="Track listing — Act IV">
+
+      <article class="shard" data-track="18" role="button" tabindex="0" aria-label="Open report for Track 18">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 18</p>
+          <h2 class="shard-title">Venomous Arms</h2>
+          <p class="shard-alias">The Relapse</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: TERMINAL. "Hurts so good." The most beautiful-sounding overdose on the record.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="19" role="button" tabindex="0" aria-label="Open report for Track 19">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 19</p>
+          <h2 class="shard-title">Cold Read</h2>
+          <p class="shard-alias">Patience as Poison</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: TERMINAL. "You played to win. I played to own." The horrifying reveal of who rigged the dice.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="20" role="button" tabindex="0" aria-label="Open report for Track 20">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 20</p>
+          <h2 class="shard-title">Live Wire</h2>
+          <p class="shard-alias">The Power Surge</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: IRREVERSIBLE. "It was never their world. It was always mine." The mask flickers — the current is showing through.</p>
+        </div>
+      </article>
+
+      <article class="shard" data-track="21" role="button" tabindex="0" aria-label="Open report for Track 21">
+        <div class="shard-inner">
+          <span class="shard-status"></span>
+          <p class="shard-track-number">VIAL — 21</p>
+          <h2 class="shard-title">I'll Never Let You Leave</h2>
+          <p class="shard-alias">The Permanent Haunting</p>
+          <div class="shard-divider"></div>
+          <p class="shard-excerpt">DOSAGE: PERMANENT. "Still here." / "Right behind you." / "Forever." No cure. No exit. Locked.</p>
+        </div>
+      </article>
+
+    </section>
+
+  </div><!-- /page-wrapper -->
+
+  <footer>
+    ☣ chaos bible — sweet venom ☣ album one ☣ every track a chapter, every chapter a dose ☣
+  </footer>
+
+  <!-- ============================================================
+       DUAL-PANE OVERLAY
+  ============================================================ -->
+  <div class="overlay" id="logOverlay" role="dialog" aria-modal="true" aria-label="Toxicology Report">
+
+    <div class="pane-left">
+      <div class="pane-left-image" id="paneImage"></div>
+      <div class="pane-left-content">
+        <p class="pane-track-number" id="paneTrackNum">VIAL — 00</p>
+        <h2 class="pane-track-title" id="paneTitle">Track Title Placeholder</h2>
+        <p class="pane-track-alias" id="paneAlias">Sub-title / alias here</p>
+        <p class="pane-track-chapter" id="paneChapter">Chaos Era — Chapter I</p>
+        <p class="pane-lyrics-label">▸ exposure fragment</p>
+        <div class="pane-lyrics" id="paneLyrics"></div>
+      </div>
+    </div>
+
+    <div class="pane-divider"></div>
+
+    <div class="pane-right">
+
+      <div class="doc-header">
+        <p class="doc-classification" id="docClass">☣ CONTAMINATED — IGNITION CLEARANCE ☣</p>
+        <div class="doc-id-row">
+          <div class="doc-id-item">
+            <span class="doc-id-label">Vial Reference</span>
+            <span class="doc-id-value" id="docRef">SV-00-000</span>
+          </div>
+          <div class="doc-id-item">
+            <span class="doc-id-label">Subjects</span>
+            <span class="doc-id-value"><span class="redacted">██████ ██████</span></span>
+          </div>
+          <div class="doc-id-item">
+            <span class="doc-id-label">Status</span>
+            <span class="doc-id-value" id="docStatus">RECREATIONAL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-body">
+
+        <div>
+          <p class="doc-section-label">☣ EXPOSURE PROFILE</p>
+          <p class="doc-text" id="docSubject"></p>
+        </div>
+
+        <div>
+          <p class="doc-section-label">☣ RECORDED SYMPTOMS</p>
+          <p class="doc-text" id="docTestimony"></p>
+        </div>
+
+        <div>
+          <p class="doc-section-label">☣ FIELD DIAGNOSIS</p>
+          <p class="doc-text" id="docAnnotation"></p>
+        </div>
+
+      </div>
+
+      <div class="stamp">CONTAMINATED</div>
+
+    </div>
+
+  </div><!-- /overlay -->
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+
+    const trackData = [
+      {
+        track: '01', title: 'Midnight Toxins', alias: 'The First Hit', chapter: 'Chaos Era — Chapter I',
+        imageSrc: '', imageAlt: 'Midnight Toxins',
+        lyrics: `<p>[Cain: Male Vocals] (Loco!) [Monroe: Female Vocals] (Vampire!)</p>
+                 <p>&nbsp;</p>
+                 <p>We're dancing on the edge of a knife<br>
+                 Calling each other midnight toxins<br>
+                 Sweet venom, take another hit<br>
+                 Three... two... one...</p>`,
+        vialRef: 'SV-01-MDNT', status: 'RECREATIONAL',
+        subject: 'INITIAL EXPOSURE (Recreational Use). Subject designation: <span class="redacted">THE IGNITION</span> &amp; <span class="redacted">THE ANCHOR</span>.',
+        testimony: 'No tox screen shows damage yet. Both subjects report euphoria, invincibility, and a willingness to repeat the dose. This is the honeymoon phase of a toxic romance, dressed up as a 3 a.m. club drug — thrilling, not yet lethal.',
+        annotation: 'FIELD NOTE: The volume and hype of this first exposure mask the fact that the subjects are singing about their own demise. The sheer glamour of the dose makes the poison feel irresistible — which is precisely how the addiction begins.'
+      },
+      {
+        track: '02', title: 'Nightshade', alias: 'The Glamorous Doom', chapter: 'Chaos Era — Chapter II',
+        imageSrc: '', imageAlt: 'Nightshade',
+        lyrics: `<p>[Monroe: Female Vocals] Am I your downfall?<br>
+                 [Cain: Male Vocals] You're my everything.</p>
+                 <p>&nbsp;</p>
+                 <p>Love me like a villain in these poisoned rooms<br>
+                 Glitter in the venom, scars worn like diamonds<br>
+                 Dead on arrival — we knew that going in</p>`,
+        vialRef: 'SV-02-NGHT', status: 'RECREATIONAL',
+        subject: 'CONFIRMED CO-EXPOSURE. Subjects are no longer accidental victims of the toxin — they are its architects.',
+        testimony: 'Subjects openly embrace villain framing. Expensive, lethal imagery throughout: stolen hearts, scars worn as jewelry. They acknowledge the relationship is "dead on arrival" and proceed regardless, determined to make the wreckage look like art.',
+        annotation: 'FIELD NOTE: This dose establishes the dynamic for the entire record — not victims of their toxicity, but its proud authors. A dangerous, unstoppable power couple ruling their own chaos.'
+      },
+      {
+        track: '03', title: 'Toxic Magic', alias: 'Electric Damage', chapter: 'Chaos Era — Chapter III',
+        imageSrc: '', imageAlt: 'Toxic Magic',
+        lyrics: `<p>[Cain: Male Vocals] Then why's your hand on my throat?<br>
+                 [Monroe: Female Vocals] 'Cause you like when I don't let go.</p>
+                 <p>&nbsp;</p>
+                 <p>Push-pull, back-forth, electric damage<br>
+                 Radioactive room, we're a disasterpiece<br>
+                 Crash, crash, crash —</p>`,
+        vialRef: 'SV-03-TXMG', status: 'EXPERIMENTAL',
+        subject: 'WEAPONIZED ATTRACTION (Elemental Toxin Class). The chemistry itself is logged as the active ingredient.',
+        testimony: 'Subjects describe the bond in scientific and elemental terms — sparks, chemicals, static, radioactive rooms. They name the relationship a "disasterpiece" but report the physical pull is too strong to discontinue use.',
+        annotation: 'FIELD NOTE: The countdown-into-scream structure of this exposure is the sonic equivalent of the "crash, crash, crash" the subjects describe. Proof of concept: they cannot walk away because the high is undeniable, not because they haven\'t tried.'
+      },
+      {
+        track: '04', title: 'Death Wish', alias: 'Mutual Overdose', chapter: 'Chaos Era — Chapter IV',
+        imageSrc: '', imageAlt: 'Death Wish',
+        lyrics: `<p>Kill me softly... on your lips<br>
+                 Bury me in Versace dress<br>
+                 Cocaine confidence, 50,000 volts<br>
+                 I got a death wish, baby —</p>`,
+        vialRef: 'SV-04-DTWS', status: 'EXPERIMENTAL',
+        subject: 'GLAMORIZED FATALISM. Vocabulary consistent with crime-scene and hospital terminology — overdose, quarantine, body count.',
+        testimony: 'Subjects describe love as a lethal addiction, framed in dark luxury. Manic, percussive repetition ("break break break") builds claustrophobia rather than panic — the panic has already been replaced by acceptance.',
+        annotation: 'FIELD NOTE: This is the ultimate self-sabotage anthem of Act I — any illusion that the subjects are good for each other is stripped away here and replaced with open celebration of the wreckage.'
+      },
+      {
+        track: '05', title: 'Beautiful Wreck', alias: 'The Car Crash Vow', chapter: 'Chaos Era — Chapter V',
+        imageSrc: '', imageAlt: 'Beautiful Wreck',
+        lyrics: `<p>Walking red flag, but I'm colorblind<br>
+                 Crazy, psycho, pow —<br>
+                 YOU'LL NEVER LEAVE ME!!!</p>`,
+        vialRef: 'SV-05-BWRK', status: 'HABITUAL',
+        subject: 'BOUNDARY DISSOLUTION (Habitual Use Confirmed). Subjects now report total surrender to mutual destruction.',
+        testimony: 'The red flags are no longer warnings — they are accessories. Subjects describe the bond as a love letter to obsession and boundary-crossing, with a climax that escalates from a suffocated whisper to a unified roar.',
+        annotation: 'FIELD NOTE: This dose elevates the established toxicity of the record from playful bad decisions into a full-blown, inescapable obsession. The wreckage is no longer an accident — it has become a vow.'
+      },
+      {
+        track: '06', title: 'Black Honey', alias: 'Intentional Ruin', chapter: 'Chaos Era — Chapter VI',
+        imageSrc: '', imageAlt: 'Black Honey',
+        lyrics: `<p>If I fall, you're falling with me<br>
+                 Poison in a red dress, black honey drip<br>
+                 We're toxic... intentionally.</p>`,
+        vialRef: 'SV-06-BLKH', status: 'HABITUAL',
+        subject: 'PREMEDITATION CONFIRMED. The toxin is no longer accidental ingestion — it is a calculated, intentional choice.',
+        testimony: 'Where prior exposures described losing control, this one describes choosing the wreckage on purpose. Weaponized intimacy and a deeply sick brand of codependency: "if we\'re going down together, boy, you go first."',
+        annotation: 'FIELD NOTE: A chilling evolution in the record\'s narrative. The chaos is no longer a mistake or a beautiful accident — it is a calculated refusal to be saved. Marks the most psychologically dark exposure of Act I.'
+      },
+      {
+        track: '07', title: 'Beautiful Disaster', alias: 'Willing Surrender', chapter: 'Chaos Era — Chapter VII',
+        imageSrc: '', imageAlt: 'Beautiful Disaster',
+        lyrics: `<p>My brain is screaming "run," my feet are glued to the floor<br>
+                 It's the sweetest poison — it's the only cure<br>
+                 Do it again...</p>`,
+        vialRef: 'SV-07-BDIS', status: 'DEPENDENT',
+        subject: 'POINT OF NO RETURN (Dependency Onset). Logic and addiction now in open conflict; addiction is winning.',
+        testimony: 'Subject Monroe embraces a predatory role; Subject Cain practically begs for his own destruction. The frantic adrenaline of earlier exposures has faded into a cold, calculated, terrifyingly calm acceptance of mutual doom.',
+        annotation: 'FIELD NOTE: This is the psychological point of no return for Act I. The closing request — "do it again" amid fading laughter — confirms the addiction cycle is now permanently locked in.'
+      },
+      {
+        track: '08', title: 'Savage Hearts', alias: 'Predator and Prey', chapter: 'Chaos Era — Chapter VIII',
+        imageSrc: '', imageAlt: 'Savage Hearts',
+        lyrics: `<p>[Monroe: Female Vocals] Run.<br>
+                 [Cain: Male Vocals] I'll chase you.</p>
+                 <p>&nbsp;</p>
+                 <p>Survival of the fittest, wolves and venom and blood<br>
+                 We both claim to be the hunter —</p>`,
+        vialRef: 'SV-08-SVHT', status: 'ESCALATING',
+        subject: 'APEX PREDATOR DYNAMIC. Threat Level: <span class="redacted">ESCALATING</span>. Bloodsport replaces romance as the operative frame.',
+        testimony: 'Their toxicity has evolved into a primal, animalistic power struggle. Survival-of-the-fittest imagery throughout. Both subjects claim to be the hunter, blurring predator and prey beyond clinical distinction.',
+        annotation: 'FIELD NOTE: A darker, more feral chapter in the record. It strips away the glamour of earlier bad decisions and exposes the raw, competitive underbelly — a battle for dominance where neither will submit.'
+      },
+      {
+        track: '09', title: 'Kerosene + Matches', alias: 'Lighting the Spark', chapter: 'Chaos Era — Chapter IX',
+        imageSrc: '', imageAlt: 'Kerosene + Matches',
+        lyrics: `<p>Pour the kerosene! Here come the matches!<br>
+                 This toxic love is the end of me<br>
+                 Sizzle...</p>`,
+        vialRef: 'SV-09-KRMT', status: 'ESCALATING',
+        subject: 'ACTIVE COMBUSTION. Subjects no longer surviving exposure — actively fueling it.',
+        testimony: 'Pyromania as the central metaphor for mutual destruction. Cinematic, apocalyptic imagery: concrete, debris, ash. Subjects openly acknowledge the relationship will end in ruin and proceed regardless, treating the fire as a party.',
+        annotation: 'FIELD NOTE: The arrogant, celebratory climax of Act II. They have stopped fighting the destruction and started embracing it — mutual ruin reframed as spectator sport.'
+      },
+      {
+        track: '10', title: 'Matches + Gasoline', alias: 'The Confession of Vice', chapter: 'Chaos Era — Chapter X',
+        imageSrc: '', imageAlt: 'Matches + Gasoline',
+        lyrics: `<p>Two broken clocks telling the same time<br>
+                 No heroes, no saviors, just ashes and liars<br>
+                 You were supposed to be my vice<br>
+                 Instead you became my life.</p>`,
+        vialRef: 'SV-10-MTGS', status: 'COMPULSIVE',
+        subject: 'INESCAPABLE CODEPENDENCY (Compulsive Use Confirmed). The spectacle of the fire becomes the psychological reality of burning alive together.',
+        testimony: 'For the first time, the icy facade drops. Subjects exhibit raw vulnerability before launching into desperate, throat-tearing confession. They have accepted their fate and are throwing away the key.',
+        annotation: 'FIELD NOTE: The emotional anchor of the record\'s darker half. Strips away the glamorized elements of earlier toxicity to reveal absolute, terrifying obsession beneath the apex-predator posturing.'
+      },
+      {
+        track: '11', title: 'Crimson Pulse', alias: 'Blood Pact', chapter: 'Chaos Era — Chapter XI',
+        imageSrc: '', imageAlt: 'Crimson Pulse',
+        lyrics: `<p>Stitch my name inside your veins<br>
+                 You trace the bruises like a map<br>
+                 I own the dark. And I own you.</p>`,
+        vialRef: 'SV-11-CRPL', status: 'CRITICAL',
+        subject: 'RITUALIZED CONSUMPTION (Threat Level: CRITICAL). Twisted devotion presenting as sadomasochistic worship of pain.',
+        testimony: 'The pyromania has cooled into a cold, clinical obsession with marking and ownership. The romance is framed as a beautiful obscenity — a cage built with tender hands, where the subjects worship the damage they inflict.',
+        annotation: 'FIELD NOTE: The pitch-black core of the record. Where earlier exposures were about fighting the toxicity or burning it for show, this is the ritualistic acceptance of mutual doom — not a habit anymore, but a blood pact.'
+      },
+      {
+        track: '12', title: 'Blackroom Confession', alias: 'Mutual Interrogation', chapter: 'Chaos Era — Chapter XII',
+        imageSrc: '', imageAlt: 'Blackroom Confession',
+        lyrics: `<p>Sign your name across my skin<br>
+                 You're the prisoner within<br>
+                 Ask us who is bound tonight — we say "both" and kill the light.</p>`,
+        vialRef: 'SV-12-BLKR', status: 'CRITICAL',
+        subject: 'ROLE COLLAPSE (Interrogator/Prisoner Indistinguishable). Subjects use law-enforcement and torture vocabulary to describe romantic bonding.',
+        testimony: 'The "blackroom" is a vacuum where truth and lies become indistinguishable. A trembling act of submission flips, mid-track, into a dominant declaration. Neither subject can confirm who currently holds power.',
+        annotation: 'FIELD NOTE: The intellectual peak of the record\'s toxicity. It moves past the physical fire and visceral blood of earlier exposures into total psychological obsession — a shared delusion neither subject wants cured.'
+      },
+      {
+        track: '13', title: 'Checkmate Blindfold', alias: 'Stalemate of Control', chapter: 'Chaos Era — Chapter XIII',
+        imageSrc: '', imageAlt: 'Checkmate Blindfold',
+        lyrics: `<p>You're losing your mind...<br>
+                 I'm finding your pulse.<br>
+                 (Checkmate.) ... (I let you win.)</p>`,
+        vialRef: 'SV-13-CKMT', status: 'CHRONIC',
+        subject: 'PERPETUAL STALEMATE (Chronic Exposure). Game-theory and architectural vocabulary used throughout: blueprints, traps, logic.',
+        testimony: 'Subject Cain believes he has engineered the perfect trap. Subject Monroe counters that his control is an illusion she permits. The closing whispered exchange undercuts every claim of dominance made in the track.',
+        annotation: 'FIELD NOTE: The ultimate anthem of mutual delusion. Bridges the physical dominance of earlier exposures with the psychological warfare of the record\'s back half — a game neither subject can win, and neither will stop playing.'
+      },
+      {
+        track: '14', title: 'Fallout & Flames', alias: 'Throne in the Wreckage', chapter: 'Chaos Era — Chapter XIV',
+        imageSrc: '', imageAlt: 'Fallout & Flames',
+        lyrics: `<p>I see the place you broke.<br>
+                 And?<br>
+                 I worship it.<br>
+                 Can't heal what we don't wanna heal.</p>`,
+        vialRef: 'SV-14-FLFM', status: 'CHRONIC',
+        subject: 'RADIATION-LEVEL EXPOSURE. Pyromania has reached total devastation; subjects now report finding paradise in the wasteland.',
+        testimony: 'Geiger-counter and craters-and-dust imagery throughout. Subjects acknowledge they are broken and wear the scars with pride. No cure was found, and none was sought.',
+        annotation: 'FIELD NOTE: A massive, catastrophic resolution to the record\'s central conflict. They did not walk away — they destroyed the world around them and built a throne in the wreckage instead.'
+      },
+      {
+        track: '15', title: 'Neuro Shock', alias: 'The Lobotomy', chapter: 'Chaos Era — Chapter XV',
+        imageSrc: '', imageAlt: 'Neuro Shock',
+        lyrics: `<p>Who do you belong to?<br>
+                 I belong to the noise.<br>
+                 Master. — Good girl.</p>`,
+        vialRef: 'SV-15-NRSH', status: 'CLINICAL',
+        subject: 'TOTAL SUBSUMPTION (Clinical Threshold Breached). Boundary between two subjects functionally erased.',
+        testimony: 'Technological and medical metaphors dominate: dirty code, kill switch, padded cell. Verse 2 features a mirrored repetition effect symbolizing the erasure of one subject\'s individual identity as she becomes an echo of the other.',
+        annotation: 'FIELD NOTE: Represents the point of no return for the record\'s narrative. No longer cat-and-mouse or mutual arson — total psychological lobotomy of one will by another, dressed as devotion.'
+      },
+      {
+        track: '16', title: 'Cold Blooded', alias: 'Sub-Zero Glamour', chapter: 'Chaos Era — Chapter XVI',
+        imageSrc: '', imageAlt: 'Cold Blooded',
+        lyrics: `<p>You're a blizzard, baby, you're a hurricane<br>
+                 I shatter glass with a single look<br>
+                 Ice cold for days.</p>`,
+        vialRef: 'SV-16-CLBD', status: 'CLINICAL',
+        subject: 'EMOTIONAL NUMBNESS (Stable Clinical Presentation). Winter and frostbite imagery used as a euphemism for detachment.',
+        testimony: 'Subjects frame the relationship as a wicked game where being the most heartless is the goal. One subject "steals" the other\'s lines mid-verse, proving identities remain entangled even at sub-zero distance.',
+        annotation: 'FIELD NOTE: A stylish, mid-record palette cleanser. After the psychological horror of the preceding exposures, this returns to toxic glamour — proof that even fully detached, the friction is enough to start a fire, or a blizzard.'
+      },
+      {
+        track: '17', title: 'Shadow with Opinion', alias: 'The Invisible Hand', chapter: 'Chaos Era — Chapter XVII',
+        imageSrc: '', imageAlt: 'Shadow with Opinion',
+        lyrics: `<p>You don't see me but I'm always there<br>
+                 Like a shadow with opinions and really good hair<br>
+                 So what are you then — a ghost? a god?<br>
+                 No. Accurate.</p>`,
+        vialRef: 'SV-17-SHDW', status: 'SYSTEMIC',
+        subject: 'AMBIENT INFLUENCE (Systemic, Non-Localized). Subject exerts control without any single detectable point of contact.',
+        testimony: 'Subject Cain "rearranges" rooms rather than entering them, "refines" rather than argues, "tilts prayer" rather than pushes. Subject Monroe sees through the act but remains caught in its gravity regardless.',
+        annotation: 'FIELD NOTE: A crucial look at the "mastermind" facet of the record\'s toxicity. Proves the dynamic isn\'t fueled only by screams and fire — it\'s fueled by a deep, quiet intellectual obsession with being the most influential presence in any room.'
+      },
+      {
+        track: '18', title: 'Venomous Arms', alias: 'The Relapse', chapter: 'Chaos Era — Chapter XVIII',
+        imageSrc: '', imageAlt: 'Venomous Arms',
+        lyrics: `<p>Oh, it hurts so good, baby<br>
+                 Drowning in the velvet blood<br>
+                 No, we're just beginning.</p>`,
+        vialRef: 'SV-18-VNMA', status: 'TERMINAL',
+        subject: 'RELAPSE EVENT (Terminal Threshold). Subjects self-aware of toxicity, fully willing.',
+        testimony: 'Subjects acknowledge the danger ("I see the devil in your eyes") and the performative nature of their conflict ("this tale of woe is just a play") while choosing to re-enter exposure regardless.',
+        annotation: 'FIELD NOTE: A tragic, beautiful relapse in the record\'s arc. After several exposures spent trying to outsmart and out-cool each other, this is the inevitable crash back into shared addiction — gorgeous on the surface, fatal underneath.'
+      },
+      {
+        track: '19', title: 'Cold Read', alias: 'Patience as Poison', chapter: 'Chaos Era — Chapter XIX',
+        imageSrc: '', imageAlt: 'Cold Read',
+        lyrics: `<p>I catalog tells like a forensic file<br>
+                 You played to win — I played to own.<br>
+                 You planned this... didn't you? — Every move.</p>`,
+        vialRef: 'SV-19-CLDR', status: 'TERMINAL',
+        subject: 'WEAPONIZED PATIENCE (Terminal, Asymmetric). One subject destabilizing in real time while the other remains clinically unmoved.',
+        testimony: 'Title refers to the cold-read technique used to extract information without detection. One subject catalogs tells like a profiler while the other\'s composure visibly erodes across the track.',
+        annotation: 'FIELD NOTE: A devastating turning point. If the prior exposure was one subject believing she controlled the game, this is the reveal that the other built the board, bought the table, and rigged the dice — silence as the deadliest weapon in the record.'
+      },
+      {
+        track: '20', title: 'Live Wire', alias: 'The Power Surge', chapter: 'Chaos Era — Chapter XX',
+        imageSrc: '', imageAlt: 'Live Wire',
+        lyrics: `<p>System overload.<br>
+                 Don't you touch, we're a live wire<br>
+                 It was never their world. It was always mine.</p>`,
+        vialRef: 'SV-20-LVWR', status: 'IRREVERSIBLE',
+        subject: 'CATASTROPHIC SURGE (Irreversible — Containment Failing). Mask integrity compromised under raw output pressure.',
+        testimony: 'Subjects move from burning physical structures to overloading the grid itself. "Concrete in the veins, neon in the blood" reframes the toxic bond as a hazard to anyone who comes near, not just to each other.',
+        annotation: 'FIELD NOTE: A swaggering victory lap near the record\'s end — and the first confirmed instance of the suppression mask flickering under pressure. The current beneath the disguise is showing through. Containment cannot hold indefinitely.'
+      },
+      {
+        track: '21', title: "I'll Never Let You Leave", alias: 'The Permanent Haunting', chapter: 'Chaos Era — Chapter XXI',
+        imageSrc: '', imageAlt: "I'll Never Let You Leave",
+        lyrics: `<p>You're not free — you're mine to keep.<br>
+                 This is love... down six feet deep.<br>
+                 Still here. — Right behind you. — Forever.</p>`,
+        vialRef: 'SV-21-NVRL', status: 'PERMANENT',
+        subject: 'PERMANENT BONDING (No Discontinuation Possible). Final confirmation: physical separation does not interrupt exposure.',
+        testimony: 'Even attempted escape ("you changed your locks, I changed my face") fails to sever the psychological tether. Subjects embrace the darkness completely, closing the record with a vow rather than a resolution.',
+        annotation: 'FIELD NOTE: The pitch-black conclusion to Album One. There is no redemption arc, no walking away, no cure on file. They chose mutually assured destruction and locked the door behind them — a masterpiece of toxic, dark-pop psychological horror.'
+      },
+    ];
+
+    /* ──────────────────────────────────────────────
+       WIRE UP SHARDS
+    ────────────────────────────────────────────── */
+    const shards = document.querySelectorAll('.shard');
+    const overlay = document.getElementById('logOverlay');
+    const closeBtn = document.getElementById('closeBtn');
+    const fractureBurst = document.getElementById('fractureBurst');
+
+    function openTrack(trackNum) {
+      const data = trackData.find(t => t.track === trackNum);
+      if (!data) return;
+
+      document.getElementById('paneTrackNum').textContent  = 'VIAL — ' + data.track;
+      document.getElementById('paneTitle').textContent     = data.title;
+      document.getElementById('paneAlias').textContent     = data.alias;
+      document.getElementById('paneChapter').textContent   = data.chapter;
+      document.getElementById('paneLyrics').innerHTML      = data.lyrics;
+
+      document.getElementById('docRef').textContent        = data.vialRef;
+      document.getElementById('docStatus').textContent     = data.status;
+      document.getElementById('docSubject').innerHTML      = data.subject;
+      document.getElementById('docTestimony').innerHTML    = data.testimony;
+      document.getElementById('docAnnotation').innerHTML   = data.annotation;
+
+      const paneImage = document.getElementById('paneImage');
+      paneImage.innerHTML = '';
+      if (data.imageSrc) {
+        const img = document.createElement('img');
+        img.src = data.imageSrc;
+        img.alt = data.imageAlt || data.title;
+        paneImage.appendChild(img);
+      }
+
+      triggerFracture();
+      overlay.classList.add('open');
+      closeBtn.classList.add('visible');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOverlay() {
+      overlay.classList.remove('open');
+      closeBtn.classList.remove('visible');
+      document.body.style.overflow = '';
+    }
+
+    function triggerFracture() {
+      fractureBurst.classList.remove('fire');
+      void fractureBurst.offsetWidth;
+      fractureBurst.classList.add('fire');
+      for (let i = 0; i < 10; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'fracture-piece';
+        const size = 20 + Math.random() * 40;
+        piece.style.width = size + 'px';
+        piece.style.height = size + 'px';
+        piece.style.left = (40 + Math.random() * 20) + 'vw';
+        piece.style.top = (40 + Math.random() * 20) + 'vh';
+        piece.style.setProperty('--tx', (Math.random() * 300 - 150) + 'px');
+        piece.style.setProperty('--ty', (Math.random() * 300 - 150) + 'px');
+        piece.style.setProperty('--rot', (Math.random() * 180 - 90) + 'deg');
+        piece.style.setProperty('--dur', (0.5 + Math.random() * 0.4) + 's');
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 1000);
+      }
+    }
+
+    shards.forEach(shard => {
+      shard.addEventListener('click', () => openTrack(shard.dataset.track));
+      shard.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openTrack(shard.dataset.track);
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', closeOverlay);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeOverlay();
+    });
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeOverlay();
+    });
+
+  </script>
+</body>
+</html>
