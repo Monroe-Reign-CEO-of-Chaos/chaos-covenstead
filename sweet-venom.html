@@ -1415,7 +1415,7 @@
         <div class="shard-inner">
           <span class="shard-status"></span>
           <p class="shard-track-number">VIAL — 17</p>
-          <h2 class="shard-title">Shadow with Opinion</h2>
+          <h2 class="shard-title">Shadow With Opinions</h2>
           <p class="shard-alias">The Invisible Hand</p>
           <div class="shard-divider"></div>
           <p class="shard-excerpt">DOSAGE: SYSTEMIC. "You don't see me but I'm always there." Control without a single raised voice.</p>
@@ -1491,15 +1491,15 @@
   <!-- ============================================================
        DUAL-PANE OVERLAY
   ============================================================ -->
-  <div class="overlay" id="logOverlay" role="dialog" aria-modal="true" aria-label="Toxicology Report">
+  <div class="overlay" id="logOverlay" role="dialog" aria-modal="true" aria-label="Toxicology Report" style="display:none">
 
     <div class="pane-left">
       <div class="pane-left-image" id="paneImage"></div>
       <div class="pane-left-content">
-        <p class="pane-track-number" id="paneTrackNum">VIAL — 00</p>
-        <h2 class="pane-track-title" id="paneTitle">Track Title Placeholder</h2>
-        <p class="pane-track-alias" id="paneAlias">Sub-title / alias here</p>
-        <p class="pane-track-chapter" id="paneChapter">Chaos Era — Chapter I</p>
+        <p class="pane-track-number" id="paneTrackNum"></p>
+        <h2 class="pane-track-title" id="paneTitle"></h2>
+        <p class="pane-track-alias" id="paneAlias"></p>
+        <p class="pane-track-chapter" id="paneChapter"></p>
         <p class="pane-lyrics-label">▸ exposure fragment</p>
         <div class="pane-lyrics" id="paneLyrics"></div>
       </div>
@@ -1750,8 +1750,8 @@
         annotation: 'FIELD NOTE: A stylish, mid-record palette cleanser. After the psychological horror of the preceding exposures, this returns to toxic glamour — proof that even fully detached, the friction is enough to start a fire, or a blizzard.'
       },
       {
-        track: '17', title: 'Shadow with Opinion', alias: 'The Invisible Hand', chapter: 'Chaos Era — Chapter XVII',
-        imageSrc: '', imageAlt: 'Shadow with Opinion',
+        track: '17', title: 'Shadow With Opinions', alias: 'The Invisible Hand', chapter: 'Chaos Era — Chapter XVII',
+        imageSrc: '', imageAlt: 'Shadow With Opinions',
         lyrics: `<p>You don't see me but I'm always there<br>
                  Like a shadow with opinions and really good hair<br>
                  So what are you then — a ghost? a god?<br>
@@ -1830,6 +1830,7 @@
       document.getElementById('docSubject').innerHTML      = data.subject;
       document.getElementById('docTestimony').innerHTML    = data.testimony;
       document.getElementById('docAnnotation').innerHTML   = data.annotation;
+      document.getElementById('docClass').textContent      = '☣ CONTAMINATED — DOSAGE: ' + data.status + ' ☣';
 
       const paneImage = document.getElementById('paneImage');
       paneImage.innerHTML = '';
@@ -1841,6 +1842,8 @@
       }
 
       triggerFracture();
+      overlay.style.display = 'flex';
+      void overlay.offsetHeight; // force reflow so CSS transition fires
       overlay.classList.add('open');
       closeBtn.classList.add('visible');
       document.body.style.overflow = 'hidden';
@@ -1850,6 +1853,12 @@
       overlay.classList.remove('open');
       closeBtn.classList.remove('visible');
       document.body.style.overflow = '';
+      overlay.addEventListener('transitionend', function onClose() {
+        overlay.removeEventListener('transitionend', onClose);
+        if (!overlay.classList.contains('open')) {
+          overlay.style.display = 'none';
+        }
+      });
     }
 
     function triggerFracture() {
