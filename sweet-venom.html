@@ -989,6 +989,34 @@
     }
     .page-wrapper { padding-top: 68px; }
 
+    /* Mobile nav fix: the fixed 68px nav has 9 links, so on narrow
+       screens they wrapped and spilled out of the bar, painting over
+       the hero title. On mobile, let the nav flow in the document
+       instead of staying fixed, so its links wrap inside its own box
+       and the hero starts below it. */
+    @media (max-width: 768px) {
+      nav {
+        position: static;
+        height: auto;
+        min-height: 68px;
+        flex-wrap: wrap;
+        padding: 0.9rem 1rem;
+        gap: 0.75rem;
+      }
+      .nav-logo { white-space: nowrap; }
+      .nav-links {
+        gap: 0.9rem 1.25rem;
+        flex-wrap: wrap;
+      }
+      .page-wrapper { padding-top: 0; }
+      .archive-hero {
+        height: auto;
+        min-height: 420px;
+        padding: 2.5rem 0;
+      }
+      .archive-hero-text { padding: 0 1rem; }
+    }
+
     /* ============================================================
        VIDEO VAULT — full music video embeds
     ============================================================ */
